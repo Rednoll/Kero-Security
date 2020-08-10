@@ -45,6 +45,8 @@ public class ProtectedTypeClass extends ProtectedTypeBase implements InvocationH
 	
 	public void updateProxyClass() throws Exception {
 		
+		this.cashedRules = collectRules();
+		
 		this.proxyClass = new ByteBuddy()
 			.subclass(type)
 			.defineField("original", type, Visibility.PRIVATE)
@@ -82,29 +84,34 @@ public class ProtectedTypeClass extends ProtectedTypeBase implements InvocationH
 		
 		Property property = fullPropertiesDict.get(name);
 		
-		List<AccessRule> rules = cashedRules.getOrDefault(property, Collections.EMPTY_LIST);
-		
-		Set<Role> processedRoles = new HashSet<>();
-		
-		for(AccessRule rule : rules) {
+		if(property != null) {
 			
-			if(rule.accessible(roles)) {
+			List<AccessRule> rules = cashedRules.getOrDefault(property, Collections.EMPTY_LIST);
+			
+			Set<Role> processedRoles = new HashSet<>();
+			
+			for(AccessRule rule : rules) {
 				
-				return method.invoke(original, args);
+				if(rule.accessible(roles)) {
+					
+					return method.invoke(original, args);
+				}
+				
+				//ADD REMOVE FORBIDDEN ROLES
+				
+				processedRoles.addAll(rule.getRoles());
 			}
 			
-			processedRoles.addAll(rule.getRoles());
-		}
-		
-		for(AccessRule rule : rules) {
-			
-			if(rule.hasSilentInterceptor()) {
+			for(AccessRule rule : rules) {
 				
-				return rule.processSilentInterceptor(original);
+				if(rule.hasSilentInterceptor()) {
+					
+					return rule.processSilentInterceptor(original);
+				}
 			}
+			
+			if(processedRoles.containsAll(roles)) throw new AccessException("Access forbidden for: "+name+"!");
 		}
-
-		if(processedRoles.containsAll(roles)) throw new AccessException("Access forbidden for: "+name+"!");
 		
 		if(property.hasDefaultRule()) {
 			
@@ -142,7 +149,7 @@ public class ProtectedTypeClass extends ProtectedTypeBase implements InvocationH
 	
 	public <T> T protect(T object, Set<Role> roles) throws Exception {
 		
-		return (T) proxyClass.getConstructor(this.type, roles.getClass()).newInstance(object, roles);	
+		return (T) proxyClass.getConstructor(this.type, Set.class).newInstance(object, roles);	
 	}
 	
 	public void collectRules(Map<String, Property> propertiesDict, Map<Property, List<AccessRule>> rules, Map<String, Set<Role>> processedRoles) {
@@ -150,6 +157,8 @@ public class ProtectedTypeClass extends ProtectedTypeBase implements InvocationH
 		collectLocalRules(propertiesDict, rules, processedRoles);
 		collectFromInterfaces(propertiesDict, rules, processedRoles);
 		collectFromSuperclass(propertiesDict, rules, processedRoles);
+		
+		fullPropertiesDict = propertiesDict;
 	}
 	
 	protected void collectFromSuperclass(Map<String, Property> propertiesDict, Map<Property, List<AccessRule>> rules, Map<String, Set<Role>> processedRoles) {

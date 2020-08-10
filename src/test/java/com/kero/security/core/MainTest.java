@@ -17,7 +17,7 @@ import com.kero.security.core.type.ProtectedTypeClass;
 public class MainTest {
 
 	@Test
-	public void test() throws Exception {
+	public void test() {
 
 		KeroAccessManager manager = new KeroAccessManagerImpl();
 		
@@ -36,12 +36,19 @@ public class MainTest {
 			.properties("text")
 			.denyFor("OWNER");
 		
-		((ProtectedTypeClass) manager.getType(TestObject.class)).updateProxyClass();
-		((ProtectedTypeClass) manager.getType(TestObject2.class)).updateProxyClass();
+		try {
+			
+			((ProtectedTypeClass) manager.getType(TestObject.class)).updateProxyClass();
+			((ProtectedTypeClass) manager.getType(TestObject2.class)).updateProxyClass();
+		}
+		catch(Exception e) {
+			
+			e.printStackTrace();
+		}
 		
 		ProtectedType protectedType = manager.getType(TestObject2.class);
 	
-		System.out.println(manager.protect(new TestObject2("test12"), "OWNER"));
+		System.out.println(manager.protect(new TestObject2("test12"), "OWNER").getText());
 		
 		Map<Property, List<AccessRule>> rules = protectedType.collectRules();
 		
