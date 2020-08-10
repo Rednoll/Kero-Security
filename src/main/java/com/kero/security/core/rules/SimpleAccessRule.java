@@ -1,6 +1,7 @@
 package com.kero.security.core.rules;
 
 import java.util.Collections;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
 
@@ -22,6 +23,26 @@ public class SimpleAccessRule implements AccessRule {
 		this.silentInterceptor = silentInterceptor;
 	}
 	
+	@Override
+	public int hashCode() {
+		
+		return Objects.hash(accessible, roles, silentInterceptor);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		SimpleAccessRule other = (SimpleAccessRule) obj;
+		return accessible == other.accessible && Objects.equals(roles, other.roles)
+				&& Objects.equals(silentInterceptor, other.silentInterceptor);
+	}
+
 	@Override
 	public Role getHighestPriorityRole() {
 		
@@ -52,6 +73,18 @@ public class SimpleAccessRule implements AccessRule {
 		return Collections.disjoint(this.roles, roles) ? !this.accessible : this.accessible;
 	}
 
+	@Override
+	public boolean isAllower() {
+		
+		return this.accessible;
+	}
+
+	@Override
+	public boolean isDisallower() {
+		
+		return !this.isDisallower();
+	}
+	
 	public boolean hasSilentInterceptor() {
 		
 		return silentInterceptor != null;

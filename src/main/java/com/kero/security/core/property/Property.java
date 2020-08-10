@@ -1,18 +1,21 @@
 package com.kero.security.core.property;
 
-import java.lang.reflect.Method;
-import java.util.Set;
+import java.util.List;
 
-import com.kero.security.core.role.Role;
 import com.kero.security.core.rules.AccessRule;
+import com.kero.security.core.type.ProtectedType;
 
 public interface Property {
 
 	public void setDefaultRule(AccessRule rule);
+	public boolean hasDefaultRule();
+	public AccessRule getDefaultRule();
 	
 	public void addRule(AccessRule rule);
 	
-	public Object tryInvoke(Object original, Method method, Object[] args, Set<Role> roles) throws Exception;
-	
 	public String getName();
+	
+	public List<AccessRule> getRules();
+	
+	public ProtectedType getOwner();
 }

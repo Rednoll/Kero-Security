@@ -8,16 +8,14 @@ import com.kero.security.core.role.Role;
 import com.kero.security.core.rules.AccessRule;
 import com.kero.security.core.rules.SimpleAccessRule;
 import com.kero.security.core.type.ProtectedType;
-import com.kero.security.core.type.ProtectedClassType;
-import com.kero.security.core.type.ProtectedClassTypeImpl;
-import com.kero.security.core.type.ProtectedInterfaceType;
+import com.kero.security.core.type.ProtectedTypeClass;
+import com.kero.security.core.type.ProtectedTypeInterface;
 
 public class KeroAccessManagerImpl implements KeroAccessManager {
 	
 	private Map<Class, ProtectedType> types = new HashMap<>();
 	
 	private AccessRule defaultRule = SimpleAccessRule.DENY_ALL;
-	
 
 	@Override
 	public boolean hasType(Class<?> rawType) {
@@ -36,17 +34,7 @@ public class KeroAccessManagerImpl implements KeroAccessManager {
 		
 		try {
 			
-			if(rawType.isInterface()) {
-				
-				
-				types.putIfAbsent(rawType, new ProtectedInterfaceType(this, rawType, defaultRule));
-			}
-			else {
-				
-				types.putIfAbsent(rawType, new ProtectedClassTypeImpl(this, rawType, defaultRule));
-			}
-			
-			return new ObjectTypeAccessManager(types.get(rawType));
+			return new ObjectTypeAccessManager(createOrGetType(rawType));
 		}
 		catch(Exception e) {
 			
@@ -54,6 +42,41 @@ public class KeroAccessManagerImpl implements KeroAccessManager {
 		}
 	}
 	
+	public ProtectedType createOrGetType(Class<?> rawType) {
+		
+		return hasType(rawType) ? getType(rawType) : createType(rawType);
+	}
+	
+	public ProtectedType createType(Class<?> rawType) {
+		
+		if(rawType.isInterface()) {
+			
+			types.put(rawType, new ProtectedTypeInterface(this, rawType, defaultRule));
+		}
+		else {
+			
+			types.put(rawType, new ProtectedTypeClass(this, rawType, defaultRule));
+		}
+		
+		return types.get(rawType);
+	}
+	
+	@Override
+	public <T> T protect(T object, Set<Role> roles) {
+		
+		ProtectedTypeClass protectedType = (ProtectedTypeClass) createOrGetType(object.getClass());
+		
+		try {
+			
+			return protectedType.protect(object, roles);
+		}
+		catch(Exception e) {
+			
+			throw new RuntimeException(e);
+		}
+	}
+	
+	/*
 	@Override
 	public <T> T protect(T object, Set<Role> roles) {
 		
@@ -70,4 +93,5 @@ public class KeroAccessManagerImpl implements KeroAccessManager {
 			throw new RuntimeException(e);
 		}
 	}
+	*/
 }

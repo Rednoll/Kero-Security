@@ -16,4 +16,7 @@ public interface AccessRule {
 	public Object processSilentInterceptor(Object target);
 	
 	public Set<Role> getRoles();
+	
+	public boolean isAllower();
+	public boolean isDisallower();
 }

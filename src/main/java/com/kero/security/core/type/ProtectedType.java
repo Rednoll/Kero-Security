@@ -1,6 +1,7 @@
 package com.kero.security.core.type;
 
-import java.lang.reflect.Method;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.kero.security.core.property.Property;
@@ -9,11 +10,8 @@ import com.kero.security.core.rules.AccessRule;
 
 public interface ProtectedType {
 
-	public void setDefaultRule(AccessRule defaulRule);
-	public boolean hasDefaultRule();
-	public AccessRule getDefaultRule();
-	
-	public Object tryInvoke(Object target, Method method, Object[] args, Set<Role> roles) throws Exception;
+	public Map<Property, List<AccessRule>> collectRules();
+	public void collectRules(Map<String, Property> propertiesDict, Map<Property, List<AccessRule>> rules, Map<String, Set<Role>> processedRoles);
 	
 	public default Property getOrCreateProperty(String name, AccessRule defaultRule) {
 		
@@ -32,5 +30,9 @@ public interface ProtectedType {
 	public Property getProperty(String name);
 	public Set<Property> getProperties();
 
+	public void setDefaultRule(AccessRule defaulRule);
+	public boolean hasDefaultRule();
+	public AccessRule getDefaultRule();
+	
 	public Class<?> getTypeClass();
 }
