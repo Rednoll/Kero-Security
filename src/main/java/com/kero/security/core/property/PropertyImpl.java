@@ -16,11 +16,10 @@ public class PropertyImpl implements Property {
 	
 	private ProtectedType owner;
 	
-	public PropertyImpl(ProtectedType owner, String name, AccessRule defaultRule) {
+	public PropertyImpl(ProtectedType owner, String name) {
 		
 		this.owner = owner;
 		this.name = name;
-		this.defaultRule = defaultRule;
 	}
 	
 	public void addRule(AccessRule rule) {

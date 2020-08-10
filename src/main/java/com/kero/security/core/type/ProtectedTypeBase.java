@@ -95,9 +95,9 @@ public abstract class ProtectedTypeBase implements ProtectedType {
 	}
 	
 	@Override
-	public Property createProperty(String name, AccessRule defaultRule) {
+	public Property createProperty(String name) {
 		
-		Property prop = new PropertyImpl(this, name, defaultRule);
+		Property prop = new PropertyImpl(this, name);
 		
 		properties.put(name, prop);
 		

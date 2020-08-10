@@ -21,11 +21,11 @@ public interface ProtectedType {
 		}
 		else {
 			
-			return createProperty(name, defaultRule);
+			return createProperty(name);
 		}
 	}
 	
-	public Property createProperty(String name, AccessRule defaultRule);
+	public Property createProperty(String name);
 	public boolean hasProperty(String name);
 	public Property getProperty(String name);
 	public Set<Property> getProperties();

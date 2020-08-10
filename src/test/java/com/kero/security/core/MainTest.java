@@ -12,11 +12,12 @@ import com.kero.security.core.property.Property;
 import com.kero.security.core.role.Role;
 import com.kero.security.core.rules.AccessRule;
 import com.kero.security.core.type.ProtectedType;
+import com.kero.security.core.type.ProtectedTypeClass;
 
 public class MainTest {
 
 	@Test
-	public void test() {
+	public void test() throws Exception {
 
 		KeroAccessManager manager = new KeroAccessManagerImpl();
 		
@@ -35,8 +36,13 @@ public class MainTest {
 			.properties("text")
 			.denyFor("OWNER");
 		
+		((ProtectedTypeClass) manager.getType(TestObject.class)).updateProxyClass();
+		((ProtectedTypeClass) manager.getType(TestObject2.class)).updateProxyClass();
+		
 		ProtectedType protectedType = manager.getType(TestObject2.class);
 	
+		System.out.println(manager.protect(new TestObject2("test12"), "OWNER"));
+		
 		Map<Property, List<AccessRule>> rules = protectedType.collectRules();
 		
 		for(Entry<Property, List<AccessRule>> entry : rules.entrySet()) {

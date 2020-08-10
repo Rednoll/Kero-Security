@@ -31,7 +31,7 @@ public class SinglePropertyAccessManager {
 	public SinglePropertyAccessManager defaultRule(AccessRule rule) {
 
 		property.setDefaultRule(rule);
-
+		
 		return this;
 	}
 	

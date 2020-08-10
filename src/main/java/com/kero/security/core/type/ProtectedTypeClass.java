@@ -16,14 +16,11 @@ import com.kero.security.core.role.Role;
 import com.kero.security.core.rules.AccessRule;
 
 import net.bytebuddy.ByteBuddy;
-import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.description.modifier.Visibility;
 import net.bytebuddy.description.type.TypeDescription;
-import net.bytebuddy.dynamic.DynamicType.Builder.MethodDefinition.ReceiverTypeDefinition;
 import net.bytebuddy.implementation.FieldAccessor;
 import net.bytebuddy.implementation.InvocationHandlerAdapter;
 import net.bytebuddy.implementation.MethodCall;
-import net.bytebuddy.matcher.ElementMatcher;
 import net.bytebuddy.matcher.ElementMatchers;
 
 public class ProtectedTypeClass extends ProtectedTypeBase implements InvocationHandler {
@@ -48,45 +45,20 @@ public class ProtectedTypeClass extends ProtectedTypeBase implements InvocationH
 	
 	public void updateProxyClass() throws Exception {
 		
-		ReceiverTypeDefinition<?> receiver = new ByteBuddy()
+		this.proxyClass = new ByteBuddy()
 			.subclass(type)
 			.defineField("original", type, Visibility.PRIVATE)
 			.defineField("roles", TypeDescription.Generic.Builder.parameterizedType(Set.class, Role.class).build(), Visibility.PRIVATE)
 			.defineConstructor(Visibility.PUBLIC)
-			.withParameters(TypeDescription.Generic.Builder.rawType(type).build(),
+			.withParameters(TypeDescription.Generic.Builder.rawType(this.type).build(),
 				TypeDescription.Generic.Builder.parameterizedType(Set.class, Role.class).build())
-			.intercept(MethodCall.invoke(type.getConstructor()).andThen(FieldAccessor.ofField("original").setsArgumentAt(0).andThen(FieldAccessor.ofField("roles").setsArgumentAt(1))));
-			
-		fullPropertiesDict.forEach((propertyName, property)-> {
-			
-			receiver
-				.method(new ElementMatcher<MethodDescription>() {
-	
-					@Override
-					public boolean matches(MethodDescription target) {
-						
-						target.getName();
-						
-						return false;
-					}
-				})
-				.intercept(InvocationHandlerAdapter.of(this)); //CREATE PROCESSOR
-		});
-		
-		receiver.method(new ElementMatcher<MethodDescription>() {
-
-			@Override
-			public boolean matches(MethodDescription target) {
-				
-				return false;
-			}
-		});
-		
-		this.proxyClass = receiver
+			.intercept(MethodCall.invoke(type.getConstructor()).andThen(FieldAccessor.ofField("original").setsArgumentAt(0).andThen(FieldAccessor.ofField("roles").setsArgumentAt(1))))
+			.method(ElementMatchers.isPublic())
+			.intercept(InvocationHandlerAdapter.of(this))
 			.make()
 			.load(ClassLoader.getSystemClassLoader())
 			.getLoaded();
-			
+		
 		this.originalField = this.proxyClass.getDeclaredField("original");
 		this.originalField.setAccessible(true);
  
