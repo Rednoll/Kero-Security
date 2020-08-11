@@ -2,7 +2,6 @@ package com.kero.security.core;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +11,6 @@ import com.kero.security.core.property.Property;
 import com.kero.security.core.role.Role;
 import com.kero.security.core.rules.AccessRule;
 import com.kero.security.core.type.ProtectedType;
-import com.kero.security.core.type.ProtectedTypeClass;
 
 public class MainTest {
 
@@ -20,28 +18,44 @@ public class MainTest {
 	public void test() {
 
 		KeroAccessManager manager = new KeroAccessManagerImpl();
-		
+
 		manager
 			.type(TestInterface.class)
+				.defaultDeny()
 				.properties("text")
 					.defaultGrant()
-					.denyFor("OWNER");
-
+					.denyFor("FRIEND");
+		manager
+			.type(TestObject.class)
+				.properties("text")
+					.grantFor("COMMON", "OWNER", "ADMIN");
+			
 		manager
 			.type(TestObject2.class)
-				.properties("text");
-//				.defaultGrant();
-
-		((ProtectedTypeClass) manager.getType(TestObject2.class)).updateRules();
-
+				.properties("text")
+					.denyFor("COMMON", "ADMIN");
+		
 		ProtectedType protectedType = manager.getType(TestObject2.class);
 	
-		Map<Property, List<AccessRule>> rules = protectedType.collectRules();
+		Map<String, Property> properties = protectedType.collectRules();
 		
-		for(Entry<Property, List<AccessRule>> entry : rules.entrySet()) {
+		for(Property property : properties.values()) {
 			
-			Property property = entry.getKey();
-			List<AccessRule> propRules = entry.getValue();
+			AccessRule defaultRule = property.getDefaultRule();
+			
+			if(defaultRule != null) {
+				
+				StringBuilder builder = new StringBuilder();
+				
+				for(Role role : defaultRule.getRoles()) {
+					
+					builder.append(role.getName()+" ");
+				}
+				
+				System.out.println("property: \""+property.getName()+"\" default rule("+(defaultRule.isAllower() ? "allower" : "disallower")+"): ["+builder.toString().trim()+"]");
+			}
+			
+			List<AccessRule> propRules = property.getRules();
 			
 			for(AccessRule rule : propRules) {
 			
@@ -56,6 +70,6 @@ public class MainTest {
 			}
 		}
 		
-		System.out.println(manager.protect(new TestObject2("test12"), "COMMON").getText());
+		System.out.println(manager.protect(new TestObject2("test12"), "COMMON", "OWNER").getText());
 	}
 }

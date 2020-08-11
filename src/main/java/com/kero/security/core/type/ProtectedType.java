@@ -1,6 +1,5 @@
 package com.kero.security.core.type;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -10,8 +9,8 @@ import com.kero.security.core.rules.AccessRule;
 
 public interface ProtectedType {
 
-	public Map<Property, List<AccessRule>> collectRules();
-	public void collectRules(Map<String, Property> propertiesDict, Map<Property, List<AccessRule>> rules, Map<String, Set<Role>> processedRoles);
+	public Map<String, Property> collectRules();
+	public void collectRules(Map<String, Property> complexProperties, Map<String, Set<Role>> processedRoles);
 	
 	public default Property getOrCreateProperty(String name) {
 		

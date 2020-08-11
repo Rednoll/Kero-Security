@@ -1,11 +1,15 @@
 package com.kero.security.core.rules;
 
 import java.lang.reflect.Method;
+import java.util.Collections;
 import java.util.Set;
 
 import com.kero.security.core.role.Role;
 
 public interface AccessRule {
+	
+	public static final SimpleAccessRule DENY_ALL = new SimpleAccessRule(Collections.EMPTY_SET, true, null);
+	public static final SimpleAccessRule GRANT_ALL = new SimpleAccessRule(Collections.EMPTY_SET, false, null);
 	
 	public Object process(Object original, Method method, Object[] args, Set<Role> roles) throws Exception;
 	

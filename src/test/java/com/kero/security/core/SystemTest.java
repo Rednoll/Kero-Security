@@ -25,8 +25,8 @@ public class SystemTest {
 		
 		manager
 			.type(TestObject.class)
-			.properties("text")
-			.grantFor("OWNER");
+				.properties("text")
+					.grantFor("OWNER");
 	
 		TestObject obj = manager.protect(new TestObject("test12"), "OWNER");
 		
@@ -38,9 +38,9 @@ public class SystemTest {
 		
 		manager
 			.type(TestObject.class)
-			.properties("text")
-			.defaultGrant()
-			.denyFor("OWNER");
+				.properties("text")
+					.defaultGrant()
+					.denyFor("OWNER");
 
 		TestObject obj = manager.protect(new TestObject("test12"), "OWNER");
 		
@@ -52,9 +52,9 @@ public class SystemTest {
 		
 		manager
 			.type(TestObject.class)
-			.properties("text")
-			.defaultDeny()
-			.grantFor("OWNER");
+				.properties("text")
+					.defaultDeny()
+					.grantFor("OWNER");
 
 		manager
 			.type(TestObject2.class);
@@ -69,15 +69,15 @@ public class SystemTest {
 		
 		manager
 			.type(TestObject.class)
-			.properties("text")
-			.defaultDeny()
-			.grantFor("OWNER");
+				.properties("text")
+					.defaultDeny()
+					.grantFor("OWNER");
 
 		manager
 			.type(TestObject2.class)
-			.properties("text")
-			.defaultDeny()
-			.grantFor("ADMIN");
+				.properties("text")
+					.defaultDeny()
+					.grantFor("ADMIN");
 		
 		TestObject2 obj = manager.protect(new TestObject2("test12"), "OWNER");
 		
@@ -89,9 +89,9 @@ public class SystemTest {
 		
 		manager
 			.type(TestInterface.class)
-			.properties("text")
-			.defaultDeny()
-			.grantFor("OWNER");
+				.properties("text")
+					.defaultDeny()
+					.grantFor("OWNER");
 
 		manager
 			.type(TestObject2.class);
@@ -106,14 +106,14 @@ public class SystemTest {
 		
 		manager
 			.type(TestObject.class)
-			.properties("text")
-			.grantFor("OWNER");
+				.properties("text")
+					.grantFor("OWNER");
 
 		manager
 			.type(TestObject2.class)
-			.properties("text")
-			.defaultGrant()
-			.denyFor("OWNER");
+				.properties("text")
+					.defaultGrant()
+					.denyFor("OWNER");
 		
 		TestObject2 obj = manager.protect(new TestObject2("test12"), "OWNER");
 		
@@ -125,8 +125,8 @@ public class SystemTest {
 		
 		manager
 			.type(TestObject.class)
-			.properties("text")
-			.grantFor("OWNER");
+				.properties("text")
+					.grantFor("OWNER");
 	
 		TestObject obj = manager.protect(new TestObject("test12"), "NONE");
 		
@@ -138,7 +138,7 @@ public class SystemTest {
 	
 		manager
 			.type(TestObject.class)
-			.defaultDeny();
+				.defaultDeny();
 
 		TestObject obj = manager.protect(new TestObject("test12"), "NONE");
 	
@@ -150,7 +150,7 @@ public class SystemTest {
 		
 		manager
 			.type(TestObject.class)
-			.defaultGrant();
+				.defaultGrant();
 
 		TestObject obj = manager.protect(new TestObject("test12"), "NONE");
 	
@@ -162,8 +162,8 @@ public class SystemTest {
 	
 		manager
 			.type(TestObject.class)
-			.properties("text")
-			.defaultDeny();
+				.properties("text")
+					.defaultDeny();
 
 		TestObject obj = manager.protect(new TestObject("test12"), "NONE");
 	
@@ -175,8 +175,8 @@ public class SystemTest {
 	
 		manager
 			.type(TestObject.class)
-			.properties("text")
-			.defaultGrant();
+				.properties("text")
+					.defaultGrant();
 
 		TestObject obj = manager.protect(new TestObject("test12"), "NONE");
 	
@@ -188,9 +188,9 @@ public class SystemTest {
 	
 		manager
 			.type(TestObject.class)
-			.defaultGrant()
-			.properties("text")
-			.defaultDeny();
+				.defaultGrant()
+				.properties("text")
+					.defaultDeny();
 
 		TestObject obj = manager.protect(new TestObject("test12"), "NONE");
 	
@@ -202,9 +202,9 @@ public class SystemTest {
 	
 		manager
 			.type(TestObject.class)
-			.defaultDeny()
-			.properties("text")
-			.defaultGrant();
+				.defaultDeny()
+				.properties("text")
+					.defaultGrant();
 
 		TestObject obj = manager.protect(new TestObject("test12"), "NONE");
 	
@@ -216,10 +216,10 @@ public class SystemTest {
 	
 		manager
 			.type(TestObject.class)
-			.defaultDeny()
-			.properties("text")
-			.grantFor("OWNER")
-			.grantFor("ADMIN");
+				.defaultDeny()
+				.properties("text")
+					.grantFor("OWNER")
+					.grantFor("ADMIN");
 
 		TestObject obj = manager.protect(new TestObject("test12"), "OWNER");
 	
@@ -235,15 +235,75 @@ public class SystemTest {
 	
 		manager
 			.type(TestObject.class)
-			.defaultDeny()
-			.property("text")
-			.denyWithInterceptor((obj)-> {
-				
-				return ((TestObject) obj).getText() + "13";
-			}, "OWNER");
+				.defaultDeny()
+				.property("text")
+					.denyWithInterceptor((obj)-> {
+						
+						return ((TestObject) obj).getText() + "_OWNER";
+					}, "OWNER");
 
 		TestObject obj = manager.protect(new TestObject("test12"), "OWNER");
 	
-		assertEquals(obj.getText(), "test1213");
+		assertEquals(obj.getText(), "test12_OWNER");
 	}
+	
+	@Test
+	public void getProperty_DenyInterceptor_CorrectChoise() {
+		
+		manager
+			.type(TestObject.class)
+				.defaultDeny()
+				.property("text")
+					.denyWithInterceptor((obj)-> {
+						
+						return ((TestObject) obj).getText() + "_OWNER";
+					}, "OWNER")
+					.denyWithInterceptor((obj)-> {
+						
+						return ((TestObject) obj).getText() + "_ADMIN";
+					}, "ADMIN");
+
+		TestObject obj = manager.protect(new TestObject("test12"), "ADMIN");
+	
+		assertEquals(obj.getText(), "test12_ADMIN");
+	}
+	
+	/*
+	@Test
+	public void getProperty_DenyInterceptor_CorrectPriority() {
+	
+		manager.createRole("OWNER", 10);
+		manager.createRole("ADMIN", 5);
+		manager.createRole("COMMON", 1);
+		
+		manager
+			.type(TestObject.class)
+				.defaultDeny()
+				.property("text")
+					.denyWithInterceptor((obj)-> {
+						
+						return ((TestObject) obj).getText() + "_3";
+					}, "COMMON", "OWNER", "ADMIN")
+					.denyWithInterceptor((obj)-> {
+						
+						return ((TestObject) obj).getText() + "_ADMIN";
+					}, "ADMIN")
+					.denyWithInterceptor((obj)-> {
+						
+						return ((TestObject) obj).getText() + "_OWNER";
+					}, "OWNER")
+					.denyWithInterceptor((obj)-> {
+						
+						return ((TestObject) obj).getText() + "_COMMON";
+					}, "COMMON")
+					.denyWithInterceptor((obj)-> {
+						
+						return ((TestObject) obj).getText() + "_2";
+					}, "COMMON", "ADMIN");
+
+		TestObject obj = manager.protect(new TestObject("test12"), "ADMIN");
+	
+		assertEquals(obj.getText(), "test12_ADMIN");
+	}
+	*/
 }

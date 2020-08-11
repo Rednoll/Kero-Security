@@ -24,7 +24,7 @@ public class PropertyImpl implements Property {
 	
 	public void addRule(AccessRule rule) {
 		
-		rules.add(0, rule);
+		rules.add(rule);
 	}
 	
 	public List<AccessRule> getRules() {

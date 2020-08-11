@@ -1,6 +1,5 @@
 package com.kero.security.core.type;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -21,9 +20,9 @@ public class ProtectedTypeInterface extends ProtectedTypeBase {
 		
 	}
 
-	public void collectRules(Map<String, Property> propertiesDict, Map<Property, List<AccessRule>> rules, Map<String, Set<Role>> processedRoles) {
+	public void collectRules(Map<String, Property> complexProperties, Map<String, Set<Role>> processedRoles) {
 		
-		collectLocalRules(propertiesDict, rules, processedRoles);
-		collectFromInterfaces(propertiesDict, rules, processedRoles);
+		collectLocalRules(complexProperties, processedRoles);
+		collectFromInterfaces(complexProperties, processedRoles);
 	}
 }

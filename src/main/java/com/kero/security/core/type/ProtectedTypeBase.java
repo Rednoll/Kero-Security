@@ -1,14 +1,10 @@
 package com.kero.security.core.type;
 
-import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.kero.security.core.exception.AccessException;
 import com.kero.security.core.managers.KeroAccessManager;
 import com.kero.security.core.property.Property;
 import com.kero.security.core.property.PropertyImpl;
@@ -37,51 +33,52 @@ public abstract class ProtectedTypeBase implements ProtectedType {
 	}
 	
 	@Override
-	public Map<Property, List<AccessRule>> collectRules() {
+	public Map<String, Property> collectRules() {
 	
-		Map<Property, List<AccessRule>> rules = new HashMap<>();
+		Map<String, Property> complexProperties = new HashMap<>();
 		Map<String, Set<Role>> processedRoles = new HashMap<>();
 		
-		collectRules(new HashMap<>(this.properties), rules, processedRoles);
+		collectRules(complexProperties, processedRoles);
 	
-		return rules;
+		return complexProperties;
 	}
 	
-	protected void collectLocalRules(Map<String, Property> propertiesDict, Map<Property, List<AccessRule>> rules, Map<String, Set<Role>> processedRoles) {
+	protected void collectLocalRules(Map<String, Property> complexProperties, Map<String, Set<Role>> processedRoles) {
 		
 		properties.forEach((propertyName, property)-> {
 			
+			Property complexProperty = complexProperties.get(propertyName);
+			
+			if(complexProperty == null) {
+			
+				complexProperty = new PropertyImpl(property.getOwner(), propertyName);
+				complexProperties.put(propertyName, complexProperty);
+			}
+			
+			if(!complexProperty.hasDefaultRule() && property.hasDefaultRule()) {
+				
+				complexProperty.setDefaultRule(property.getDefaultRule());
+			}
+			
 			Set<Role> processedPropertyRoles = processedRoles.get(propertyName);
-			
-				if(processedPropertyRoles == null) {
-					
-					processedPropertyRoles = new HashSet<>();
-					processedRoles.put(propertyName, processedPropertyRoles);
-				}
-			
-			List<AccessRule> propertyRules = new ArrayList<>(property.getRules());
+
+			if(processedPropertyRoles == null) {
 				
-			for(AccessRule localRule : propertyRules) {
+				processedPropertyRoles = new HashSet<>();
+				processedRoles.put(propertyName, processedPropertyRoles);
+			}
+			
+			for(AccessRule localRule : property.getRules()) {
+					
+				if(processedPropertyRoles.containsAll(localRule.getRoles())) continue;
 				
-				if(!processedPropertyRoles.containsAll(localRule.getRoles())) {
-					
-					processedPropertyRoles.addAll(localRule.getRoles());	
-					
-					propertiesDict.putIfAbsent(propertyName, property);
-					
-					Property globalProperty = propertiesDict.get(propertyName);
-					
-					rules.putIfAbsent(globalProperty, new ArrayList<>());
-					
-					List<AccessRule> globalPropertyRoles = rules.get(globalProperty);
-					
-					globalPropertyRoles.add(localRule);
-				}
+				processedPropertyRoles.addAll(localRule.getRoles());
+				complexProperty.addRule(localRule);
 			}
 		});
 	}
 	
-	protected void collectFromInterfaces(Map<String, Property> propertiesDict, Map<Property, List<AccessRule>> rules, Map<String, Set<Role>> processedRoles) {
+	protected void collectFromInterfaces(Map<String, Property> complexProperties, Map<String, Set<Role>> processedRoles) {
 	
 		Class<?>[] interfaces = type.getInterfaces();
 		
@@ -91,7 +88,7 @@ public abstract class ProtectedTypeBase implements ProtectedType {
 		
 			if(interfazeType != null) {
 				
-				interfazeType.collectRules(propertiesDict, rules, processedRoles);
+				interfazeType.collectRules(complexProperties, processedRoles);
 			}
 		}
 	}

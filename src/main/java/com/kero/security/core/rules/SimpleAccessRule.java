@@ -11,9 +11,6 @@ import com.kero.security.core.role.Role;
 
 public class SimpleAccessRule implements AccessRule {
 
-	public static final SimpleAccessRule DENY_ALL = new SimpleAccessRule(Collections.EMPTY_SET, true, null);
-	public static final SimpleAccessRule GRANT_ALL = new SimpleAccessRule(Collections.EMPTY_SET, false, null);
-	
 	private Set<Role> roles;
 	private boolean accessible;
 	private Function<Object, Object> silentInterceptor;
@@ -37,7 +34,7 @@ public class SimpleAccessRule implements AccessRule {
 		}
 		else {
 			
-			throw new AccessException("Access forbidden for: "+method.getName()+"!");
+			throw new AccessException("Access denied for: "+method.getName()+"!");
 		}
 	}
 	
