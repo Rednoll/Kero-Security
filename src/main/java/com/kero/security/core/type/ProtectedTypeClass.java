@@ -3,13 +3,15 @@ package com.kero.security.core.type;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
-import java.rmi.AccessException;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
+import com.kero.security.core.exception.AccessException;
 import com.kero.security.core.managers.KeroAccessManager;
 import com.kero.security.core.property.Property;
 import com.kero.security.core.role.Role;
@@ -38,28 +40,22 @@ public class ProtectedTypeClass extends ProtectedTypeBase implements InvocationH
 	
 	}
 	
-	public ProtectedTypeClass(KeroAccessManager manager, Class<?> type, AccessRule defaultRule) {
+	public ProtectedTypeClass(KeroAccessManager manager, Class<?> type, AccessRule defaultRule) throws Exception {
 		super(manager, type, defaultRule);
 	
-	}
-	
-	public void updateProxyClass() throws Exception {
-		
-		this.cashedRules = collectRules();
-		
 		this.proxyClass = new ByteBuddy()
-			.subclass(type)
-			.defineField("original", type, Visibility.PRIVATE)
-			.defineField("roles", TypeDescription.Generic.Builder.parameterizedType(Set.class, Role.class).build(), Visibility.PRIVATE)
-			.defineConstructor(Visibility.PUBLIC)
-			.withParameters(TypeDescription.Generic.Builder.rawType(this.type).build(),
-				TypeDescription.Generic.Builder.parameterizedType(Set.class, Role.class).build())
-			.intercept(MethodCall.invoke(type.getConstructor()).andThen(FieldAccessor.ofField("original").setsArgumentAt(0).andThen(FieldAccessor.ofField("roles").setsArgumentAt(1))))
-			.method(ElementMatchers.isPublic())
-			.intercept(InvocationHandlerAdapter.of(this))
-			.make()
-			.load(ClassLoader.getSystemClassLoader())
-			.getLoaded();
+				.subclass(type)
+				.defineField("original", type, Visibility.PRIVATE)
+				.defineField("roles", TypeDescription.Generic.Builder.parameterizedType(Set.class, Role.class).build(), Visibility.PRIVATE)
+				.defineConstructor(Visibility.PUBLIC)
+				.withParameters(TypeDescription.Generic.Builder.rawType(this.type).build(),
+					TypeDescription.Generic.Builder.parameterizedType(Set.class, Role.class).build())
+				.intercept(MethodCall.invoke(type.getConstructor()).andThen(FieldAccessor.ofField("original").setsArgumentAt(0).andThen(FieldAccessor.ofField("roles").setsArgumentAt(1))))
+				.method(ElementMatchers.isPublic())
+				.intercept(InvocationHandlerAdapter.of(this))
+				.make()
+				.load(ClassLoader.getSystemClassLoader())
+				.getLoaded();
 		
 		this.originalField = this.proxyClass.getDeclaredField("original");
 		this.originalField.setAccessible(true);
@@ -67,12 +63,19 @@ public class ProtectedTypeClass extends ProtectedTypeBase implements InvocationH
 		this.rolesField = this.proxyClass.getDeclaredField("roles");
 		this.rolesField.setAccessible(true);
 	}
+	
+	public void updateRules() {
+		
+		this.cashedRules = collectRules();
+	}
 
 	@Override
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 		
+		updateRules(); //STUB!
+		
 		Object original = originalField.get(proxy);
-		Set<Role> roles = (Set<Role>) rolesField.get(proxy);
+		Set<Role> roles = new HashSet<>((Set<Role>) rolesField.get(proxy));
 		
 		String name = method.getName();
 		
@@ -87,17 +90,23 @@ public class ProtectedTypeClass extends ProtectedTypeBase implements InvocationH
 		if(property != null) {
 			
 			List<AccessRule> rules = cashedRules.getOrDefault(property, Collections.EMPTY_LIST);
+
+			buildSequencesForProperty(property, rules);
 			
 			Set<Role> processedRoles = new HashSet<>();
 			
 			for(AccessRule rule : rules) {
-				
+			
+				if(!rule.manage(roles)) continue;
+					
 				if(rule.accessible(roles)) {
 					
 					return method.invoke(original, args);
 				}
+				else if(rule.isDisallower()) {
 				
-				//ADD REMOVE FORBIDDEN ROLES
+					roles.removeAll(rule.getRoles());
+				}
 				
 				processedRoles.addAll(rule.getRoles());
 			}
@@ -111,45 +120,75 @@ public class ProtectedTypeClass extends ProtectedTypeBase implements InvocationH
 			}
 			
 			if(processedRoles.containsAll(roles)) throw new AccessException("Access forbidden for: "+name+"!");
-		}
 		
-		if(property.hasDefaultRule()) {
+			if(property.hasDefaultRule()) {
 			
-			AccessRule propertyDefaultRule = property.getDefaultRule();
-		
-			if(propertyDefaultRule.accessible(roles)) {
-			
-				return method.invoke(original, args);
-			}
-			else if(propertyDefaultRule.hasSilentInterceptor()) {
-				
-				return propertyDefaultRule.processSilentInterceptor(original);
+				return property.getDefaultRule().process(original, method, args, processedRoles);
 			}
 			else {
 				
-				throw new AccessException("Access forbidden for: "+name+"!");
+				ProtectedType propertyOwner = property.getOwner();
+				
+				return propertyOwner.getDefaultRule().process(original, method, args, processedRoles);
 			}
 		}
-		
-		AccessRule defaultTypeRule = property.getOwner().getDefaultRule();
-		
-		if(defaultTypeRule.accessible(roles)) {
-			
-			return method.invoke(original, args);
-		}
-		else if(defaultTypeRule.hasSilentInterceptor()) {
-			
-			return defaultTypeRule.processSilentInterceptor(original);
-		}
-		else {
-			
-			throw new AccessException("Access forbidden for: "+name+"!");
-		}
+
+		return this.defaultRule.process(original, method, args, roles);
 	}
 	
 	public <T> T protect(T object, Set<Role> roles) throws Exception {
 		
 		return (T) proxyClass.getConstructor(this.type, Set.class).newInstance(object, roles);	
+	}
+	
+	public void buildSequencesForProperty(Property property, List<AccessRule> rules) {
+		
+		SortedSet<Role> denyRoles = new TreeSet<>();
+		SortedSet<Role> grantRoles = new TreeSet<>();
+		
+		for(AccessRule rule : rules) {
+			
+			if(rule.isAllower()) {
+				
+				for(Role role : rule.getRoles()) {
+					
+					if(!denyRoles.contains(role)) {
+						
+						grantRoles.add(role);
+					}
+				}
+			}
+			else {
+				
+				for(Role role : rule.getRoles()) {
+					
+					if(!grantRoles.contains(role)) {
+						
+						denyRoles.add(role);
+					}
+				}
+			}
+		}
+		
+		System.out.println("Property: "+property.getName());
+			
+		String grantRolesMessage = "";
+		
+		for(Role role : grantRoles) {
+			
+			grantRolesMessage += role.getName()+"("+role.getPriority()+") ";
+		}
+		
+		System.out.println("Grant chanin: "+grantRolesMessage);
+		
+		String denyRolesMessage = "";
+		
+		for(Role role : denyRoles) {
+			
+			denyRolesMessage += role.getName()+"("+role.getPriority()+") ";
+		}
+		
+		System.out.println("Deny chanin: "+denyRolesMessage);
 	}
 	
 	public void collectRules(Map<String, Property> propertiesDict, Map<Property, List<AccessRule>> rules, Map<String, Set<Role>> processedRoles) {
@@ -158,22 +197,19 @@ public class ProtectedTypeClass extends ProtectedTypeBase implements InvocationH
 		collectFromInterfaces(propertiesDict, rules, processedRoles);
 		collectFromSuperclass(propertiesDict, rules, processedRoles);
 		
-		fullPropertiesDict = propertiesDict;
+		fullPropertiesDict = propertiesDict; //TODO: SIDE EFFECT
 	}
 	
 	protected void collectFromSuperclass(Map<String, Property> propertiesDict, Map<Property, List<AccessRule>> rules, Map<String, Set<Role>> processedRoles) {
 		
 		Class<?> superclass = type.getSuperclass();
 		
-		while(superclass != null && superclass != Object.class) {
+		while(superclass != Object.class) {
 			
-			ProtectedType supeclassType = manager.getType(superclass);
-			
-			if(supeclassType != null) {
-				
-				supeclassType.collectRules(propertiesDict, rules, processedRoles);
-			}
-			
+			ProtectedType supeclassType = manager.getOrCreateType(superclass);
+
+			supeclassType.collectRules(propertiesDict, rules, processedRoles);
+
 			superclass = superclass.getSuperclass();
 		}
 	}

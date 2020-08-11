@@ -12,9 +12,11 @@ import com.kero.security.core.rules.SimpleAccessRule;
 public class SinglePropertyAccessManager {
 
 	private Property property;
+	private KeroAccessManager manager;
 	
-	public SinglePropertyAccessManager(Property property) {
+	public SinglePropertyAccessManager(KeroAccessManager manager, Property property) {
 		
+		this.manager = manager;
 		this.property = property;
 	}
 	
@@ -41,7 +43,7 @@ public class SinglePropertyAccessManager {
 		
 		for(String name : roleNames) {
 			
-			roles.add(Role.getOrCreate(name));
+			roles.add(manager.getOrCreateRole(name));
 		}
 		
 		setAccessible(roles, true);
@@ -55,7 +57,7 @@ public class SinglePropertyAccessManager {
 		
 		for(String name : roleNames) {
 			
-			roles.add(Role.getOrCreate(name));
+			roles.add(manager.getOrCreateRole(name));
 		}
 		
 		setAccessible(roles, false);
@@ -78,7 +80,7 @@ public class SinglePropertyAccessManager {
 		
 		for(String name : roleNames) {
 			
-			roles.add(Role.getOrCreate(name));
+			roles.add(manager.getOrCreateRole(name));
 		}
 		
 		return denyWithInterceptor(silentInterceptor, roles);

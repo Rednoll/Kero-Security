@@ -5,10 +5,18 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.kero.security.core.role.Role;
+import com.kero.security.core.role.RoleImpl;
 import com.kero.security.core.type.ProtectedType;
 
 public interface KeroAccessManager {
+	
 
+	public Role createRole(String name, int priority);
+	public Role getRole(String name);
+	public Role getOrCreateRole(String name);
+	
+	public ProtectedType getOrCreateType(Class<?> rawType);
+	
 	public boolean hasType(Class<?> rawType);
 	public ProtectedType getType(Class<?> rawType);
 	public ObjectTypeAccessManager type(Class<?> rawType);
@@ -19,7 +27,7 @@ public interface KeroAccessManager {
 		
 		for(String name : roleNames) {
 			
-			roles.add(Role.getOrCreate(name));
+			roles.add(this.getOrCreateRole(name));
 		}
 		
 		return protect(object, roles);

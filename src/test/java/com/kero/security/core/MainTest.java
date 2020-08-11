@@ -23,33 +23,19 @@ public class MainTest {
 		
 		manager
 			.type(TestInterface.class)
-			.properties("text")
-			.denyFor("COMMON", "ADMIN");
-		
-		manager
-			.type(TestObject.class)
-			.properties("text")
-			.grantFor("OWNER", "ADMIN");
-		
+				.properties("text")
+					.defaultGrant()
+					.denyFor("OWNER");
+
 		manager
 			.type(TestObject2.class)
-			.properties("text")
-			.denyFor("OWNER");
-		
-		try {
-			
-			((ProtectedTypeClass) manager.getType(TestObject.class)).updateProxyClass();
-			((ProtectedTypeClass) manager.getType(TestObject2.class)).updateProxyClass();
-		}
-		catch(Exception e) {
-			
-			e.printStackTrace();
-		}
-		
+				.properties("text");
+//				.defaultGrant();
+
+		((ProtectedTypeClass) manager.getType(TestObject2.class)).updateRules();
+
 		ProtectedType protectedType = manager.getType(TestObject2.class);
 	
-		System.out.println(manager.protect(new TestObject2("test12"), "OWNER").getText());
-		
 		Map<Property, List<AccessRule>> rules = protectedType.collectRules();
 		
 		for(Entry<Property, List<AccessRule>> entry : rules.entrySet()) {
@@ -69,5 +55,7 @@ public class MainTest {
 				System.out.println("property: \""+property.getName()+"\" rule("+(rule.isAllower() ? "allower" : "disallower")+"): ["+builder.toString().trim()+"]");
 			}
 		}
+		
+		System.out.println(manager.protect(new TestObject2("test12"), "COMMON").getText());
 	}
 }

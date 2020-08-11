@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.kero.security.core.role.Role;
+import com.kero.security.core.role.RoleImpl;
 import com.kero.security.core.rules.AccessRule;
 import com.kero.security.core.rules.SimpleAccessRule;
 import com.kero.security.core.type.ProtectedType;
@@ -15,8 +16,77 @@ public class KeroAccessManagerImpl implements KeroAccessManager {
 	
 	private Map<Class, ProtectedType> types = new HashMap<>();
 	
+	private Map<String, Role> roles = new HashMap<>();
+	
 	private AccessRule defaultRule = SimpleAccessRule.DENY_ALL;
 
+	@Override
+	public Role createRole(String name, int priority) {
+		
+		if(hasRoleWithPriority(priority)) throw new RuntimeException("Role with priority: "+priority+" already exists!");
+		
+		Role role = new RoleImpl(name, priority);
+		
+		roles.put(name, role);
+		
+		return role;
+	}
+	
+	public Role getRole(String name) {
+		
+		return roles.get(name);
+	}
+	
+	public Role getOrCreateRole(String name) {
+		
+		if(hasRole(name)) {
+			
+			return getRole(name);
+		}
+		else {
+			
+			Role withMaxPriority = getRoleWithMaxPriorty();
+			int priority = withMaxPriority != null ? withMaxPriority.getPriority() + 1 : 1;
+			
+			return createRole(name, priority);
+		}
+	}
+	
+	public Role getRoleWithMaxPriorty() {
+		
+		Role role = null;
+		int max = Integer.MIN_VALUE;
+		
+		for(Role suspect : roles.values()) {
+			
+			if(suspect.getPriority() > max) {
+				
+				role = suspect;
+				max = suspect.getPriority();
+			}
+		}
+		
+		return role;
+	}
+	
+	public boolean hasRole(String name) {
+		
+		return this.roles.containsKey(name);
+	}
+	
+	public boolean hasRoleWithPriority(int priority) {
+		
+		for(Role role : roles.values()) {
+			
+			if(role.getPriority() == priority) {
+				
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
 	@Override
 	public boolean hasType(Class<?> rawType) {
 		
@@ -34,7 +104,7 @@ public class KeroAccessManagerImpl implements KeroAccessManager {
 		
 		try {
 			
-			return new ObjectTypeAccessManager(createOrGetType(rawType));
+			return new ObjectTypeAccessManager(this, getOrCreateType(rawType));
 		}
 		catch(Exception e) {
 			
@@ -42,7 +112,7 @@ public class KeroAccessManagerImpl implements KeroAccessManager {
 		}
 	}
 	
-	public ProtectedType createOrGetType(Class<?> rawType) {
+	public ProtectedType getOrCreateType(Class<?> rawType){
 		
 		return hasType(rawType) ? getType(rawType) : createType(rawType);
 	}
@@ -55,7 +125,14 @@ public class KeroAccessManagerImpl implements KeroAccessManager {
 		}
 		else {
 			
-			types.put(rawType, new ProtectedTypeClass(this, rawType, defaultRule));
+			try {
+				
+				types.put(rawType, new ProtectedTypeClass(this, rawType, defaultRule));
+			}
+			catch(Exception e) {
+				
+				throw new RuntimeException(e);
+			}
 		}
 		
 		return types.get(rawType);
@@ -64,10 +141,10 @@ public class KeroAccessManagerImpl implements KeroAccessManager {
 	@Override
 	public <T> T protect(T object, Set<Role> roles) {
 		
-		ProtectedTypeClass protectedType = (ProtectedTypeClass) createOrGetType(object.getClass());
-		
 		try {
 			
+			ProtectedTypeClass protectedType = (ProtectedTypeClass) getOrCreateType(object.getClass());
+				
 			return protectedType.protect(object, roles);
 		}
 		catch(Exception e) {
@@ -75,23 +152,4 @@ public class KeroAccessManagerImpl implements KeroAccessManager {
 			throw new RuntimeException(e);
 		}
 	}
-	
-	/*
-	@Override
-	public <T> T protect(T object, Set<Role> roles) {
-		
-		//TODO: ADD AUTO REGISTER NOT DECLARED TYPES
-		
-		try {
-		
-			Class<?> objectClass = object.getClass();
-	
-			return (T) ((ProtectedClassType) types.get(objectClass)).protect(object, roles);
-		}
-		catch(Exception e) {
-			
-			throw new RuntimeException(e);
-		}
-	}
-	*/
 }

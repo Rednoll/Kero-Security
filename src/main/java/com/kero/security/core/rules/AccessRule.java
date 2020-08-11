@@ -1,10 +1,13 @@
 package com.kero.security.core.rules;
 
+import java.lang.reflect.Method;
 import java.util.Set;
 
 import com.kero.security.core.role.Role;
 
 public interface AccessRule {
+	
+	public Object process(Object original, Method method, Object[] args, Set<Role> roles) throws Exception;
 	
 	public Role getHighestPriorityRole();
 	

@@ -13,7 +13,7 @@ public interface ProtectedType {
 	public Map<Property, List<AccessRule>> collectRules();
 	public void collectRules(Map<String, Property> propertiesDict, Map<Property, List<AccessRule>> rules, Map<String, Set<Role>> processedRoles);
 	
-	public default Property getOrCreateProperty(String name, AccessRule defaultRule) {
+	public default Property getOrCreateProperty(String name) {
 		
 		if(hasProperty(name)) {
 			

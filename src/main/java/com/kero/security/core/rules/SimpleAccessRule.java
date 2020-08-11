@@ -1,10 +1,12 @@
 package com.kero.security.core.rules;
 
+import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
 
+import com.kero.security.core.exception.AccessException;
 import com.kero.security.core.role.Role;
 
 public class SimpleAccessRule implements AccessRule {
@@ -21,6 +23,22 @@ public class SimpleAccessRule implements AccessRule {
 		this.roles = roles;
 		this.accessible = accessible;
 		this.silentInterceptor = silentInterceptor;
+	}
+	
+	public Object process(Object original, Method method, Object[] args, Set<Role> roles) throws Exception {
+
+		if(this.accessible(roles)) {
+			
+			return method.invoke(original, args);
+		}
+		else if(this.hasSilentInterceptor()) {
+			
+			return this.processSilentInterceptor(original);
+		}
+		else {
+			
+			throw new AccessException("Access forbidden for: "+method.getName()+"!");
+		}
 	}
 	
 	@Override
@@ -82,7 +100,7 @@ public class SimpleAccessRule implements AccessRule {
 	@Override
 	public boolean isDisallower() {
 		
-		return !this.isDisallower();
+		return !this.accessible;
 	}
 	
 	public boolean hasSilentInterceptor() {

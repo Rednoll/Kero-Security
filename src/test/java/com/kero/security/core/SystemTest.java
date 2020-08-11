@@ -84,7 +84,6 @@ public class SystemTest {
 		assertEquals(obj.getText(), "test12");
 	}
 	
-	/*
 	@Test
 	public void getProperty_DeepScanSuperclassInterface() {
 		
@@ -101,7 +100,6 @@ public class SystemTest {
 		
 		assertEquals(obj.getText(), "test12");
 	}
-	*/
 	
 	@Test
 	public void getProperty_DeepScanSuperclass_RulesOverride() {

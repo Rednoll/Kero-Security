@@ -2,7 +2,7 @@ package com.kero.security.core.role;
 
 import java.util.Objects;
 
-public class RoleImpl implements Role {
+public class RoleImpl implements Role, Comparable<RoleImpl> {
 
 	private String name;
 	private int priority;
@@ -40,5 +40,11 @@ public class RoleImpl implements Role {
 	public int getPriority() {
 		
 		return this.priority;
+	}
+
+	@Override
+	public int compareTo(RoleImpl another) {
+		
+		return another.priority - this.priority;
 	}
 }

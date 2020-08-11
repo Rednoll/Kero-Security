@@ -12,7 +12,7 @@ public class PropertyImpl implements Property {
 	
 	private List<AccessRule> rules = new LinkedList<>();
 	
-	private AccessRule defaultRule = null;
+	private AccessRule defaultRule;
 	
 	private ProtectedType owner;
 	
@@ -41,7 +41,7 @@ public class PropertyImpl implements Property {
 	@Override
 	public boolean hasDefaultRule() {
 		
-		return false;
+		return getDefaultRule() != null;
 	}
 	
 	@Override

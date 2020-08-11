@@ -11,9 +11,11 @@ import com.kero.security.core.type.ProtectedType;
 public class ObjectTypeAccessManager {
 
 	private ProtectedType managedType;
+	private KeroAccessManager manager;
 	
-	public ObjectTypeAccessManager(ProtectedType managedType) {
+	public ObjectTypeAccessManager(KeroAccessManager manager, ProtectedType managedType) {
 		
+		this.manager = manager;
 		this.managedType = managedType;
 	}
 	
@@ -40,25 +42,26 @@ public class ObjectTypeAccessManager {
 		
 		for(String name : propertyNames) {
 			
-			properties.add(this.managedType.getOrCreateProperty(name, managedType.getDefaultRule()));
+			properties.add(this.managedType.getOrCreateProperty(name));
 		}
 		
 		return properties(properties);
 	}
 	
+	public PropertiesAccessManager properties(List<Property> properties) {
+		
+		return new PropertiesAccessManager(this.manager, properties);
+	}
+	
+	
 	public SinglePropertyAccessManager property(String propertyName) {
 		
-		return property(this.managedType.getOrCreateProperty(propertyName, managedType.getDefaultRule()));
+		return property(this.managedType.getOrCreateProperty(propertyName));
 	}
 	
 	public SinglePropertyAccessManager property(Property property) {
 	
-		return new SinglePropertyAccessManager(property);
-	}
-	
-	public PropertiesAccessManager properties(List<Property> properties) {
-		
-		return new PropertiesAccessManager(properties);
+		return new SinglePropertyAccessManager(this.manager, property);
 	}
 	
 	public ProtectedType getManagedType() {
