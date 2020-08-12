@@ -152,4 +152,9 @@ public class KeroAccessManagerImpl implements KeroAccessManager {
 			throw new RuntimeException(e);
 		}
 	}
+	
+	public AccessRule getDefaultRule() {
+		
+		return this.defaultRule;
+	}
 }

@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.kero.security.core.role.Role;
-import com.kero.security.core.role.RoleImpl;
+import com.kero.security.core.rules.AccessRule;
 import com.kero.security.core.type.ProtectedType;
 
 public interface KeroAccessManager {
@@ -39,4 +39,6 @@ public interface KeroAccessManager {
 	}
 	
 	public <T> T protect(T object, Set<Role> roles);
+	
+	public AccessRule getDefaultRule();
 }

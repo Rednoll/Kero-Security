@@ -3,14 +3,14 @@ package com.kero.security.core.type;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.kero.security.core.config.PreparedAccessConfiguration;
 import com.kero.security.core.config.PreparedAccessConfigurationImpl;
@@ -31,14 +31,14 @@ import net.bytebuddy.matcher.ElementMatchers;
 
 public class ProtectedTypeClass extends ProtectedTypeBase implements InvocationHandler {
 
+	private static Logger LOGGER = LoggerFactory.getLogger("KeroSecurity");
+	
 	private Class<?> proxyClass = null;
 	
 	private Field originalField = null;
 	private Field pacField = null;
 	
 	private Map<String, Property> cashedRules;
-	private Map<Property, Set<Role>> grantChain = new HashMap<>();
-	private Map<Property, Set<Role>> denyChain = new HashMap<>();
 	
 	private Map<Set<Role>, PreparedAccessConfiguration> configsCache = new HashMap<>();
 	
@@ -84,75 +84,6 @@ public class ProtectedTypeClass extends ProtectedTypeBase implements InvocationH
 		return pac.process(original, method, args);
 	}
 	
-	/*
-	@Override
-	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-		
-		updateRules(); //STUB!
-		buildChainsForProperties();
-		
-		Object original = originalField.get(proxy);
-		Set<Role> significantRoles = new HashSet<>((Set<Role>) rolesField.get(proxy));
-		
-		String name = method.getName();
-		
-		if(name.startsWith("get")) {
-			
-			name = name.replaceFirst("get", "");
-			name = name.toLowerCase();
-		}
-		
-		Property property = cashedRules.get(name);
-	
-		if(property != null) {
-		
-			Set<Role> denyChain = this.denyChain.get(property);
-			Set<Role> grantChain = this.grantChain.get(property);
-			
-			if(!Collections.disjoint(grantChain, significantRoles)) {
-				
-				return method.invoke(original, args);
-			}
-			
-			for(AccessRule rule : property.getRules()) {
-				
-				if(rule.manage(significantRoles) && rule.hasSilentInterceptor()) {
-					
-					return rule.processSilentInterceptor(original);
-				}
-			}
-		
-			significantRoles.removeAll(denyChain);
-		
-			if(significantRoles.isEmpty()) throw new AccessException("Access denied for: "+name);
-
-			if(property.hasDefaultRule()) {
-			
-				return property.getDefaultRule().process(original, method, args, significantRoles);
-			}
-			else {
-				
-				ProtectedType propertyOwner = property.getOwner();
-				
-				return propertyOwner.getDefaultRule().process(original, method, args, significantRoles);
-			}
-		}
-
-		return this.defaultRule.process(original, method, args, significantRoles);
-	}
-	
-	/*
-	private AccessRule determineSilentInterceptor(Property property, Set<Role> roles) {
-	
-		List<AccessRule> rules = property.getRules();
-	
-		for(AccessRule rule : rules) {
-			
-			
-		}
-	}
-	*/
-	
 	public <T> T protect(T object, Set<Role> roles) throws Exception {
 		
 		PreparedAccessConfiguration config = configsCache.get(roles);
@@ -168,35 +99,53 @@ public class ProtectedTypeClass extends ProtectedTypeBase implements InvocationH
 	
 	private PreparedAccessConfiguration prepareAccessConfiguration(Set<Role> roles) {
 		
-		Map<String, PreparedRule> preparedRules = new HashMap<>();
+		String rolesList = "[";
 		
+		for(Role role : roles) {
+			
+			rolesList += role.getName()+" ";
+		}
+		
+		rolesList = rolesList.trim()+"]";
+		
+		LOGGER.debug("Prepare access configuration for "+type.getCanonicalName()+" roles: "+rolesList);
+		
+		Map<String, PreparedRule> preparedRules = new HashMap<>();
+
 		updateRules();
-		buildChainsForProperties();
 		
 		cashedRules.forEach((propertyName, property)-> {
 			
 			Set<Role> significantRoles = new HashSet<>(roles);
 			
-			Set<Role> denyChain = this.denyChain.get(property);
-			Set<Role> grantChain = this.grantChain.get(property);
-			
-			if(!Collections.disjoint(grantChain, significantRoles)) {
-				
-				preparedRules.put(propertyName, new PreparedGrantRule());
-				return;
+			List<AccessRule> rules = property.getRules();
+			 
+			for(AccessRule rule : rules) {
+ 
+				if(!rule.manage(significantRoles)) continue;
+ 
+				if(rule.accessible(significantRoles)) {
+ 
+					preparedRules.put(propertyName, new PreparedGrantRule());
+					return;
+				}
+				else if(rule.isDisallower()) {
+ 
+					significantRoles.removeAll(rule.getRoles());
+				}
 			}
 			
+			//REWRITE SILENT INTECEPTOR PICKER / IT'S STUB!
 			for(AccessRule rule : property.getRules()) {
 				
-				if(rule.manage(significantRoles) && rule.hasSilentInterceptor()) {
+				if(rule.manage(roles) && rule.hasSilentInterceptor()) {
 					
 					preparedRules.put(propertyName, rule.prepare(roles));
 					return;
 				}
 			}
-		
-			significantRoles.removeAll(denyChain);
-		
+			//
+			
 			if(significantRoles.isEmpty()) {
 			
 				preparedRules.put(propertyName, new PreparedDenyRule());
@@ -217,70 +166,33 @@ public class ProtectedTypeClass extends ProtectedTypeBase implements InvocationH
 			}
 		});
 		
-		return new PreparedAccessConfigurationImpl(preparedRules);
-	}
-	
-	public void buildChainsForProperties() {
-	
-		this.denyChain.clear();
-		this.grantChain.clear();
+		PreparedRule defaultTypeRule = findDefaultRule().prepare(roles);
 		
-		cashedRules.values().forEach((property)-> this.buildChainsForProperty(property));
+		return new PreparedAccessConfigurationImpl(preparedRules, defaultTypeRule);
 	}
+	
+	private AccessRule findDefaultRule() {
+		
+		if(this.hasDefaultRule()) return this.getDefaultRule();
 
-	public void buildChainsForProperty(Property property) {
+		Class<?> superClass = this.type.getSuperclass();
 		
-		List<AccessRule> rules = property.getRules();
-		
-		SortedSet<Role> denyRoles = new TreeSet<>();
-		SortedSet<Role> grantRoles = new TreeSet<>();
-		
-		for(AccessRule rule : rules) {
+		while(superClass != Object.class) {
 			
-			if(rule.isAllower()) {
+			if(manager.hasType(superClass)) {
 				
-				for(Role role : rule.getRoles()) {
+				ProtectedType type = manager.getType(superClass);
+			
+				if(type.hasDefaultRule()) {
 					
-					if(!denyRoles.contains(role)) {
-						
-						grantRoles.add(role);
-					}
+					return type.getDefaultRule();
 				}
 			}
-			else {
-				
-				for(Role role : rule.getRoles()) {
-					
-					if(!grantRoles.contains(role)) {
-						
-						denyRoles.add(role);
-					}
-				}
-			}
+			
+			superClass = superClass.getSuperclass();
 		}
 		
-		System.out.println("Property: "+property.getName());
-			
-		String grantRolesMessage = "";
-		
-		for(Role role : grantRoles) {
-			
-			grantRolesMessage += role.getName()+"("+role.getPriority()+") ";
-		}
-		
-		System.out.println("Grant chain: "+grantRolesMessage);
-		
-		String denyRolesMessage = "";
-		
-		for(Role role : denyRoles) {
-			
-			denyRolesMessage += role.getName()+"("+role.getPriority()+") ";
-		}
-		
-		System.out.println("Deny chain: "+denyRolesMessage);
-		
-		this.denyChain.put(property, denyRoles);
-		this.grantChain.put(property, grantRoles);
+		return manager.getDefaultRule();
 	}
 	
 	public void collectRules(Map<String, Property> complexProperties, Map<String, Set<Role>> processedRoles) {
