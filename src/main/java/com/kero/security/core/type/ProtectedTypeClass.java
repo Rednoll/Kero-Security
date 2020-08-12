@@ -14,8 +14,9 @@ import java.util.TreeSet;
 
 import com.kero.security.core.config.PreparedAccessConfiguration;
 import com.kero.security.core.config.PreparedAccessConfigurationImpl;
+import com.kero.security.core.config.PreparedDenyRule;
+import com.kero.security.core.config.PreparedGrantRule;
 import com.kero.security.core.config.PreparedRule;
-import com.kero.security.core.exception.AccessException;
 import com.kero.security.core.managers.KeroAccessManager;
 import com.kero.security.core.property.Property;
 import com.kero.security.core.role.Role;
@@ -23,7 +24,6 @@ import com.kero.security.core.rules.AccessRule;
 
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.description.modifier.Visibility;
-import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.implementation.FieldAccessor;
 import net.bytebuddy.implementation.InvocationHandlerAdapter;
 import net.bytebuddy.implementation.MethodCall;
@@ -53,9 +53,9 @@ public class ProtectedTypeClass extends ProtectedTypeBase implements InvocationH
 		this.proxyClass = new ByteBuddy()
 				.subclass(type)
 				.defineField("original", type, Visibility.PRIVATE)
-				.defineField("pac", PreparedRule.class, Visibility.PRIVATE)
+				.defineField("pac", PreparedAccessConfiguration.class, Visibility.PRIVATE)
 				.defineConstructor(Visibility.PUBLIC)
-				.withParameters(type, PreparedRule.class)
+				.withParameters(type, PreparedAccessConfiguration.class)
 				.intercept(MethodCall.invoke(type.getConstructor()).andThen(FieldAccessor.ofField("original").setsArgumentAt(0).andThen(FieldAccessor.ofField("pac").setsArgumentAt(1))))
 				.method(ElementMatchers.isPublic())
 				.intercept(InvocationHandlerAdapter.of(this))
@@ -157,7 +157,7 @@ public class ProtectedTypeClass extends ProtectedTypeBase implements InvocationH
 		
 		PreparedAccessConfiguration config = configsCache.get(roles);
 		
-		if(config != null) {
+		if(config == null) {
 	
 			config = prepareAccessConfiguration(roles);
 			configsCache.put(roles, config);
@@ -168,17 +168,56 @@ public class ProtectedTypeClass extends ProtectedTypeBase implements InvocationH
 	
 	private PreparedAccessConfiguration prepareAccessConfiguration(Set<Role> roles) {
 		
-		Map<String, PreparedRule> rules = new HashMap<>();
+		Map<String, PreparedRule> preparedRules = new HashMap<>();
 		
 		updateRules();
 		buildChainsForProperties();
 		
 		cashedRules.forEach((propertyName, property)-> {
 			
+			Set<Role> significantRoles = new HashSet<>(roles);
 			
+			Set<Role> denyChain = this.denyChain.get(property);
+			Set<Role> grantChain = this.grantChain.get(property);
+			
+			if(!Collections.disjoint(grantChain, significantRoles)) {
+				
+				preparedRules.put(propertyName, new PreparedGrantRule());
+				return;
+			}
+			
+			for(AccessRule rule : property.getRules()) {
+				
+				if(rule.manage(significantRoles) && rule.hasSilentInterceptor()) {
+					
+					preparedRules.put(propertyName, rule.prepare(roles));
+					return;
+				}
+			}
+		
+			significantRoles.removeAll(denyChain);
+		
+			if(significantRoles.isEmpty()) {
+			
+				preparedRules.put(propertyName, new PreparedDenyRule());
+				return;
+			}
+
+			if(property.hasDefaultRule()) {
+			
+				preparedRules.put(propertyName, property.getDefaultRule().prepare(roles));
+				return;
+			}
+			else {
+				
+				ProtectedType propertyOwner = property.getOwner();
+				
+				preparedRules.put(propertyName, propertyOwner.getDefaultRule().prepare(roles));
+				return;
+			}
 		});
 		
-		return new PreparedAccessConfigurationImpl(rules);
+		return new PreparedAccessConfigurationImpl(preparedRules);
 	}
 	
 	public void buildChainsForProperties() {

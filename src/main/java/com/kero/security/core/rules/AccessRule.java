@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.Set;
 
+import com.kero.security.core.config.PreparedRule;
 import com.kero.security.core.role.Role;
 
 public interface AccessRule {
@@ -12,6 +13,7 @@ public interface AccessRule {
 	public static final SimpleAccessRule GRANT_ALL = new SimpleAccessRule(Collections.EMPTY_SET, false, null);
 	
 	public Object process(Object original, Method method, Object[] args, Set<Role> roles) throws Exception;
+	public PreparedRule prepare(Set<Role> roles);
 	
 	public Role getHighestPriorityRole();
 	

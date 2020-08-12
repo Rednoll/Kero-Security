@@ -6,6 +6,10 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
 
+import com.kero.security.core.config.PreparedDenyRule;
+import com.kero.security.core.config.PreparedGrantRule;
+import com.kero.security.core.config.PreparedInterceptedRule;
+import com.kero.security.core.config.PreparedRule;
 import com.kero.security.core.exception.AccessException;
 import com.kero.security.core.role.Role;
 
@@ -35,6 +39,23 @@ public class SimpleAccessRule implements AccessRule {
 		else {
 			
 			throw new AccessException("Access denied for: "+method.getName()+"!");
+		}
+	}
+	
+	@Override
+	public PreparedRule prepare(Set<Role> roles) {
+		
+		if(this.accessible(roles)) {
+			
+			return new PreparedGrantRule();
+		}
+		else if(this.hasSilentInterceptor()) {
+			
+			return new PreparedInterceptedRule(this.silentInterceptor);
+		}
+		else {
+			
+			return new PreparedDenyRule();
 		}
 	}
 	
@@ -104,7 +125,7 @@ public class SimpleAccessRule implements AccessRule {
 		
 		return silentInterceptor != null;
 	}
-
+	
 	@Override
 	public Object processSilentInterceptor(Object target) {
 		

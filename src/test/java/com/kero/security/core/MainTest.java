@@ -70,6 +70,11 @@ public class MainTest {
 			}
 		}
 		
+		for(int i = 0; i < 100000; i++) {
+			
+			manager.protect(new TestObject2("test12"), "COMMON", "OWNER").getText();
+		}
+		
 		System.out.println(manager.protect(new TestObject2("test12"), "COMMON", "OWNER").getText());
 	}
 }
