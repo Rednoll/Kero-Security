@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.kero.security.core.property.Property;
 import com.kero.security.core.rules.AccessRule;
-import com.kero.security.core.rules.SimpleAccessRule;
+import com.kero.security.core.rules.AccessRuleImpl;
 import com.kero.security.core.type.ProtectedType;
 
 public class ObjectTypeAccessManager {
@@ -21,12 +21,12 @@ public class ObjectTypeAccessManager {
 	
 	public ObjectTypeAccessManager defaultGrant() {
 		
-		return defaultRule(SimpleAccessRule.GRANT_ALL);
+		return defaultRule(AccessRuleImpl.GRANT_ALL);
 	}
 	
 	public ObjectTypeAccessManager defaultDeny() {
 		
-		return defaultRule(SimpleAccessRule.DENY_ALL);
+		return defaultRule(AccessRuleImpl.DENY_ALL);
 	}
 	
 	public ObjectTypeAccessManager defaultRule(AccessRule rule) {

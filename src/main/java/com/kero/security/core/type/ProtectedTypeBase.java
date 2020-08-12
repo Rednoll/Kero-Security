@@ -70,7 +70,7 @@ public abstract class ProtectedTypeBase implements ProtectedType {
 			
 			for(AccessRule localRule : property.getRules()) {
 					
-				if(processedPropertyRoles.containsAll(localRule.getRoles())) continue;
+				if(localRule.isSimple() && processedPropertyRoles.containsAll(localRule.getRoles())) continue;
 				
 				processedPropertyRoles.addAll(localRule.getRoles());
 				complexProperty.addRule(localRule);

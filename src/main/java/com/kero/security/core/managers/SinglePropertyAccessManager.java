@@ -7,7 +7,7 @@ import java.util.function.Function;
 import com.kero.security.core.property.Property;
 import com.kero.security.core.role.Role;
 import com.kero.security.core.rules.AccessRule;
-import com.kero.security.core.rules.SimpleAccessRule;
+import com.kero.security.core.rules.AccessRuleImpl;
 
 public class SinglePropertyAccessManager {
 
@@ -22,12 +22,12 @@ public class SinglePropertyAccessManager {
 	
 	public SinglePropertyAccessManager defaultGrant() {
 		
-		return defaultRule(SimpleAccessRule.GRANT_ALL);
+		return defaultRule(AccessRuleImpl.GRANT_ALL);
 	}
 	
 	public SinglePropertyAccessManager defaultDeny() {
 		
-		return defaultRule(SimpleAccessRule.DENY_ALL);
+		return defaultRule(AccessRuleImpl.DENY_ALL);
 	}
 	
 	public SinglePropertyAccessManager defaultRule(AccessRule rule) {
@@ -69,7 +69,7 @@ public class SinglePropertyAccessManager {
 		
 		if(roles.isEmpty()) return this;
 	
-		property.addRule(new SimpleAccessRule(roles, accessible, null));
+		property.addRule(new AccessRuleImpl(roles, accessible, null));
 		
 		return this;
 	}
@@ -90,7 +90,7 @@ public class SinglePropertyAccessManager {
 			
 		if(roles.isEmpty()) return this;
 		
-		property.addRule(new SimpleAccessRule(roles, false, silentInterceptor));
+		property.addRule(new AccessRuleImpl(roles, false, silentInterceptor));
 		
 		return this;
 	}

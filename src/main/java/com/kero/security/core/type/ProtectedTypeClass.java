@@ -135,16 +135,13 @@ public class ProtectedTypeClass extends ProtectedTypeBase implements InvocationH
 				}
 			}
 			
-			//REWRITE SILENT INTECEPTOR PICKER / IT'S STUB!
-			for(AccessRule rule : property.getRules()) {
+			AccessRule intercetptingRule = determineInterceptor(property, roles);
+			
+			if(intercetptingRule != null) {
 				
-				if(rule.manage(roles) && rule.hasSilentInterceptor()) {
-					
-					preparedRules.put(propertyName, rule.prepare(roles));
-					return;
-				}
+				preparedRules.put(propertyName, intercetptingRule.prepare(roles));
+				return;
 			}
-			//
 			
 			if(significantRoles.isEmpty()) {
 			
@@ -169,6 +166,53 @@ public class ProtectedTypeClass extends ProtectedTypeBase implements InvocationH
 		PreparedRule defaultTypeRule = findDefaultRule().prepare(roles);
 		
 		return new PreparedAccessConfigurationImpl(preparedRules, defaultTypeRule);
+	}
+	
+	private AccessRule determineInterceptor(Property property, Set<Role> roles) {
+	
+		int maxOverlap = -1;
+		int minTrash = Integer.MAX_VALUE;
+		AccessRule result = null;
+		
+		for(AccessRule rule : property.getRules()) {
+			
+			Set<Role> ruleRoles = rule.getRoles();
+			
+			int overlap = 0;
+			int trash = 0;
+			
+			for(Role ruleRole : ruleRoles) {
+				
+				if(roles.contains(ruleRole)) {
+					
+					overlap++;
+				}
+				else {
+					
+					trash++;
+				}
+			}
+			
+			if(overlap == roles.size() && trash == 0) {
+				
+				return rule;
+			}
+			
+			if(overlap > maxOverlap) {
+				
+				maxOverlap = overlap;
+				minTrash = trash;
+				result = rule;
+			}
+			else if(overlap == maxOverlap && trash < minTrash) {
+				
+				maxOverlap = overlap;
+				minTrash = trash;
+				result = rule;
+			}
+		}
+		
+		return result;
 	}
 	
 	private AccessRule findDefaultRule() {

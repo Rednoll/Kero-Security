@@ -7,7 +7,7 @@ import java.util.Set;
 import com.kero.security.core.property.Property;
 import com.kero.security.core.role.Role;
 import com.kero.security.core.rules.AccessRule;
-import com.kero.security.core.rules.SimpleAccessRule;
+import com.kero.security.core.rules.AccessRuleImpl;
 
 public class PropertiesAccessManager {
 
@@ -22,12 +22,12 @@ public class PropertiesAccessManager {
 	
 	public PropertiesAccessManager defaultGrant() {
 		
-		return defaultRule(SimpleAccessRule.GRANT_ALL);
+		return defaultRule(AccessRuleImpl.GRANT_ALL);
 	}
 	
 	public PropertiesAccessManager defaultDeny() {
 		
-		return defaultRule(SimpleAccessRule.DENY_ALL);
+		return defaultRule(AccessRuleImpl.DENY_ALL);
 	}
 	
 	public PropertiesAccessManager defaultRule(AccessRule rule) {

@@ -9,8 +9,8 @@ import com.kero.security.core.role.Role;
 
 public interface AccessRule {
 	
-	public static final SimpleAccessRule DENY_ALL = new SimpleAccessRule(Collections.EMPTY_SET, true, null);
-	public static final SimpleAccessRule GRANT_ALL = new SimpleAccessRule(Collections.EMPTY_SET, false, null);
+	public static final AccessRuleImpl DENY_ALL = new AccessRuleImpl(Collections.EMPTY_SET, true, null);
+	public static final AccessRuleImpl GRANT_ALL = new AccessRuleImpl(Collections.EMPTY_SET, false, null);
 	
 	public Object process(Object original, Method method, Object[] args, Set<Role> roles) throws Exception;
 	public PreparedRule prepare(Set<Role> roles);
@@ -28,4 +28,10 @@ public interface AccessRule {
 	
 	public boolean isAllower();
 	public boolean isDisallower();
+	
+	
+	/**
+	 * Simple access rule doesn't ANY additions like interceptor. It's manages only grant/deny functions.
+	 */
+	public boolean isSimple();
 }

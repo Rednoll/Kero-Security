@@ -13,17 +13,37 @@ import com.kero.security.core.config.PreparedRule;
 import com.kero.security.core.exception.AccessException;
 import com.kero.security.core.role.Role;
 
-public class SimpleAccessRule implements AccessRule {
+public class AccessRuleImpl implements AccessRule {
 
 	private Set<Role> roles;
 	private boolean accessible;
 	private Function<Object, Object> silentInterceptor;
 	
-	public SimpleAccessRule(Set<Role> roles, boolean accessible, Function<Object, Object> silentInterceptor) {
+	public AccessRuleImpl(Set<Role> roles, boolean accessible, Function<Object, Object> silentInterceptor) {
 		
 		this.roles = roles;
 		this.accessible = accessible;
 		this.silentInterceptor = silentInterceptor;
+	}
+	
+	@Override
+	public int hashCode() {
+		
+		return Objects.hash(accessible, roles, silentInterceptor);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		AccessRuleImpl other = (AccessRuleImpl) obj;
+		return accessible == other.accessible && Objects.equals(roles, other.roles)
+				&& Objects.equals(silentInterceptor, other.silentInterceptor);
 	}
 	
 	public Object process(Object original, Method method, Object[] args, Set<Role> roles) throws Exception {
@@ -58,27 +78,13 @@ public class SimpleAccessRule implements AccessRule {
 			return new PreparedDenyRule();
 		}
 	}
+
+	@Override
+	public boolean isSimple() {
+		
+		return !hasSilentInterceptor();
+	}
 	
-	@Override
-	public int hashCode() {
-		
-		return Objects.hash(accessible, roles, silentInterceptor);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		SimpleAccessRule other = (SimpleAccessRule) obj;
-		return accessible == other.accessible && Objects.equals(roles, other.roles)
-				&& Objects.equals(silentInterceptor, other.silentInterceptor);
-	}
-
 	@Override
 	public Role getHighestPriorityRole() {
 		

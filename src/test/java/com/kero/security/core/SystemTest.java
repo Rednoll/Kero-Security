@@ -267,8 +267,7 @@ public class SystemTest {
 	
 		assertEquals(obj.getText(), "test12_ADMIN");
 	}
-	
-	/*
+
 	@Test
 	public void getProperty_DenyInterceptor_CorrectPriority() {
 	
@@ -305,5 +304,4 @@ public class SystemTest {
 	
 		assertEquals(obj.getText(), "test12_ADMIN");
 	}
-	*/
 }

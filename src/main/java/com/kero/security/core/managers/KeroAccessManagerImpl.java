@@ -7,18 +7,18 @@ import java.util.Set;
 import com.kero.security.core.role.Role;
 import com.kero.security.core.role.RoleImpl;
 import com.kero.security.core.rules.AccessRule;
-import com.kero.security.core.rules.SimpleAccessRule;
+import com.kero.security.core.rules.AccessRuleImpl;
 import com.kero.security.core.type.ProtectedType;
 import com.kero.security.core.type.ProtectedTypeClass;
 import com.kero.security.core.type.ProtectedTypeInterface;
 
 public class KeroAccessManagerImpl implements KeroAccessManager {
 	
-	private Map<Class, ProtectedType> types = new HashMap<>();
+	protected Map<Class, ProtectedType> types = new HashMap<>();
 	
-	private Map<String, Role> roles = new HashMap<>();
+	protected Map<String, Role> roles = new HashMap<>();
 	
-	private AccessRule defaultRule = SimpleAccessRule.DENY_ALL;
+	protected AccessRule defaultRule = AccessRuleImpl.DENY_ALL;
 
 	@Override
 	public Role createRole(String name, int priority) {
