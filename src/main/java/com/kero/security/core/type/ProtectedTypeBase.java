@@ -5,11 +5,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import com.kero.security.core.interceptor.FailureInterceptor;
 import com.kero.security.core.managers.KeroAccessManager;
 import com.kero.security.core.property.Property;
 import com.kero.security.core.property.PropertyImpl;
-import com.kero.security.core.role.Role;
 import com.kero.security.core.rules.AccessRule;
 
 public abstract class ProtectedTypeBase implements ProtectedType {
@@ -18,7 +16,7 @@ public abstract class ProtectedTypeBase implements ProtectedType {
 	
 	protected AccessRule defaultRule;
 	
-	protected Map<String, Property> properties = new HashMap<>();
+	protected Map<String, Property> localProperties = new HashMap<>();
 	
 	protected KeroAccessManager manager;
 	
@@ -28,27 +26,24 @@ public abstract class ProtectedTypeBase implements ProtectedType {
 		
 	}
 	
-	public ProtectedTypeBase(KeroAccessManager manager, Class<?> type, AccessRule defaultRule) {
+	public ProtectedTypeBase(KeroAccessManager manager, Class<?> type) {
 		
 		this.manager = manager;
 		this.type = type;
-		this.defaultRule = defaultRule;
 	}
-	
-	@Override
-	public Map<String, Property> collectRules() {
+
+	public Set<Property> getProperties() {
 	
 		Map<String, Property> complexProperties = new HashMap<>();
-		Map<String, Set<Role>> processedRoles = new HashMap<>();
-		
-		collectProperties(complexProperties, processedRoles);
+
+		collectProperties(complexProperties);
 	
-		return complexProperties;
+		return new HashSet<>(complexProperties.values());
 	}
 	
-	protected void collectLocalProperties(Map<String, Property> complexProperties, Map<String, Set<Role>> processedRoles) {
+	protected void collectLocalProperties(Map<String, Property> complexProperties) {
 		
-		properties.forEach((propertyName, property)-> {
+		localProperties.forEach((propertyName, property)-> {
 			
 			Property complexProperty = complexProperties.get(propertyName);
 			
@@ -58,44 +53,11 @@ public abstract class ProtectedTypeBase implements ProtectedType {
 				complexProperties.put(propertyName, complexProperty);
 			}
 			
-			//Default rule
-			if(!complexProperty.hasDefaultRule() && property.hasDefaultRule()) {
-				
-				complexProperty.setDefaultRule(property.getDefaultRule());
-			}
-			
-			Set<Role> processedPropertyRoles = processedRoles.get(propertyName);
-
-			if(processedPropertyRoles == null) {
-				
-				processedPropertyRoles = new HashSet<>();
-				processedRoles.put(propertyName, processedPropertyRoles);
-			}
-			
-			//Rules
-			for(AccessRule localRule : property.getRules()) {
-					
-				if(processedPropertyRoles.containsAll(localRule.getRoles())) continue;
-				
-				processedPropertyRoles.addAll(localRule.getRoles());
-				complexProperty.addRule(localRule);
-			}
-			
-			//Default interceptor
-			if(!complexProperty.hasDefaultInterceptor() && property.hasDefaultInterceptor()) {
-				
-				complexProperty.setDefaultInterceptor(property.getDefaultInterceptor());
-			}
-			
-			//Interceptors
-			for(FailureInterceptor interceptor : property.getInterceptors()) {
-				
-				complexProperty.addInterceptor(interceptor);
-			}
+			complexProperty.inherit(property);
 		});
 	}
 	
-	protected void collectFromInterfaces(Map<String, Property> complexProperties, Map<String, Set<Role>> processedRoles) {
+	protected void collectFromInterfaces(Map<String, Property> complexProperties) {
 	
 		Class<?>[] interfaces = type.getInterfaces();
 		
@@ -105,7 +67,7 @@ public abstract class ProtectedTypeBase implements ProtectedType {
 		
 			if(interfazeType != null) {
 				
-				interfazeType.collectProperties(complexProperties, processedRoles);
+				interfazeType.collectProperties(complexProperties);
 			}
 		}
 	}
@@ -123,31 +85,31 @@ public abstract class ProtectedTypeBase implements ProtectedType {
 	}
 	
 	@Override
-	public Property createProperty(String name) {
+	public Property createLocalProperty(String name) {
 		
 		Property prop = new PropertyImpl(this, name);
 		
-		properties.put(name, prop);
+		localProperties.put(name, prop);
 		
 		return prop;
 	}
 
 	@Override
-	public boolean hasProperty(String name) {
+	public boolean hasLocalProperty(String name) {
 		
-		return properties.containsKey(name);
+		return localProperties.containsKey(name);
 	}
 
 	@Override
-	public Property getProperty(String name) {
+	public Property getLocalProperty(String name) {
 		
-		return properties.get(name);
+		return localProperties.get(name);
 	}
 
 	@Override
-	public Set<Property> getProperties() {
+	public Set<Property> getLocalProperties() {
 		
-		return new HashSet<>(properties.values());
+		return new HashSet<>(localProperties.values());
 	}
 
 	@Override

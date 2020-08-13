@@ -20,6 +20,8 @@ public interface Property {
 	
 	public void addInterceptor(FailureInterceptor interceptor);
 	
+	public void inherit(Property parent);
+	
 	public String getName();
 	
 	public List<AccessRule> getRules();

@@ -121,13 +121,13 @@ public class KeroAccessManagerImpl implements KeroAccessManager {
 		
 		if(rawType.isInterface()) {
 			
-			types.put(rawType, new ProtectedTypeInterface(this, rawType, defaultRule));
+			types.put(rawType, new ProtectedTypeInterface(this, rawType));
 		}
 		else {
 			
 			try {
 				
-				types.put(rawType, new ProtectedTypeClass(this, rawType, defaultRule));
+				types.put(rawType, new ProtectedTypeClass(this, rawType));
 			}
 			catch(Exception e) {
 				

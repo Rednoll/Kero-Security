@@ -39,8 +39,6 @@ public class ProtectedTypeClass extends ProtectedTypeBase implements InvocationH
 	private Field originalField = null;
 	private Field pacField = null;
 	
-	private Map<String, Property> cashedProperties;
-	
 	private Map<Set<Role>, PreparedAccessConfiguration> configsCache = new HashMap<>();
 	
 	public ProtectedTypeClass() {
@@ -48,8 +46,8 @@ public class ProtectedTypeClass extends ProtectedTypeBase implements InvocationH
 	
 	}
 	
-	public ProtectedTypeClass(KeroAccessManager manager, Class<?> type, AccessRule defaultRule) throws Exception {
-		super(manager, type, defaultRule);
+	public ProtectedTypeClass(KeroAccessManager manager, Class<?> type) throws Exception {
+		super(manager, type);
 	
 		this.proxyClass = new ByteBuddy()
 				.subclass(type)
@@ -69,11 +67,6 @@ public class ProtectedTypeClass extends ProtectedTypeBase implements InvocationH
  
 		this.pacField = this.proxyClass.getDeclaredField("pac");
 		this.pacField.setAccessible(true);
-	}
-	
-	public void updateRules() {
-		
-		this.cashedProperties = collectRules();
 	}
 
 	@Override
@@ -113,9 +106,11 @@ public class ProtectedTypeClass extends ProtectedTypeBase implements InvocationH
 		
 		Map<String, PreparedAction> preparedActions = new HashMap<>();
 
-		updateRules();
+		Set<Property> properties = getProperties();
 		
-		cashedProperties.forEach((propertyName, property)-> {
+		properties.forEach((property)-> {
+			
+			String propertyName = property.getName();
 			
 			Set<Role> significantRoles = new HashSet<>(roles);
 			
@@ -157,10 +152,18 @@ public class ProtectedTypeClass extends ProtectedTypeBase implements InvocationH
 			}
 			else {
 				
-				ProtectedType propertyOwner = property.getOwner();
+				AccessRule defaultRule = findDefaultRule();
 				
-				preparedActions.put(propertyName, propertyOwner.getDefaultRule().prepare(roles));
-				return;
+				if(defaultRule != null) {
+					
+					preparedActions.put(propertyName, defaultRule.prepare(roles));
+					return;
+				}
+				else {
+					
+					preparedActions.put(propertyName, this.manager.getDefaultRule().prepare(roles));
+					return;
+				}
 			}
 		});
 		
@@ -248,18 +251,18 @@ public class ProtectedTypeClass extends ProtectedTypeBase implements InvocationH
 		return manager.getDefaultRule();
 	}
 	
-	public void collectProperties(Map<String, Property> complexProperties, Map<String, Set<Role>> processedRoles) {
+	public void collectProperties(Map<String, Property> complexProperties) {
 		
-		collectLocalProperties(complexProperties, processedRoles);
+		collectLocalProperties(complexProperties);
 		
 		if(this.inherit) {
 			
-			collectFromInterfaces(complexProperties, processedRoles);
-			collectFromSuperclass(complexProperties, processedRoles);
+			collectFromInterfaces(complexProperties);
+			collectFromSuperclass(complexProperties);
 		}
 	}
 	
-	protected void collectFromSuperclass(Map<String, Property> complexProperties, Map<String, Set<Role>> processedRoles) {
+	protected void collectFromSuperclass(Map<String, Property> complexProperties) {
 		
 		Class<?> superclass = type.getSuperclass();
 		
@@ -267,7 +270,7 @@ public class ProtectedTypeClass extends ProtectedTypeBase implements InvocationH
 			
 			ProtectedType supeclassType = manager.getOrCreateType(superclass);
 
-			supeclassType.collectProperties(complexProperties, processedRoles);
+			supeclassType.collectProperties(complexProperties);
 
 			superclass = superclass.getSuperclass();
 		}

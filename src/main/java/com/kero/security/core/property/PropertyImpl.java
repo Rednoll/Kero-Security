@@ -27,6 +27,24 @@ public class PropertyImpl implements Property {
 		this.name = name;
 	}
 	
+	@Override
+	public void inherit(Property parent) {
+		
+		if(!this.hasDefaultRule() && parent.hasDefaultRule()) {
+			
+			this.setDefaultRule(parent.getDefaultRule());
+		}
+		
+		this.rules.addAll(parent.getRules());
+		
+		if(!this.hasDefaultInterceptor() && parent.hasDefaultInterceptor()) {
+			
+			this.setDefaultInterceptor(parent.getDefaultInterceptor());
+		}
+		
+		this.interceptors.addAll(parent.getInterceptors());
+	}
+	
 	public void addInterceptor(FailureInterceptor interceptor) {
 		
 		this.interceptors.add(interceptor);

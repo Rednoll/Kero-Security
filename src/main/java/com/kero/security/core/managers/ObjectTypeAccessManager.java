@@ -42,7 +42,7 @@ public class ObjectTypeAccessManager {
 		
 		for(String name : propertyNames) {
 			
-			properties.add(this.managedType.getOrCreateProperty(name));
+			properties.add(this.managedType.getOrCreateLocalProperty(name));
 		}
 		
 		return properties(properties);
@@ -56,7 +56,7 @@ public class ObjectTypeAccessManager {
 	
 	public SinglePropertyAccessManager property(String propertyName) {
 		
-		return property(this.managedType.getOrCreateProperty(propertyName));
+		return property(this.managedType.getOrCreateLocalProperty(propertyName));
 	}
 	
 	public SinglePropertyAccessManager property(Property property) {

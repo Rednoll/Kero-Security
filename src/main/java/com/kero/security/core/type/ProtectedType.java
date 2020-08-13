@@ -4,32 +4,32 @@ import java.util.Map;
 import java.util.Set;
 
 import com.kero.security.core.property.Property;
-import com.kero.security.core.role.Role;
 import com.kero.security.core.rules.AccessRule;
 
 public interface ProtectedType {
 
-	public Map<String, Property> collectRules();
-	public void collectProperties(Map<String, Property> complexProperties, Map<String, Set<Role>> processedRoles);
+	public void collectProperties(Map<String, Property> complexProperties);
 	
-	public default Property getOrCreateProperty(String name) {
+	public default Property getOrCreateLocalProperty(String name) {
 		
-		if(hasProperty(name)) {
+		if(hasLocalProperty(name)) {
 			
-			return getProperty(name);
+			return getLocalProperty(name);
 		}
 		else {
 			
-			return createProperty(name);
+			return createLocalProperty(name);
 		}
 	}
 	
 	public void setInherit(boolean i);
 	public boolean isInherit();
 	
-	public Property createProperty(String name);
-	public boolean hasProperty(String name);
-	public Property getProperty(String name);
+	public Property createLocalProperty(String name);
+	public boolean hasLocalProperty(String name);
+	public Property getLocalProperty(String name);
+	public Set<Property> getLocalProperties();
+
 	public Set<Property> getProperties();
 
 	public void setDefaultRule(AccessRule defaulRule);

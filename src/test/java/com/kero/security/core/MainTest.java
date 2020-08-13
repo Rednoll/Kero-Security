@@ -1,7 +1,7 @@
 package com.kero.security.core;
 
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
@@ -45,9 +45,9 @@ public class MainTest {
 		
 		ProtectedType protectedType = manager.getType(TestObject2.class);
 	
-		Map<String, Property> properties = protectedType.collectRules();
+		Set<Property> properties = protectedType.getProperties();
 		
-		for(Property property : properties.values()) {
+		for(Property property : properties) {
 			
 			AccessRule defaultRule = property.getDefaultRule();
 			
