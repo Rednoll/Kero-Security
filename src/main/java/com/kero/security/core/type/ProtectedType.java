@@ -10,7 +10,7 @@ import com.kero.security.core.rules.AccessRule;
 public interface ProtectedType {
 
 	public Map<String, Property> collectRules();
-	public void collectRules(Map<String, Property> complexProperties, Map<String, Set<Role>> processedRoles);
+	public void collectProperties(Map<String, Property> complexProperties, Map<String, Set<Role>> processedRoles);
 	
 	public default Property getOrCreateProperty(String name) {
 		
@@ -23,6 +23,9 @@ public interface ProtectedType {
 			return createProperty(name);
 		}
 	}
+	
+	public void setInherit(boolean i);
+	public boolean isInherit();
 	
 	public Property createProperty(String name);
 	public boolean hasProperty(String name);

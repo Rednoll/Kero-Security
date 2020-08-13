@@ -1,9 +1,11 @@
 package com.kero.security.core.managers;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Function;
 
+import com.kero.security.core.interceptor.FailureInterceptorImpl;
 import com.kero.security.core.property.Property;
 import com.kero.security.core.role.Role;
 import com.kero.security.core.rules.AccessRule;
@@ -69,7 +71,36 @@ public class SinglePropertyAccessManager {
 		
 		if(roles.isEmpty()) return this;
 	
-		property.addRule(new AccessRuleImpl(roles, accessible, null));
+		property.addRule(new AccessRuleImpl(roles, accessible));
+		
+		return this;
+	}
+	
+	public SinglePropertyAccessManager failureInterceptor(Function<Object, Object> function, String... roleNames) {
+		
+		Set<Role> roles = new HashSet<>();
+		
+		for(String name : roleNames) {
+			
+			roles.add(manager.getOrCreateRole(name));
+		}
+		
+		return failureInterceptor(function, roles);
+	}
+	
+	
+	public SinglePropertyAccessManager defaultInterceptor(Function<Object, Object> function) {
+		
+		property.setDefaultInterceptor(new FailureInterceptorImpl(Collections.EMPTY_SET, function));
+		
+		return this;
+	}
+	
+	public SinglePropertyAccessManager failureInterceptor(Function<Object, Object> function, Set<Role> roles) {
+		
+		if(roles == null || roles.isEmpty()) return defaultInterceptor(function);
+		
+		property.addInterceptor(new FailureInterceptorImpl(roles, function));
 		
 		return this;
 	}
@@ -85,13 +116,13 @@ public class SinglePropertyAccessManager {
 		
 		return denyWithInterceptor(silentInterceptor, roles);
 	}
-		
-	public SinglePropertyAccessManager denyWithInterceptor(Function<Object, Object> silentInterceptor, Set<Role> roles) {
+	
+	public SinglePropertyAccessManager denyWithInterceptor(Function<Object, Object> function, Set<Role> roles) {
 			
 		if(roles.isEmpty()) return this;
 		
-		property.addRule(new AccessRuleImpl(roles, false, silentInterceptor));
+		property.addRule(new AccessRuleImpl(roles, false));
 		
-		return this;
+		return failureInterceptor(function, roles);
 	}
 }

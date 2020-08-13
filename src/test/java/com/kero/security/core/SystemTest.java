@@ -304,4 +304,45 @@ public class SystemTest {
 	
 		assertEquals(obj.getText(), "test12_ADMIN");
 	}
+	
+	@Test
+	public void getProperty_InterceptorInheritance() {
+		
+		manager
+			.type(TestObject.class)
+				.defaultDeny()
+				.property("text")
+					.grantFor("OWNER")
+					.failureInterceptor((obj)-> {
+						
+						return ((TestObject) obj).getText() + "_1";
+					}, "OWNER");
+		
+		manager
+			.type(TestObject2.class)
+				.property("text")
+				.denyFor("OWNER");
+		
+		TestObject2 obj = manager.protect(new TestObject2("test12"), "OWNER");
+		
+		assertEquals(obj.getText(), "test12_1");
+	}
+	
+	@Test
+	public void getProperty_InheritDisable() {
+		
+		manager
+			.type(TestObject.class)
+				.property("text")
+					.grantFor("OWNER");
+		
+		manager
+			.type(TestObject2.class)
+				.defaultDeny()
+				.disableInherit();
+		
+		TestObject2 obj = manager.protect(new TestObject2("test12"), "OWNER");
+		
+		assertThrows(AccessException.class, obj::getText);
+	}
 }

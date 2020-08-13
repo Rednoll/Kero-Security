@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import com.kero.security.core.interceptor.FailureInterceptor;
 import com.kero.security.core.managers.KeroAccessManager;
 import com.kero.security.core.property.Property;
 import com.kero.security.core.property.PropertyImpl;
@@ -21,6 +22,8 @@ public abstract class ProtectedTypeBase implements ProtectedType {
 	
 	protected KeroAccessManager manager;
 	
+	protected boolean inherit = true;
+
 	public ProtectedTypeBase() {
 		
 	}
@@ -38,12 +41,12 @@ public abstract class ProtectedTypeBase implements ProtectedType {
 		Map<String, Property> complexProperties = new HashMap<>();
 		Map<String, Set<Role>> processedRoles = new HashMap<>();
 		
-		collectRules(complexProperties, processedRoles);
+		collectProperties(complexProperties, processedRoles);
 	
 		return complexProperties;
 	}
 	
-	protected void collectLocalRules(Map<String, Property> complexProperties, Map<String, Set<Role>> processedRoles) {
+	protected void collectLocalProperties(Map<String, Property> complexProperties, Map<String, Set<Role>> processedRoles) {
 		
 		properties.forEach((propertyName, property)-> {
 			
@@ -55,6 +58,7 @@ public abstract class ProtectedTypeBase implements ProtectedType {
 				complexProperties.put(propertyName, complexProperty);
 			}
 			
+			//Default rule
 			if(!complexProperty.hasDefaultRule() && property.hasDefaultRule()) {
 				
 				complexProperty.setDefaultRule(property.getDefaultRule());
@@ -68,12 +72,25 @@ public abstract class ProtectedTypeBase implements ProtectedType {
 				processedRoles.put(propertyName, processedPropertyRoles);
 			}
 			
+			//Rules
 			for(AccessRule localRule : property.getRules()) {
 					
-				if(localRule.isSimple() && processedPropertyRoles.containsAll(localRule.getRoles())) continue;
+				if(processedPropertyRoles.containsAll(localRule.getRoles())) continue;
 				
 				processedPropertyRoles.addAll(localRule.getRoles());
 				complexProperty.addRule(localRule);
+			}
+			
+			//Default interceptor
+			if(!complexProperty.hasDefaultInterceptor() && property.hasDefaultInterceptor()) {
+				
+				complexProperty.setDefaultInterceptor(property.getDefaultInterceptor());
+			}
+			
+			//Interceptors
+			for(FailureInterceptor interceptor : property.getInterceptors()) {
+				
+				complexProperty.addInterceptor(interceptor);
 			}
 		});
 	}
@@ -88,9 +105,21 @@ public abstract class ProtectedTypeBase implements ProtectedType {
 		
 			if(interfazeType != null) {
 				
-				interfazeType.collectRules(complexProperties, processedRoles);
+				interfazeType.collectProperties(complexProperties, processedRoles);
 			}
 		}
+	}
+	
+	@Override
+	public void setInherit(boolean i) {
+		
+		this.inherit = i;
+	}
+	
+	@Override
+	public boolean isInherit() {
+		
+		return this.inherit;
 	}
 	
 	@Override

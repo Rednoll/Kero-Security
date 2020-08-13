@@ -3,6 +3,7 @@ package com.kero.security.core.property;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.kero.security.core.interceptor.FailureInterceptor;
 import com.kero.security.core.rules.AccessRule;
 import com.kero.security.core.type.ProtectedType;
 
@@ -12,7 +13,11 @@ public class PropertyImpl implements Property {
 	
 	private List<AccessRule> rules = new LinkedList<>();
 	
+	private List<FailureInterceptor> interceptors = new LinkedList<>();
+	
 	private AccessRule defaultRule;
+	
+	private FailureInterceptor defaultInterceptor;
 	
 	private ProtectedType owner;
 	
@@ -22,9 +27,19 @@ public class PropertyImpl implements Property {
 		this.name = name;
 	}
 	
+	public void addInterceptor(FailureInterceptor interceptor) {
+		
+		this.interceptors.add(interceptor);
+	}
+	
+	public List<FailureInterceptor> getInterceptors() {
+	
+		return this.interceptors;
+	}
+	
 	public void addRule(AccessRule rule) {
 		
-		rules.add(rule);
+		this.rules.add(rule);
 	}
 	
 	public List<AccessRule> getRules() {
@@ -60,5 +75,23 @@ public class PropertyImpl implements Property {
 	public ProtectedType getOwner() {
 		
 		return this.owner;
+	}
+
+	@Override
+	public void setDefaultInterceptor(FailureInterceptor interceptor) {
+		
+		this.defaultInterceptor = interceptor;
+	}
+
+	@Override
+	public boolean hasDefaultInterceptor() {
+		
+		return getDefaultInterceptor() != null;
+	}
+
+	@Override
+	public FailureInterceptor getDefaultInterceptor() {
+		
+		return this.defaultInterceptor;
 	}
 }

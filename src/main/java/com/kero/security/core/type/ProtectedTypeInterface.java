@@ -19,10 +19,14 @@ public class ProtectedTypeInterface extends ProtectedTypeBase {
 		super(manager, type, defaultRule);
 		
 	}
-
-	public void collectRules(Map<String, Property> complexProperties, Map<String, Set<Role>> processedRoles) {
+	
+	public void collectProperties(Map<String, Property> complexProperties, Map<String, Set<Role>> processedRoles) {
 		
-		collectLocalRules(complexProperties, processedRoles);
-		collectFromInterfaces(complexProperties, processedRoles);
+		collectLocalProperties(complexProperties, processedRoles);
+		
+		if(this.inherit) {
+			
+			collectFromInterfaces(complexProperties, processedRoles);
+		}
 	}
 }

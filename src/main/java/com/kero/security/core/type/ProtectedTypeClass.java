@@ -14,9 +14,10 @@ import org.slf4j.LoggerFactory;
 
 import com.kero.security.core.config.PreparedAccessConfiguration;
 import com.kero.security.core.config.PreparedAccessConfigurationImpl;
+import com.kero.security.core.config.PreparedAction;
 import com.kero.security.core.config.PreparedDenyRule;
 import com.kero.security.core.config.PreparedGrantRule;
-import com.kero.security.core.config.PreparedRule;
+import com.kero.security.core.interceptor.FailureInterceptor;
 import com.kero.security.core.managers.KeroAccessManager;
 import com.kero.security.core.property.Property;
 import com.kero.security.core.role.Role;
@@ -38,7 +39,7 @@ public class ProtectedTypeClass extends ProtectedTypeBase implements InvocationH
 	private Field originalField = null;
 	private Field pacField = null;
 	
-	private Map<String, Property> cashedRules;
+	private Map<String, Property> cashedProperties;
 	
 	private Map<Set<Role>, PreparedAccessConfiguration> configsCache = new HashMap<>();
 	
@@ -72,7 +73,7 @@ public class ProtectedTypeClass extends ProtectedTypeBase implements InvocationH
 	
 	public void updateRules() {
 		
-		this.cashedRules = collectRules();
+		this.cashedProperties = collectRules();
 	}
 
 	@Override
@@ -110,11 +111,11 @@ public class ProtectedTypeClass extends ProtectedTypeBase implements InvocationH
 		
 		LOGGER.debug("Prepare access configuration for "+type.getCanonicalName()+" roles: "+rolesList);
 		
-		Map<String, PreparedRule> preparedRules = new HashMap<>();
+		Map<String, PreparedAction> preparedActions = new HashMap<>();
 
 		updateRules();
 		
-		cashedRules.forEach((propertyName, property)-> {
+		cashedProperties.forEach((propertyName, property)-> {
 			
 			Set<Role> significantRoles = new HashSet<>(roles);
 			
@@ -126,7 +127,7 @@ public class ProtectedTypeClass extends ProtectedTypeBase implements InvocationH
  
 				if(rule.accessible(significantRoles)) {
  
-					preparedRules.put(propertyName, new PreparedGrantRule());
+					preparedActions.put(propertyName, new PreparedGrantRule());
 					return;
 				}
 				else if(rule.isDisallower()) {
@@ -135,55 +136,55 @@ public class ProtectedTypeClass extends ProtectedTypeBase implements InvocationH
 				}
 			}
 			
-			AccessRule intercetptingRule = determineInterceptor(property, roles);
+			FailureInterceptor interceptor = determineInterceptor(property, roles);
 			
-			if(intercetptingRule != null) {
+			if(interceptor != null) {
 				
-				preparedRules.put(propertyName, intercetptingRule.prepare(roles));
+				preparedActions.put(propertyName, interceptor.prepare(roles));
 				return;
 			}
 			
 			if(significantRoles.isEmpty()) {
 			
-				preparedRules.put(propertyName, new PreparedDenyRule());
+				preparedActions.put(propertyName, new PreparedDenyRule());
 				return;
 			}
 
 			if(property.hasDefaultRule()) {
 			
-				preparedRules.put(propertyName, property.getDefaultRule().prepare(roles));
+				preparedActions.put(propertyName, property.getDefaultRule().prepare(roles));
 				return;
 			}
 			else {
 				
 				ProtectedType propertyOwner = property.getOwner();
 				
-				preparedRules.put(propertyName, propertyOwner.getDefaultRule().prepare(roles));
+				preparedActions.put(propertyName, propertyOwner.getDefaultRule().prepare(roles));
 				return;
 			}
 		});
 		
-		PreparedRule defaultTypeRule = findDefaultRule().prepare(roles);
+		PreparedAction defaultTypeAction = findDefaultRule().prepare(roles);
 		
-		return new PreparedAccessConfigurationImpl(preparedRules, defaultTypeRule);
+		return new PreparedAccessConfigurationImpl(preparedActions, defaultTypeAction);
 	}
 	
-	private AccessRule determineInterceptor(Property property, Set<Role> roles) {
+	private FailureInterceptor determineInterceptor(Property property, Set<Role> roles) {
 	
-		int maxOverlap = -1;
+		int maxOverlap = 0;
 		int minTrash = Integer.MAX_VALUE;
-		AccessRule result = null;
+		FailureInterceptor result = null;
 		
-		for(AccessRule rule : property.getRules()) {
+		for(FailureInterceptor interceptor : property.getInterceptors()) {
 			
-			Set<Role> ruleRoles = rule.getRoles();
+			Set<Role> interceptorRoles = interceptor.getRoles();
 			
 			int overlap = 0;
 			int trash = 0;
 			
-			for(Role ruleRole : ruleRoles) {
+			for(Role interceptorRole : interceptorRoles) {
 				
-				if(roles.contains(ruleRole)) {
+				if(roles.contains(interceptorRole)) {
 					
 					overlap++;
 				}
@@ -195,21 +196,26 @@ public class ProtectedTypeClass extends ProtectedTypeBase implements InvocationH
 			
 			if(overlap == roles.size() && trash == 0) {
 				
-				return rule;
+				return interceptor;
 			}
 			
 			if(overlap > maxOverlap) {
 				
 				maxOverlap = overlap;
 				minTrash = trash;
-				result = rule;
+				result = interceptor;
 			}
 			else if(overlap == maxOverlap && trash < minTrash) {
 				
 				maxOverlap = overlap;
 				minTrash = trash;
-				result = rule;
+				result = interceptor;
 			}
+		}
+	
+		if(maxOverlap == 0) {
+			
+			return property.getDefaultInterceptor();
 		}
 		
 		return result;
@@ -218,32 +224,39 @@ public class ProtectedTypeClass extends ProtectedTypeBase implements InvocationH
 	private AccessRule findDefaultRule() {
 		
 		if(this.hasDefaultRule()) return this.getDefaultRule();
-
-		Class<?> superClass = this.type.getSuperclass();
 		
-		while(superClass != Object.class) {
+		if(this.inherit) {
 			
-			if(manager.hasType(superClass)) {
+			Class<?> superClass = this.type.getSuperclass();
+			
+			while(superClass != Object.class) {
 				
-				ProtectedType type = manager.getType(superClass);
-			
-				if(type.hasDefaultRule()) {
+				if(manager.hasType(superClass)) {
 					
-					return type.getDefaultRule();
+					ProtectedType type = manager.getType(superClass);
+				
+					if(type.hasDefaultRule()) {
+						
+						return type.getDefaultRule();
+					}
 				}
+				
+				superClass = superClass.getSuperclass();
 			}
-			
-			superClass = superClass.getSuperclass();
 		}
 		
 		return manager.getDefaultRule();
 	}
 	
-	public void collectRules(Map<String, Property> complexProperties, Map<String, Set<Role>> processedRoles) {
+	public void collectProperties(Map<String, Property> complexProperties, Map<String, Set<Role>> processedRoles) {
 		
-		collectLocalRules(complexProperties, processedRoles);
-		collectFromInterfaces(complexProperties, processedRoles);
-		collectFromSuperclass(complexProperties, processedRoles);
+		collectLocalProperties(complexProperties, processedRoles);
+		
+		if(this.inherit) {
+			
+			collectFromInterfaces(complexProperties, processedRoles);
+			collectFromSuperclass(complexProperties, processedRoles);
+		}
 	}
 	
 	protected void collectFromSuperclass(Map<String, Property> complexProperties, Map<String, Set<Role>> processedRoles) {
@@ -254,7 +267,7 @@ public class ProtectedTypeClass extends ProtectedTypeBase implements InvocationH
 			
 			ProtectedType supeclassType = manager.getOrCreateType(superclass);
 
-			supeclassType.collectRules(complexProperties, processedRoles);
+			supeclassType.collectProperties(complexProperties, processedRoles);
 
 			superclass = superclass.getSuperclass();
 		}

@@ -64,6 +64,23 @@ public class ObjectTypeAccessManager {
 		return new SinglePropertyAccessManager(this.manager, property);
 	}
 	
+
+	public ObjectTypeAccessManager disableInherit() {
+		
+		return inherit(false);
+	}
+
+	public ObjectTypeAccessManager enableInherit() {
+		
+		return inherit(true);
+	}
+	
+	public ObjectTypeAccessManager inherit(boolean inherit) {
+		
+		managedType.setInherit(inherit);
+		return this;
+	}
+	
 	public ProtectedType getManagedType() {
 		
 		return this.managedType;

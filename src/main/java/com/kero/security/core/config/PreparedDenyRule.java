@@ -4,7 +4,7 @@ import java.lang.reflect.Method;
 
 import com.kero.security.core.exception.AccessException;
 
-public class PreparedDenyRule implements PreparedRule {
+public class PreparedDenyRule implements PreparedAction {
 
 	@Override
 	public Object process(Method method, Object original, Object[] args) {
