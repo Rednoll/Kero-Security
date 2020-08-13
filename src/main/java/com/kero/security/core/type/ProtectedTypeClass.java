@@ -1,8 +1,10 @@
 package com.kero.security.core.type;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -39,6 +41,8 @@ public class ProtectedTypeClass extends ProtectedTypeBase implements InvocationH
 	private Field originalField = null;
 	private Field pacField = null;
 	
+	private Constructor proxyConstructor;
+	
 	private Map<Set<Role>, PreparedAccessConfiguration> configsCache = new HashMap<>();
 	
 	public ProtectedTypeClass() {
@@ -67,6 +71,9 @@ public class ProtectedTypeClass extends ProtectedTypeBase implements InvocationH
  
 		this.pacField = this.proxyClass.getDeclaredField("pac");
 		this.pacField.setAccessible(true);
+		
+		this.proxyConstructor = this.proxyClass.getConstructor(this.type, PreparedAccessConfiguration.class);
+		this.proxyConstructor.setAccessible(true);
 	}
 
 	@Override
@@ -85,10 +92,10 @@ public class ProtectedTypeClass extends ProtectedTypeBase implements InvocationH
 		if(config == null) {
 	
 			config = prepareAccessConfiguration(roles);
-			configsCache.put(roles, config);
+			configsCache.put(Collections.unmodifiableSet(new HashSet<>(roles)), config);
 		}
 		
-		return (T) proxyClass.getConstructor(this.type, PreparedAccessConfiguration.class).newInstance(object, config);	
+		return (T) this.proxyConstructor.newInstance(object, config);
 	}
 	
 	private PreparedAccessConfiguration prepareAccessConfiguration(Set<Role> roles) {

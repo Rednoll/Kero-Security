@@ -49,7 +49,7 @@ public abstract class ProtectedTypeBase implements ProtectedType {
 			
 			if(complexProperty == null) {
 			
-				complexProperty = new PropertyImpl(property.getOwner(), propertyName);
+				complexProperty = new PropertyImpl(propertyName);
 				complexProperties.put(propertyName, complexProperty);
 			}
 			
@@ -87,7 +87,7 @@ public abstract class ProtectedTypeBase implements ProtectedType {
 	@Override
 	public Property createLocalProperty(String name) {
 		
-		Property prop = new PropertyImpl(this, name);
+		Property prop = new PropertyImpl(name);
 		
 		localProperties.put(name, prop);
 		

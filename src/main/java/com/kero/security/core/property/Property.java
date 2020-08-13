@@ -27,5 +27,5 @@ public interface Property {
 	public List<AccessRule> getRules();
 	public List<FailureInterceptor> getInterceptors();
 	
-	public ProtectedType getOwner();
+//	public ProtectedType getOwner();
 }

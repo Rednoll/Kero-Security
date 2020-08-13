@@ -19,11 +19,8 @@ public class PropertyImpl implements Property {
 	
 	private FailureInterceptor defaultInterceptor;
 	
-	private ProtectedType owner;
-	
-	public PropertyImpl(ProtectedType owner, String name) {
+	public PropertyImpl(String name) {
 		
-		this.owner = owner;
 		this.name = name;
 	}
 	
@@ -87,12 +84,6 @@ public class PropertyImpl implements Property {
 	public String getName() {
 		
 		return this.name;
-	}
-
-	@Override
-	public ProtectedType getOwner() {
-		
-		return this.owner;
 	}
 
 	@Override
