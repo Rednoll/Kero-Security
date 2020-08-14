@@ -63,12 +63,9 @@ public abstract class ProtectedTypeBase implements ProtectedType {
 		
 		for(Class<?> interfaze : interfaces) {
 			
-			ProtectedType interfazeType = manager.getType(interfaze);
+			ProtectedType interfazeType = manager.getOrCreateType(interfaze);
 		
-			if(interfazeType != null) {
-				
-				interfazeType.collectProperties(complexProperties);
-			}
+			interfazeType.collectProperties(complexProperties);
 		}
 	}
 	
@@ -134,5 +131,11 @@ public abstract class ProtectedTypeBase implements ProtectedType {
 	public Class<?> getTypeClass() {
 		
 		return this.type;
+	}
+	
+	@Override
+	public KeroAccessManager getManager() {
+		
+		return this.manager;
 	}
 }

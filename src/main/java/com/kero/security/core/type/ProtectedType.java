@@ -3,6 +3,7 @@ package com.kero.security.core.type;
 import java.util.Map;
 import java.util.Set;
 
+import com.kero.security.core.managers.KeroAccessManager;
 import com.kero.security.core.property.Property;
 import com.kero.security.core.rules.AccessRule;
 
@@ -37,4 +38,6 @@ public interface ProtectedType {
 	public AccessRule getDefaultRule();
 	
 	public Class<?> getTypeClass();
+	
+	public KeroAccessManager getManager();
 }

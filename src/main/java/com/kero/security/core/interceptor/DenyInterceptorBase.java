@@ -3,23 +3,19 @@ package com.kero.security.core.interceptor;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.function.Function;
 
 import com.kero.security.core.config.PreparedInterceptor;
 import com.kero.security.core.role.Role;
 
-public class FailureInterceptorImpl implements FailureInterceptor {
-
+public abstract class DenyInterceptorBase implements DenyInterceptor {
+	
 	private Set<Role> roles = new HashSet<>();
 	
-	private Function<Object, Object> function;
+	public DenyInterceptorBase() {}
 	
-	public FailureInterceptorImpl() {}
-	
-	public FailureInterceptorImpl(Set<Role> roles, Function<Object, Object> function) {
+	public DenyInterceptorBase(Set<Role> roles) {
 	
 		this.roles = roles;
-		this.function = function;
 	}
 	
 	@Override
@@ -27,7 +23,7 @@ public class FailureInterceptorImpl implements FailureInterceptor {
 		
 		if(manage(roles) || this.roles.isEmpty()) {
 		
-			return new PreparedInterceptor(function);
+			return new PreparedInterceptor(this::intercept);
 		}
 		else {
 			
@@ -46,13 +42,12 @@ public class FailureInterceptorImpl implements FailureInterceptor {
 		
 		return !Collections.disjoint(this.roles, roles);
 	}
-	
-	@Override
-	public Object intercept(Object obj) {
-		
-		return function.apply(obj);
-	}
 
+	public void setRoles(Set<Role> roles) {
+		
+		this.roles = roles;
+	}
+	
 	@Override
 	public Set<Role> getRoles() {
 	

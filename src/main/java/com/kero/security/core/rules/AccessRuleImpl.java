@@ -1,16 +1,12 @@
 package com.kero.security.core.rules;
 
-import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
-import java.util.function.Function;
 
+import com.kero.security.core.config.PreparedAction;
 import com.kero.security.core.config.PreparedDenyRule;
 import com.kero.security.core.config.PreparedGrantRule;
-import com.kero.security.core.config.PreparedInterceptor;
-import com.kero.security.core.config.PreparedAction;
-import com.kero.security.core.exception.AccessException;
 import com.kero.security.core.role.Role;
 
 public class AccessRuleImpl implements AccessRule {

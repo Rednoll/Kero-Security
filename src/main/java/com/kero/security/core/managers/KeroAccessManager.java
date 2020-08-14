@@ -41,4 +41,6 @@ public interface KeroAccessManager {
 	public <T> T protect(T object, Set<Role> roles);
 	
 	public AccessRule getDefaultRule();
+	
+	public String extractName(String rawName);
 }

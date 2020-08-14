@@ -2,7 +2,7 @@ package com.kero.security.core.property;
 
 import java.util.List;
 
-import com.kero.security.core.interceptor.FailureInterceptor;
+import com.kero.security.core.interceptor.DenyInterceptor;
 import com.kero.security.core.rules.AccessRule;
 import com.kero.security.core.type.ProtectedType;
 
@@ -14,18 +14,18 @@ public interface Property {
 	
 	public void addRule(AccessRule rule);
 	
-	public void setDefaultInterceptor(FailureInterceptor interceptor);
+	public void setDefaultInterceptor(DenyInterceptor interceptor);
 	public boolean hasDefaultInterceptor();
-	public FailureInterceptor getDefaultInterceptor();
+	public DenyInterceptor getDefaultInterceptor();
 	
-	public void addInterceptor(FailureInterceptor interceptor);
+	public void addInterceptor(DenyInterceptor interceptor);
 	
 	public void inherit(Property parent);
 	
 	public String getName();
 	
 	public List<AccessRule> getRules();
-	public List<FailureInterceptor> getInterceptors();
+	public List<DenyInterceptor> getInterceptors();
 	
 //	public ProtectedType getOwner();
 }

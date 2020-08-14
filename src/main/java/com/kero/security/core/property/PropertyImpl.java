@@ -3,7 +3,7 @@ package com.kero.security.core.property;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.kero.security.core.interceptor.FailureInterceptor;
+import com.kero.security.core.interceptor.DenyInterceptor;
 import com.kero.security.core.rules.AccessRule;
 import com.kero.security.core.type.ProtectedType;
 
@@ -13,11 +13,11 @@ public class PropertyImpl implements Property {
 	
 	private List<AccessRule> rules = new LinkedList<>();
 	
-	private List<FailureInterceptor> interceptors = new LinkedList<>();
+	private List<DenyInterceptor> interceptors = new LinkedList<>();
 	
 	private AccessRule defaultRule;
 	
-	private FailureInterceptor defaultInterceptor;
+	private DenyInterceptor defaultInterceptor;
 	
 	public PropertyImpl(String name) {
 		
@@ -42,12 +42,12 @@ public class PropertyImpl implements Property {
 		this.interceptors.addAll(parent.getInterceptors());
 	}
 	
-	public void addInterceptor(FailureInterceptor interceptor) {
+	public void addInterceptor(DenyInterceptor interceptor) {
 		
 		this.interceptors.add(interceptor);
 	}
 	
-	public List<FailureInterceptor> getInterceptors() {
+	public List<DenyInterceptor> getInterceptors() {
 	
 		return this.interceptors;
 	}
@@ -87,7 +87,7 @@ public class PropertyImpl implements Property {
 	}
 
 	@Override
-	public void setDefaultInterceptor(FailureInterceptor interceptor) {
+	public void setDefaultInterceptor(DenyInterceptor interceptor) {
 		
 		this.defaultInterceptor = interceptor;
 	}
@@ -99,7 +99,7 @@ public class PropertyImpl implements Property {
 	}
 
 	@Override
-	public FailureInterceptor getDefaultInterceptor() {
+	public DenyInterceptor getDefaultInterceptor() {
 		
 		return this.defaultInterceptor;
 	}

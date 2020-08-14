@@ -19,7 +19,7 @@ import com.kero.security.core.config.PreparedAccessConfigurationImpl;
 import com.kero.security.core.config.PreparedAction;
 import com.kero.security.core.config.PreparedDenyRule;
 import com.kero.security.core.config.PreparedGrantRule;
-import com.kero.security.core.interceptor.FailureInterceptor;
+import com.kero.security.core.interceptor.DenyInterceptor;
 import com.kero.security.core.managers.KeroAccessManager;
 import com.kero.security.core.property.Property;
 import com.kero.security.core.role.Role;
@@ -138,7 +138,7 @@ public class ProtectedTypeClass extends ProtectedTypeBase implements InvocationH
 				}
 			}
 			
-			FailureInterceptor interceptor = determineInterceptor(property, roles);
+			DenyInterceptor interceptor = determineInterceptor(property, roles);
 			
 			if(interceptor != null) {
 				
@@ -176,16 +176,16 @@ public class ProtectedTypeClass extends ProtectedTypeBase implements InvocationH
 		
 		PreparedAction defaultTypeAction = findDefaultRule().prepare(roles);
 		
-		return new PreparedAccessConfigurationImpl(preparedActions, defaultTypeAction);
+		return new PreparedAccessConfigurationImpl(this, preparedActions, defaultTypeAction);
 	}
 	
-	private FailureInterceptor determineInterceptor(Property property, Set<Role> roles) {
+	private DenyInterceptor determineInterceptor(Property property, Set<Role> roles) {
 	
 		int maxOverlap = 0;
 		int minTrash = Integer.MAX_VALUE;
-		FailureInterceptor result = null;
+		DenyInterceptor result = null;
 		
-		for(FailureInterceptor interceptor : property.getInterceptors()) {
+		for(DenyInterceptor interceptor : property.getInterceptors()) {
 			
 			Set<Role> interceptorRoles = interceptor.getRoles();
 			

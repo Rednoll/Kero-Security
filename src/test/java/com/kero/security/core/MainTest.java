@@ -21,29 +21,18 @@ public class MainTest {
 
 		manager
 			.type(TestInterface.class)
-				.defaultDeny()
 				.property("text")
-					.defaultGrant()
-					.denyFor("FRIEND")
-					.defaultInterceptor((obj)-> {
+					.denyWithInterceptor((obj)-> {
 					
 						return "You not have access!";
-					});
+					}, "FRIEND");
 		manager
 			.type(TestObject.class)
+				.defaultGrant()
 				.property("text")
-					.grantFor("COMMON", "OWNER", "ADMIN")
-					.defaultInterceptor((obj)-> {
-						
-						return "You not have access! (Overrided by TestObject.class)";
-					});
-			
-		manager
-			.type(TestObject2.class)
-				.property("text")
-					.denyFor("COMMON", "ADMIN");
-		
-		ProtectedType protectedType = manager.getType(TestObject2.class);
+					.denyFor("FRIEND");
+
+		ProtectedType protectedType = manager.getType(TestObject.class);
 	
 		Set<Property> properties = protectedType.getProperties();
 		
@@ -83,6 +72,6 @@ public class MainTest {
 			manager.protect(new TestObject2("test12"), "COMMON", "OWNER").getText();
 		}
 		
-		System.out.println(manager.protect(new TestObject2("test12"), "COMMON").getText());
+		System.out.println(manager.protect(new TestObject2("test12"), "FRIEND").getText());
 	}
 }

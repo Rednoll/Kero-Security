@@ -313,7 +313,7 @@ public class SystemTest {
 				.defaultDeny()
 				.property("text")
 					.grantFor("OWNER")
-					.failureInterceptor((obj)-> {
+					.addDenyInterceptor((obj)-> {
 						
 						return ((TestObject) obj).getText() + "_1";
 					}, "OWNER");
