@@ -1,1 +1,1 @@
-"# KeroSecurity-Docs-RU"  
+Wiki(RU): https://kero-security.readthedocs.io/ru/latest/
