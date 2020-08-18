@@ -1,4 +1,4 @@
-package com.kero.security.core.type;
+package com.kero.security.core.scheme;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -10,7 +10,7 @@ import com.kero.security.core.property.Property;
 import com.kero.security.core.property.PropertyImpl;
 import com.kero.security.core.rules.AccessRule;
 
-public abstract class ProtectedTypeBase implements ProtectedType {
+public abstract class AccessSchemeBase implements AccessScheme {
 
 	protected Class<?> type;
 	
@@ -22,11 +22,11 @@ public abstract class ProtectedTypeBase implements ProtectedType {
 	
 	protected boolean inherit = true;
 
-	public ProtectedTypeBase() {
+	public AccessSchemeBase() {
 		
 	}
 	
-	public ProtectedTypeBase(KeroAccessManager manager, Class<?> type) {
+	public AccessSchemeBase(KeroAccessManager manager, Class<?> type) {
 		
 		this.manager = manager;
 		this.type = type;
@@ -63,9 +63,9 @@ public abstract class ProtectedTypeBase implements ProtectedType {
 		
 		for(Class<?> interfaze : interfaces) {
 			
-			ProtectedType interfazeType = manager.getOrCreateType(interfaze);
+			AccessScheme interfazeScheme = manager.getOrCreateScheme(interfaze);
 		
-			interfazeType.collectProperties(complexProperties);
+			interfazeScheme.collectProperties(complexProperties);
 		}
 	}
 	

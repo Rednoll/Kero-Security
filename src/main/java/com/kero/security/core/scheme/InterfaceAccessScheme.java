@@ -1,18 +1,18 @@
-package com.kero.security.core.type;
+package com.kero.security.core.scheme;
 
 import java.util.Map;
 
 import com.kero.security.core.managers.KeroAccessManager;
 import com.kero.security.core.property.Property;
 
-public class ProtectedTypeInterface extends ProtectedTypeBase {
+public class InterfaceAccessScheme extends AccessSchemeBase {
 
-	public ProtectedTypeInterface() {
+	public InterfaceAccessScheme() {
 		super();
 		
 	}
 	
-	public ProtectedTypeInterface(KeroAccessManager manager, Class<?> type) {
+	public InterfaceAccessScheme(KeroAccessManager manager, Class<?> type) {
 		super(manager, type);
 		
 	}

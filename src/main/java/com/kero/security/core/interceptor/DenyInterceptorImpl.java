@@ -4,6 +4,7 @@ import java.util.Set;
 import java.util.function.Function;
 
 import com.kero.security.core.role.Role;
+import com.kero.security.core.scheme.AccessScheme;
 
 public class DenyInterceptorImpl extends DenyInterceptorBase {
 
@@ -11,8 +12,8 @@ public class DenyInterceptorImpl extends DenyInterceptorBase {
 	
 	public DenyInterceptorImpl() {}
 	
-	public DenyInterceptorImpl(Set<Role> roles, Function<Object, Object> function) {
-		super(roles);
+	public DenyInterceptorImpl(AccessScheme scheme, Set<Role> roles, Function<Object, Object> function) {
+		super(scheme, roles);
 		
 		this.function = function;
 	}

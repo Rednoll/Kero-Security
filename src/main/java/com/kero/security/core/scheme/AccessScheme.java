@@ -1,4 +1,4 @@
-package com.kero.security.core.type;
+package com.kero.security.core.scheme;
 
 import java.util.Map;
 import java.util.Set;
@@ -7,7 +7,7 @@ import com.kero.security.core.managers.KeroAccessManager;
 import com.kero.security.core.property.Property;
 import com.kero.security.core.rules.AccessRule;
 
-public interface ProtectedType {
+public interface AccessScheme {
 
 	public void collectProperties(Map<String, Property> complexProperties);
 	

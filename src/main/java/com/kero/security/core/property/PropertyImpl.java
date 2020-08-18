@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.kero.security.core.interceptor.DenyInterceptor;
 import com.kero.security.core.rules.AccessRule;
-import com.kero.security.core.type.ProtectedType;
+import com.kero.security.core.scheme.AccessScheme;
 
 public class PropertyImpl implements Property {
 

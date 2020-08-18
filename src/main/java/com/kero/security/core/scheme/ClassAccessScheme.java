@@ -1,9 +1,10 @@
-package com.kero.security.core.type;
+package com.kero.security.core.scheme;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -16,9 +17,9 @@ import org.slf4j.LoggerFactory;
 
 import com.kero.security.core.config.PreparedAccessConfiguration;
 import com.kero.security.core.config.PreparedAccessConfigurationImpl;
-import com.kero.security.core.config.PreparedAction;
-import com.kero.security.core.config.PreparedDenyRule;
-import com.kero.security.core.config.PreparedGrantRule;
+import com.kero.security.core.config.prepared.PreparedAction;
+import com.kero.security.core.config.prepared.PreparedDenyRule;
+import com.kero.security.core.config.prepared.PreparedGrantRule;
 import com.kero.security.core.interceptor.DenyInterceptor;
 import com.kero.security.core.managers.KeroAccessManager;
 import com.kero.security.core.property.Property;
@@ -32,7 +33,7 @@ import net.bytebuddy.implementation.InvocationHandlerAdapter;
 import net.bytebuddy.implementation.MethodCall;
 import net.bytebuddy.matcher.ElementMatchers;
 
-public class ProtectedTypeClass extends ProtectedTypeBase implements InvocationHandler {
+public class ClassAccessScheme extends AccessSchemeBase implements InvocationHandler {
 
 	private static Logger LOGGER = LoggerFactory.getLogger("KeroSecurity");
 	
@@ -45,35 +46,38 @@ public class ProtectedTypeClass extends ProtectedTypeBase implements InvocationH
 	
 	private Map<Set<Role>, PreparedAccessConfiguration> configsCache = new HashMap<>();
 	
-	public ProtectedTypeClass() {
+	public ClassAccessScheme() {
 		super();
 	
 	}
 	
-	public ProtectedTypeClass(KeroAccessManager manager, Class<?> type) throws Exception {
+	public ClassAccessScheme(KeroAccessManager manager, Class<?> type) throws Exception {
 		super(manager, type);
 	
-		this.proxyClass = new ByteBuddy()
-				.subclass(type)
-				.defineField("original", type, Visibility.PRIVATE)
-				.defineField("pac", PreparedAccessConfiguration.class, Visibility.PRIVATE)
-				.defineConstructor(Visibility.PUBLIC)
-				.withParameters(type, PreparedAccessConfiguration.class)
-				.intercept(MethodCall.invoke(type.getConstructor()).andThen(FieldAccessor.ofField("original").setsArgumentAt(0).andThen(FieldAccessor.ofField("pac").setsArgumentAt(1))))
-				.method(ElementMatchers.isPublic())
-				.intercept(InvocationHandlerAdapter.of(this))
-				.make()
-				.load(ClassLoader.getSystemClassLoader())
-				.getLoaded();
-		
-		this.originalField = this.proxyClass.getDeclaredField("original");
-		this.originalField.setAccessible(true);
- 
-		this.pacField = this.proxyClass.getDeclaredField("pac");
-		this.pacField.setAccessible(true);
-		
-		this.proxyConstructor = this.proxyClass.getConstructor(this.type, PreparedAccessConfiguration.class);
-		this.proxyConstructor.setAccessible(true);
+		if(!Modifier.isAbstract(type.getModifiers())) {
+			
+			this.proxyClass = new ByteBuddy()
+					.subclass(type)
+					.defineField("original", type, Visibility.PRIVATE)
+					.defineField("pac", PreparedAccessConfiguration.class, Visibility.PRIVATE)
+					.defineConstructor(Visibility.PUBLIC)
+					.withParameters(type, PreparedAccessConfiguration.class)
+					.intercept(MethodCall.invoke(type.getConstructor()).andThen(FieldAccessor.ofField("original").setsArgumentAt(0).andThen(FieldAccessor.ofField("pac").setsArgumentAt(1))))
+					.method(ElementMatchers.isPublic())
+					.intercept(InvocationHandlerAdapter.of(this))
+					.make()
+					.load(ClassLoader.getSystemClassLoader())
+					.getLoaded();
+			
+			this.originalField = this.proxyClass.getDeclaredField("original");
+			this.originalField.setAccessible(true);
+	 
+			this.pacField = this.proxyClass.getDeclaredField("pac");
+			this.pacField.setAccessible(true);
+			
+			this.proxyConstructor = this.proxyClass.getConstructor(this.type, PreparedAccessConfiguration.class);
+			this.proxyConstructor.setAccessible(true);
+		}
 	}
 
 	@Override
@@ -129,7 +133,7 @@ public class ProtectedTypeClass extends ProtectedTypeBase implements InvocationH
  
 				if(rule.accessible(significantRoles)) {
  
-					preparedActions.put(propertyName, new PreparedGrantRule());
+					preparedActions.put(propertyName, new PreparedGrantRule(this, roles));
 					return;
 				}
 				else if(rule.isDisallower()) {
@@ -148,13 +152,13 @@ public class ProtectedTypeClass extends ProtectedTypeBase implements InvocationH
 			
 			if(significantRoles.isEmpty()) {
 			
-				preparedActions.put(propertyName, new PreparedDenyRule());
+				preparedActions.put(propertyName, new PreparedDenyRule(this, roles));
 				return;
 			}
 
 			if(property.hasDefaultRule()) {
 			
-				preparedActions.put(propertyName, property.getDefaultRule().prepare(roles));
+				preparedActions.put(propertyName, property.getDefaultRule().prepare(this, roles));
 				return;
 			}
 			else {
@@ -163,18 +167,18 @@ public class ProtectedTypeClass extends ProtectedTypeBase implements InvocationH
 				
 				if(defaultRule != null) {
 					
-					preparedActions.put(propertyName, defaultRule.prepare(roles));
+					preparedActions.put(propertyName, defaultRule.prepare(this, roles));
 					return;
 				}
 				else {
 					
-					preparedActions.put(propertyName, this.manager.getDefaultRule().prepare(roles));
+					preparedActions.put(propertyName, this.manager.getDefaultRule().prepare(this, roles));
 					return;
 				}
 			}
 		});
 		
-		PreparedAction defaultTypeAction = findDefaultRule().prepare(roles);
+		PreparedAction defaultTypeAction = findDefaultRule().prepare(this, roles);
 		
 		return new PreparedAccessConfigurationImpl(this, preparedActions, defaultTypeAction);
 	}
@@ -202,11 +206,6 @@ public class ProtectedTypeClass extends ProtectedTypeBase implements InvocationH
 					
 					trash++;
 				}
-			}
-			
-			if(overlap == roles.size() && trash == 0) {
-				
-				return interceptor;
 			}
 			
 			if(overlap > maxOverlap) {
@@ -241,13 +240,13 @@ public class ProtectedTypeClass extends ProtectedTypeBase implements InvocationH
 			
 			while(superClass != Object.class) {
 				
-				if(manager.hasType(superClass)) {
+				if(manager.hasScheme(superClass)) {
 					
-					ProtectedType type = manager.getType(superClass);
+					AccessScheme scheme = manager.getScheme(superClass);
 				
-					if(type.hasDefaultRule()) {
+					if(scheme.hasDefaultRule()) {
 						
-						return type.getDefaultRule();
+						return scheme.getDefaultRule();
 					}
 				}
 				
@@ -271,15 +270,15 @@ public class ProtectedTypeClass extends ProtectedTypeBase implements InvocationH
 	
 	protected void collectFromSuperclass(Map<String, Property> complexProperties) {
 		
-		Class<?> superclass = type.getSuperclass();
+		Class<?> superClass = type.getSuperclass();
 		
-		while(superclass != Object.class) {
+		while(superClass != Object.class) {
 			
-			ProtectedType supeclassType = manager.getOrCreateType(superclass);
+			AccessScheme supeclassScheme = manager.getOrCreateScheme(superClass);
 
-			supeclassType.collectProperties(complexProperties);
+			supeclassScheme.collectProperties(complexProperties);
 
-			superclass = superclass.getSuperclass();
+			superClass = superClass.getSuperclass();
 		}
 	}
 }

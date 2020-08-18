@@ -1,16 +1,12 @@
 package com.kero.security.core;
 
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
 import com.kero.security.core.managers.KeroAccessManager;
 import com.kero.security.core.managers.KeroAccessManagerImpl;
-import com.kero.security.core.property.Property;
-import com.kero.security.core.role.Role;
-import com.kero.security.core.rules.AccessRule;
-import com.kero.security.core.type.ProtectedType;
 
 public class MainTest {
 
@@ -20,20 +16,26 @@ public class MainTest {
 		KeroAccessManager manager = new KeroAccessManagerImpl();
 
 		manager
-			.type(TestInterface.class)
+			.scheme(TestInterface.class)
 				.property("text")
 					.denyWithInterceptor((obj)-> {
 					
 						return "You not have access!";
 					}, "FRIEND");
 		manager
-			.type(TestObject.class)
-				.defaultGrant()
+			.scheme(TestObject.class)
+				.defaultDeny()
 				.property("text")
-					.denyFor("FRIEND");
-
-		ProtectedType protectedType = manager.getType(TestObject.class);
-	
+					.denyFor("FRIEND")
+					.grantFor("OWNER");
+		
+		TestObjectDeep deep = manager.protect(new TestObjectDeep(new TestObject("test text!!")), "FRIEND");
+		
+		System.out.println("text: "+deep.getObjects().iterator().next().getText());
+		
+		//TEST IN IN
+		
+		/*
 		Set<Property> properties = protectedType.getProperties();
 		
 		for(Property property : properties) {
@@ -73,5 +75,33 @@ public class MainTest {
 		}
 		
 		System.out.println(manager.protect(new TestObject2("test12"), "FRIEND").getText());
+		*/
+	}
+
+	public static class TestObjectDeep {
+		
+		private Set<TestObject> objects = new HashSet<>();
+		private TestObject testObject = null;
+		
+		public TestObjectDeep() {
+			
+			objects.add(new TestObject("collection object"));
+		}
+		
+		public TestObjectDeep(TestObject testObject) {
+			this();
+			
+			this.testObject = testObject;
+		}
+		
+		public Set<TestObject> getObjects() {
+		
+			return this.objects;
+		}
+		
+		public TestObject getTestObject() {
+			
+			return this.testObject;
+		}
 	}
 }

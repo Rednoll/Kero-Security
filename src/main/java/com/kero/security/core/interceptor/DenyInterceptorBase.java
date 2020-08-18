@@ -4,17 +4,20 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.kero.security.core.config.PreparedInterceptor;
+import com.kero.security.core.config.prepared.PreparedInterceptor;
 import com.kero.security.core.role.Role;
+import com.kero.security.core.scheme.AccessScheme;
 
 public abstract class DenyInterceptorBase implements DenyInterceptor {
 	
 	private Set<Role> roles = new HashSet<>();
+	private AccessScheme scheme;
 	
 	public DenyInterceptorBase() {}
 	
-	public DenyInterceptorBase(Set<Role> roles) {
+	public DenyInterceptorBase(AccessScheme scheme, Set<Role> roles) {
 	
+		this.scheme = scheme;
 		this.roles = roles;
 	}
 	
@@ -23,7 +26,7 @@ public abstract class DenyInterceptorBase implements DenyInterceptor {
 		
 		if(manage(roles) || this.roles.isEmpty()) {
 		
-			return new PreparedInterceptor(this::intercept);
+			return new PreparedInterceptor(this.scheme, roles, this::intercept);
 		}
 		else {
 			

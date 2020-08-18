@@ -27,26 +27,24 @@ import com.kero.security.core.rules.annotations.DefaultDeny;
 import com.kero.security.core.rules.annotations.DefaultGrant;
 import com.kero.security.core.rules.annotations.DenyFor;
 import com.kero.security.core.rules.annotations.GrantFor;
-import com.kero.security.core.type.ProtectedType;
-import com.kero.security.core.type.ProtectedTypeClass;
-import com.kero.security.core.type.ProtectedTypeInterface;
+import com.kero.security.core.scheme.AccessScheme;
+import com.kero.security.core.scheme.ClassAccessScheme;
+import com.kero.security.core.scheme.InterfaceAccessScheme;
 
 public class KeroAccessManagerImpl implements KeroAccessManager {
 	
 	protected static Logger LOGGER = LoggerFactory.getLogger("KeroSecurity");
 	
-	protected Map<Class, ProtectedType> types = new HashMap<>();
+	protected Map<Class, AccessScheme> schemes = new HashMap<>();
 	
 	protected Map<String, Role> roles = new HashMap<>();
 	
-	protected AccessRule defaultRule = AccessRuleImpl.DENY_ALL;
-
+	protected AccessRule defaultRule = AccessRuleImpl.GRANT_ALL;
+	
 	@Override
-	public Role createRole(String name, int priority) {
+	public Role createRole(String name) {
 		
-		if(hasRoleWithPriority(priority)) throw new RuntimeException("Role with priority: "+priority+" already exists!");
-		
-		Role role = new RoleImpl(name, priority);
+		Role role = new RoleImpl(name);
 		
 		roles.put(name, role);
 		
@@ -65,29 +63,9 @@ public class KeroAccessManagerImpl implements KeroAccessManager {
 			return getRole(name);
 		}
 		else {
-			
-			Role withMaxPriority = getRoleWithMaxPriorty();
-			int priority = withMaxPriority != null ? withMaxPriority.getPriority() + 1 : 1;
-			
-			return createRole(name, priority);
+
+			return createRole(name);
 		}
-	}
-	
-	public Role getRoleWithMaxPriorty() {
-		
-		Role role = null;
-		int max = Integer.MIN_VALUE;
-		
-		for(Role suspect : roles.values()) {
-			
-			if(suspect.getPriority() > max) {
-				
-				role = suspect;
-				max = suspect.getPriority();
-			}
-		}
-		
-		return role;
 	}
 	
 	public boolean hasRole(String name) {
@@ -95,37 +73,24 @@ public class KeroAccessManagerImpl implements KeroAccessManager {
 		return this.roles.containsKey(name);
 	}
 	
-	public boolean hasRoleWithPriority(int priority) {
-		
-		for(Role role : roles.values()) {
-			
-			if(role.getPriority() == priority) {
-				
-				return true;
-			}
-		}
-		
-		return false;
-	}
-	
 	@Override
-	public boolean hasType(Class<?> rawType) {
+	public boolean hasScheme(Class<?> rawType) {
 		
-		return types.containsKey(rawType);
+		return schemes.containsKey(rawType);
 	}
 
 	@Override
-	public ProtectedType getType(Class<?> rawType) {
+	public AccessScheme getScheme(Class<?> rawType) {
 		
-		return types.get(rawType);
+		return schemes.get(rawType);
 	}
 	
 	@Override
-	public ObjectTypeAccessManager type(Class<?> rawType) {
+	public AccessSchemeManager scheme(Class<?> rawType) {
 		
 		try {
 			
-			return new ObjectTypeAccessManager(this, getOrCreateType(rawType));
+			return new AccessSchemeManager(this, getOrCreateScheme(rawType));
 		}
 		catch(Exception e) {
 			
@@ -133,26 +98,26 @@ public class KeroAccessManagerImpl implements KeroAccessManager {
 		}
 	}
 	
-	public ProtectedType getOrCreateType(Class<?> rawType){
+	public AccessScheme getOrCreateScheme(Class<?> rawType){
 		
-		return hasType(rawType) ? getType(rawType) : createType(rawType);
+		return hasScheme(rawType) ? getScheme(rawType) : createScheme(rawType);
 	}
 	
-	public ProtectedType createType(Class<?> rawType) {
+	public AccessScheme createScheme(Class<?> rawType) {
 		
-		ProtectedType type = null;
+		AccessScheme scheme = null;
 		
 		if(rawType.isInterface()) {
 			
 			LOGGER.debug("Creating protected type INTERFACE for: "+rawType.getCanonicalName());
-			type = new ProtectedTypeInterface(this, rawType);
+			scheme = new InterfaceAccessScheme(this, rawType);
 		}
 		else {
 			
 			try {
 				
 				LOGGER.debug("Creating protected type CLASS for: "+rawType.getCanonicalName());
-				type = new ProtectedTypeClass(this, rawType);
+				scheme = new ClassAccessScheme(this, rawType);
 			}
 			catch(Exception e) {
 				
@@ -160,34 +125,34 @@ public class KeroAccessManagerImpl implements KeroAccessManager {
 			}
 		}
 		
-		processAnnotations(rawType, type);
+		processAnnotations(rawType, scheme);
 		
-		types.put(rawType, type);
+		schemes.put(rawType, scheme);
 		
-		return type;
+		return scheme;
 	}
 	
-	protected void processAnnotations(Class<?> rawType, ProtectedType type) {
+	protected void processAnnotations(Class<?> rawType, AccessScheme scheme) {
 		
-		ObjectTypeAccessManager typeAccess = new ObjectTypeAccessManager(this, type);
+		AccessSchemeManager schemeAccess = new AccessSchemeManager(this, scheme);
 		
 		if(rawType.isAnnotationPresent(DefaultGrant.class)) {
 			
-			typeAccess.defaultGrant();
+			schemeAccess.defaultGrant();
 		}
 		else if(rawType.isAnnotationPresent(DefaultDeny.class)) {
 			
-			typeAccess.defaultDeny();
+			schemeAccess.defaultDeny();
 		}
 		
 		if(rawType.isAnnotationPresent(DisableInheritProperties.class)) {
 			
-			typeAccess.disableInherit();
+			schemeAccess.disableInherit();
 		}
 		
 		if(rawType.isAnnotationPresent(EnableInheritProperties.class)) {
 			
-			typeAccess.enableInherit();
+			schemeAccess.enableInherit();
 		}
 		
 		Map<String, List<Object>> propertyAnnotations = new HashMap<>();
@@ -228,7 +193,7 @@ public class KeroAccessManagerImpl implements KeroAccessManager {
 		
 		propertyAnnotations.forEach((name, annotations)-> {
 			
-			SinglePropertyAccessManager propertyAccess = typeAccess.property(name);
+			SinglePropertyManager propertyAccess = schemeAccess.property(name);
 			
 			annotations.forEach((rawAnnotation)-> {
 				
@@ -327,9 +292,9 @@ public class KeroAccessManagerImpl implements KeroAccessManager {
 		
 		try {
 			
-			ProtectedTypeClass protectedType = (ProtectedTypeClass) getOrCreateType(object.getClass());
+			ClassAccessScheme scheme = (ClassAccessScheme) getOrCreateScheme(object.getClass());
 				
-			return protectedType.protect(object, roles);
+			return scheme.protect(object, roles);
 		}
 		catch(Exception e) {
 			

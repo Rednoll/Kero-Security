@@ -1,4 +1,4 @@
-package com.kero.security.core.config;
+package com.kero.security.core.config.prepared;
 
 import java.lang.reflect.Method;
 

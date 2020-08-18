@@ -5,17 +5,15 @@ import java.util.Objects;
 public class RoleImpl implements Role, Comparable<RoleImpl> {
 
 	private String name;
-	private int priority;
 	
-	public RoleImpl(String name, int priority) {
+	public RoleImpl(String name) {
 	
 		this.name = name;
-		this.priority = priority;
 	}
 	
 	@Override
 	public int hashCode() {
-		return Objects.hash(name, priority);
+		return Objects.hash(name);
 	}
 
 	@Override
@@ -27,7 +25,7 @@ public class RoleImpl implements Role, Comparable<RoleImpl> {
 		if (getClass() != obj.getClass())
 			return false;
 		RoleImpl other = (RoleImpl) obj;
-		return Objects.equals(name, other.name) && priority == other.priority;
+		return Objects.equals(name, other.name);
 	}
 
 	@Override
@@ -35,16 +33,10 @@ public class RoleImpl implements Role, Comparable<RoleImpl> {
 		
 		return this.name;
 	}
-
-	@Override
-	public int getPriority() {
-		
-		return this.priority;
-	}
-
+	
 	@Override
 	public int compareTo(RoleImpl another) {
 		
-		return another.priority - this.priority;
+		return this.name.compareTo(another.name);
 	}
 }

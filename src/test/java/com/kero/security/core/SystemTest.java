@@ -24,7 +24,8 @@ public class SystemTest {
 	public void getProperty() {
 		
 		manager
-			.type(TestObject.class)
+			.scheme(TestObject.class)
+				.defaultDeny()
 				.properties("text")
 					.grantFor("OWNER");
 	
@@ -37,7 +38,8 @@ public class SystemTest {
 	public void getProperty_DefaultOverrideBySpecifiedRule() {
 		
 		manager
-			.type(TestObject.class)
+			.scheme(TestObject.class)
+				.defaultDeny()
 				.properties("text")
 					.defaultGrant()
 					.denyFor("OWNER");
@@ -51,13 +53,14 @@ public class SystemTest {
 	public void getProperty_DeepScanSuperclass() {
 		
 		manager
-			.type(TestObject.class)
+			.scheme(TestObject.class)
+				.defaultDeny()
 				.properties("text")
 					.defaultDeny()
 					.grantFor("OWNER");
 
 		manager
-			.type(TestObject2.class);
+			.scheme(TestObject2.class);
 		
 		TestObject2 obj = manager.protect(new TestObject2("test12"), "OWNER");
 		
@@ -68,13 +71,15 @@ public class SystemTest {
 	public void getProperty_RulesInheritance() {
 		
 		manager
-			.type(TestObject.class)
+			.scheme(TestObject.class)
+				.defaultDeny()
 				.properties("text")
 					.defaultDeny()
 					.grantFor("OWNER");
 
 		manager
-			.type(TestObject2.class)
+			.scheme(TestObject2.class)
+				.defaultDeny()
 				.properties("text")
 					.defaultDeny()
 					.grantFor("ADMIN");
@@ -88,13 +93,14 @@ public class SystemTest {
 	public void getProperty_DeepScanSuperclassInterface() {
 		
 		manager
-			.type(TestInterface.class)
+			.scheme(TestInterface.class)
+				.defaultDeny()
 				.properties("text")
 					.defaultDeny()
 					.grantFor("OWNER");
 
 		manager
-			.type(TestObject2.class);
+			.scheme(TestObject2.class);
 		
 		TestObject2 obj = manager.protect(new TestObject2("test12"), "OWNER");
 		
@@ -105,12 +111,14 @@ public class SystemTest {
 	public void getProperty_DeepScanSuperclass_RulesOverride() {
 		
 		manager
-			.type(TestObject.class)
+			.scheme(TestObject.class)
+				.defaultDeny()
 				.properties("text")
 					.grantFor("OWNER");
 
 		manager
-			.type(TestObject2.class)
+			.scheme(TestObject2.class)
+				.defaultDeny()
 				.properties("text")
 					.defaultGrant()
 					.denyFor("OWNER");
@@ -124,7 +132,8 @@ public class SystemTest {
 	public void getProperty_UnsuitableRole() {
 		
 		manager
-			.type(TestObject.class)
+			.scheme(TestObject.class)
+				.defaultDeny()
 				.properties("text")
 					.grantFor("OWNER");
 	
@@ -137,7 +146,7 @@ public class SystemTest {
 	public void getProperty_DefaultDeny_TypeLevel() {
 	
 		manager
-			.type(TestObject.class)
+			.scheme(TestObject.class)
 				.defaultDeny();
 
 		TestObject obj = manager.protect(new TestObject("test12"), "NONE");
@@ -149,7 +158,7 @@ public class SystemTest {
 	public void getProperty_DefaultGrant_TypeLevel() {
 		
 		manager
-			.type(TestObject.class)
+			.scheme(TestObject.class)
 				.defaultGrant();
 
 		TestObject obj = manager.protect(new TestObject("test12"), "NONE");
@@ -161,7 +170,8 @@ public class SystemTest {
 	public void getProperty_DefaultDeny_PropertyLevel() {
 	
 		manager
-			.type(TestObject.class)
+			.scheme(TestObject.class)
+				.defaultDeny()
 				.properties("text")
 					.defaultDeny();
 
@@ -174,7 +184,8 @@ public class SystemTest {
 	public void getProperty_DefaultGrant_PropertyLevel() {
 	
 		manager
-			.type(TestObject.class)
+			.scheme(TestObject.class)
+				.defaultDeny()
 				.properties("text")
 					.defaultGrant();
 
@@ -187,7 +198,7 @@ public class SystemTest {
 	public void getProperty_DefaultDeny_PropertyLevel_TypeLevel_Overriding() {
 	
 		manager
-			.type(TestObject.class)
+			.scheme(TestObject.class)
 				.defaultGrant()
 				.properties("text")
 					.defaultDeny();
@@ -201,7 +212,7 @@ public class SystemTest {
 	public void getProperty_DefaultGrant_PropertyLevel_TypeLevel_Overriding() {
 	
 		manager
-			.type(TestObject.class)
+			.scheme(TestObject.class)
 				.defaultDeny()
 				.properties("text")
 					.defaultGrant();
@@ -215,7 +226,7 @@ public class SystemTest {
 	public void getProperty_AcessibleStacking() {
 	
 		manager
-			.type(TestObject.class)
+			.scheme(TestObject.class)
 				.defaultDeny()
 				.properties("text")
 					.grantFor("OWNER")
@@ -234,7 +245,7 @@ public class SystemTest {
 	public void getProperty_DenyInterceptor() {
 	
 		manager
-			.type(TestObject.class)
+			.scheme(TestObject.class)
 				.defaultDeny()
 				.property("text")
 					.denyWithInterceptor((obj)-> {
@@ -251,7 +262,7 @@ public class SystemTest {
 	public void getProperty_DenyInterceptor_CorrectChoise() {
 		
 		manager
-			.type(TestObject.class)
+			.scheme(TestObject.class)
 				.defaultDeny()
 				.property("text")
 					.denyWithInterceptor((obj)-> {
@@ -271,12 +282,8 @@ public class SystemTest {
 	@Test
 	public void getProperty_DenyInterceptor_CorrectPriority() {
 	
-		manager.createRole("OWNER", 10);
-		manager.createRole("ADMIN", 5);
-		manager.createRole("COMMON", 1);
-		
 		manager
-			.type(TestObject.class)
+			.scheme(TestObject.class)
 				.defaultDeny()
 				.property("text")
 					.denyWithInterceptor((obj)-> {
@@ -309,7 +316,7 @@ public class SystemTest {
 	public void getProperty_InterceptorInheritance() {
 		
 		manager
-			.type(TestObject.class)
+			.scheme(TestObject.class)
 				.defaultDeny()
 				.property("text")
 					.grantFor("OWNER")
@@ -319,7 +326,7 @@ public class SystemTest {
 					}, "OWNER");
 		
 		manager
-			.type(TestObject2.class)
+			.scheme(TestObject2.class)
 				.property("text")
 				.denyFor("OWNER");
 		
@@ -332,12 +339,13 @@ public class SystemTest {
 	public void getProperty_InheritDisable() {
 		
 		manager
-			.type(TestObject.class)
+			.scheme(TestObject.class)
+				.defaultDeny()
 				.property("text")
 					.grantFor("OWNER");
 		
 		manager
-			.type(TestObject2.class)
+			.scheme(TestObject2.class)
 				.defaultDeny()
 				.disableInherit();
 		

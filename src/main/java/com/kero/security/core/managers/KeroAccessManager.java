@@ -6,20 +6,19 @@ import java.util.Set;
 
 import com.kero.security.core.role.Role;
 import com.kero.security.core.rules.AccessRule;
-import com.kero.security.core.type.ProtectedType;
+import com.kero.security.core.scheme.AccessScheme;
 
 public interface KeroAccessManager {
 	
-
-	public Role createRole(String name, int priority);
+	public Role createRole(String name);
 	public Role getRole(String name);
 	public Role getOrCreateRole(String name);
 	
-	public ProtectedType getOrCreateType(Class<?> rawType);
+	public AccessScheme getOrCreateScheme(Class<?> rawType);
 	
-	public boolean hasType(Class<?> rawType);
-	public ProtectedType getType(Class<?> rawType);
-	public ObjectTypeAccessManager type(Class<?> rawType);
+	public boolean hasScheme(Class<?> rawType);
+	public AccessScheme getScheme(Class<?> rawType);
+	public AccessSchemeManager scheme(Class<?> rawType);
 	
 	public default <T> T protect(T object, String... roleNames) {
 		

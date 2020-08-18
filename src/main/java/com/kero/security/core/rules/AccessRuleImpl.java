@@ -4,10 +4,11 @@ import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
 
-import com.kero.security.core.config.PreparedAction;
-import com.kero.security.core.config.PreparedDenyRule;
-import com.kero.security.core.config.PreparedGrantRule;
+import com.kero.security.core.config.prepared.PreparedAction;
+import com.kero.security.core.config.prepared.PreparedDenyRule;
+import com.kero.security.core.config.prepared.PreparedGrantRule;
 import com.kero.security.core.role.Role;
+import com.kero.security.core.scheme.AccessScheme;
 
 public class AccessRuleImpl implements AccessRule {
 
@@ -40,15 +41,15 @@ public class AccessRuleImpl implements AccessRule {
 	}
 	
 	@Override
-	public PreparedAction prepare(Set<Role> roles) {
+	public PreparedAction prepare(AccessScheme scheme, Set<Role> roles) {
 		
 		if(this.accessible(roles)) {
 			
-			return new PreparedGrantRule();
+			return new PreparedGrantRule(scheme, roles);
 		}
 		else {
 			
-			return new PreparedDenyRule();
+			return new PreparedDenyRule(scheme, roles);
 		}
 	}
 	

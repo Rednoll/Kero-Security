@@ -9,44 +9,44 @@ import com.kero.security.core.role.Role;
 import com.kero.security.core.rules.AccessRule;
 import com.kero.security.core.rules.AccessRuleImpl;
 
-public class PropertiesAccessManager {
+public class PropertiesManager {
 
 	private List<Property> properties;
-	private KeroAccessManager manager;
+	private AccessSchemeManager schemeManager;
 	
-	public PropertiesAccessManager(KeroAccessManager manager, List<Property> properties) {
+	public PropertiesManager(AccessSchemeManager schemeManager, List<Property> properties) {
 	
-		this.manager = manager;
+		this.schemeManager = schemeManager;
 		this.properties = properties;
 	}
 	
-	public PropertiesAccessManager defaultGrant() {
+	public PropertiesManager defaultGrant() {
 		
 		return defaultRule(AccessRuleImpl.GRANT_ALL);
 	}
 	
-	public PropertiesAccessManager defaultDeny() {
+	public PropertiesManager defaultDeny() {
 		
 		return defaultRule(AccessRuleImpl.DENY_ALL);
 	}
 	
-	public PropertiesAccessManager defaultRule(AccessRule rule) {
+	public PropertiesManager defaultRule(AccessRule rule) {
 		
 		for(Property property : properties) {
 			
-			new SinglePropertyAccessManager(this.manager, property).defaultRule(rule);
+			new SinglePropertyManager(this.schemeManager, property).defaultRule(rule);
 		}
 		
 		return this;
 	}
 	
-	public PropertiesAccessManager grantFor(String... roleNames) {
+	public PropertiesManager grantFor(String... roleNames) {
 		
 		Set<Role> roles = new HashSet<>();
 		
 		for(String name : roleNames) {
 			
-			roles.add(manager.getOrCreateRole(name));
+			roles.add(schemeManager.getManager().getOrCreateRole(name));
 		}
 		
 		setAccessible(roles, true);
@@ -54,13 +54,13 @@ public class PropertiesAccessManager {
 		return this;
 	}
 	
-	public PropertiesAccessManager denyFor(String... roleNames) {
+	public PropertiesManager denyFor(String... roleNames) {
 		
 		Set<Role> roles = new HashSet<>();
 		
 		for(String name : roleNames) {
 			
-			roles.add(manager.getOrCreateRole(name));
+			roles.add(schemeManager.getManager().getOrCreateRole(name));
 		}
 		
 		setAccessible(roles, false);
@@ -68,11 +68,11 @@ public class PropertiesAccessManager {
 		return this;
 	}
 	
-	public PropertiesAccessManager setAccessible(Set<Role> roles, boolean accessible) {
+	public PropertiesManager setAccessible(Set<Role> roles, boolean accessible) {
 		
 		for(Property property : properties) {
 			
-			new SinglePropertyAccessManager(this.manager, property).setAccessible(roles, accessible);
+			new SinglePropertyManager(schemeManager, property).setAccessible(roles, accessible);
 		}
 		
 		return this;
