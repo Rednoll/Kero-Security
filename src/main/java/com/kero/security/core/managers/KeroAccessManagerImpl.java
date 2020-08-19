@@ -318,43 +318,7 @@ public class KeroAccessManagerImpl implements KeroAccessManager {
 	public <T> T protect(T object, Set<Role> roles) {
 		
 		if(this.ignoreList.contains(object.getClass())) return object;
-		
-		if(!hasScheme(object.getClass())) {
-		
-			if(object instanceof Collection) {
-				
-				Collection collection = (Collection) object;
-				Collection rawProtectedCollection = null;
-				
-				try {
-					
-					rawProtectedCollection = collection.getClass().getConstructor().newInstance();
-				}
-				catch(Exception e) {
-					
-					try {
-						
-						rawProtectedCollection = collection.getClass().getConstructor(Collection.class).newInstance(Collections.EMPTY_SET);
-					}
-					catch(Exception e1) {
-						
-						e1.printStackTrace();
-					}
-				}
-				
-				Collection protectedCollection = rawProtectedCollection;
-				
-				if(protectedCollection == null) throw new RuntimeException("Can't protect collection: "+object.getClass());
-				
-				collection.forEach((element)-> {
-					
-					protectedCollection.add(protect(element, roles));
-				});
-				
-				return (T) protectedCollection;
-			}
-		}
-		
+
 		try {
 			
 			ClassAccessScheme scheme = (ClassAccessScheme) getOrCreateScheme(object.getClass());
