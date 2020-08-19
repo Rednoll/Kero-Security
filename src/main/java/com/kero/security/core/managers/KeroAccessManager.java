@@ -10,6 +10,8 @@ import com.kero.security.core.scheme.AccessScheme;
 
 public interface KeroAccessManager {
 	
+	public void ignoreType(Class<?> type);
+	
 	public Role createRole(String name);
 	public Role getRole(String name);
 	public Role getOrCreateRole(String name);
@@ -19,6 +21,8 @@ public interface KeroAccessManager {
 	public boolean hasScheme(Class<?> rawType);
 	public AccessScheme getScheme(Class<?> rawType);
 	public AccessSchemeManager scheme(Class<?> rawType);
+	
+	public ClassLoader getClassLoader();
 	
 	public default <T> T protect(T object, String... roleNames) {
 		

@@ -41,6 +41,38 @@ public class KeroAccessManagerImpl implements KeroAccessManager {
 	
 	protected AccessRule defaultRule = AccessRuleImpl.GRANT_ALL;
 	
+	protected ClassLoader proxiesClassLoader = ClassLoader.getSystemClassLoader();
+	
+	protected Set<Class> ignoreList = new HashSet<>();
+	
+	public KeroAccessManagerImpl() {
+		
+		ignoreType(String.class);
+		
+		ignoreType(Integer.class);
+		ignoreType(int.class);
+		
+		ignoreType(Long.class);
+		ignoreType(long.class);
+		
+		ignoreType(Float.class);
+		ignoreType(float.class);
+		
+		ignoreType(Double.class);
+		ignoreType(double.class);
+		
+		ignoreType(Character.class);
+		ignoreType(char.class);
+		
+		ignoreType(Boolean.class);
+		ignoreType(boolean.class);
+	}
+	
+	public void ignoreType(Class<?> type) {
+		
+		ignoreList.add(type);
+	}
+	
 	@Override
 	public Role createRole(String name) {
 		
@@ -113,16 +145,9 @@ public class KeroAccessManagerImpl implements KeroAccessManager {
 			scheme = new InterfaceAccessScheme(this, rawType);
 		}
 		else {
-			
-			try {
-				
-				LOGGER.debug("Creating protected type CLASS for: "+rawType.getCanonicalName());
-				scheme = new ClassAccessScheme(this, rawType);
-			}
-			catch(Exception e) {
-				
-				throw new RuntimeException(e);
-			}
+
+			LOGGER.debug("Creating protected type CLASS for: "+rawType.getCanonicalName());
+			scheme = new ClassAccessScheme(this, rawType);
 		}
 		
 		processAnnotations(rawType, scheme);
@@ -290,6 +315,8 @@ public class KeroAccessManagerImpl implements KeroAccessManager {
 	@Override
 	public <T> T protect(T object, Set<Role> roles) {
 		
+		if(this.ignoreList.contains(object.getClass())) return object;
+		
 		try {
 			
 			ClassAccessScheme scheme = (ClassAccessScheme) getOrCreateScheme(object.getClass());
@@ -317,5 +344,11 @@ public class KeroAccessManagerImpl implements KeroAccessManager {
 	public AccessRule getDefaultRule() {
 		
 		return this.defaultRule;
+	}
+
+	@Override
+	public ClassLoader getClassLoader() {
+		
+		return this.proxiesClassLoader;
 	}
 }

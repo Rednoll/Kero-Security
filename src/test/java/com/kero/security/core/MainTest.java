@@ -29,9 +29,9 @@ public class MainTest {
 					.denyFor("FRIEND")
 					.grantFor("OWNER");
 		
-		TestObjectDeep deep = manager.protect(new TestObjectDeep(new TestObject("test text!!")), "FRIEND");
+		TestObjectDeep deep = manager.protect(new TestObjectDeep(new TestObject("test text!!")), "NONE");
 		
-		System.out.println("text: "+deep.getObjects().iterator().next().getText());
+		System.out.println("text: "+deep.getObjects().iterator().getClass().getCanonicalName());
 		
 		//TEST IN IN
 		

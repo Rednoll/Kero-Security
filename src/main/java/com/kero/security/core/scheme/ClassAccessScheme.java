@@ -1,7 +1,5 @@
 package com.kero.security.core.scheme;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -39,11 +37,6 @@ public class ClassAccessScheme extends AccessSchemeBase implements InvocationHan
 	
 	private Class<?> proxyClass = null;
 	
-	private Field originalField = null;
-	private Field pacField = null;
-	
-	private Constructor proxyConstructor;
-	
 	private Map<Set<Role>, PreparedAccessConfiguration> configsCache = new HashMap<>();
 	
 	public ClassAccessScheme() {
@@ -51,13 +44,20 @@ public class ClassAccessScheme extends AccessSchemeBase implements InvocationHan
 	
 	}
 	
-	public ClassAccessScheme(KeroAccessManager manager, Class<?> type) throws Exception {
+	public ClassAccessScheme(KeroAccessManager manager, Class<?> type) {
 		super(manager, type);
+		
+	}
 	
+	protected void initAutoProxy() throws Exception {
+		
 		if(!Modifier.isAbstract(type.getModifiers())) {
 			
+			LOGGER.debug("Building proxy for: "+type.getCanonicalName());
+		
 			this.proxyClass = new ByteBuddy()
 					.subclass(type)
+					.implement(AccessProxy.class)
 					.defineField("original", type, Visibility.PRIVATE)
 					.defineField("pac", PreparedAccessConfiguration.class, Visibility.PRIVATE)
 					.defineConstructor(Visibility.PUBLIC)
@@ -66,25 +66,18 @@ public class ClassAccessScheme extends AccessSchemeBase implements InvocationHan
 					.method(ElementMatchers.isPublic())
 					.intercept(InvocationHandlerAdapter.of(this))
 					.make()
-					.load(ClassLoader.getSystemClassLoader())
+					.load(manager.getClassLoader())
 					.getLoaded();
-			
-			this.originalField = this.proxyClass.getDeclaredField("original");
-			this.originalField.setAccessible(true);
-	 
-			this.pacField = this.proxyClass.getDeclaredField("pac");
-			this.pacField.setAccessible(true);
-			
-			this.proxyConstructor = this.proxyClass.getConstructor(this.type, PreparedAccessConfiguration.class);
-			this.proxyConstructor.setAccessible(true);
 		}
 	}
-
+	
 	@Override
-	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+	public Object invoke(Object rawProxy, Method method, Object[] args) throws Throwable {
 		
-		Object original = originalField.get(proxy);
-		PreparedAccessConfiguration pac = (PreparedAccessConfiguration) pacField.get(proxy);
+		AccessProxy proxy = (AccessProxy) rawProxy;
+		
+		Object original = proxy.getOriginal();
+		PreparedAccessConfiguration pac = proxy.getConfiguration();
 	
 		return pac.process(original, method, args);
 	}
@@ -99,7 +92,7 @@ public class ClassAccessScheme extends AccessSchemeBase implements InvocationHan
 			configsCache.put(Collections.unmodifiableSet(new HashSet<>(roles)), config);
 		}
 		
-		return (T) this.proxyConstructor.newInstance(object, config);
+		return (T) this.proxyClass.getConstructor(object.getClass(), config.getClass()).newInstance(object, config);
 	}
 	
 	private PreparedAccessConfiguration prepareAccessConfiguration(Set<Role> roles) {

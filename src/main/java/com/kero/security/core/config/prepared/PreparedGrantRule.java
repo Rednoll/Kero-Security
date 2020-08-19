@@ -1,7 +1,6 @@
 package com.kero.security.core.config.prepared;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.Set;
 
 import com.kero.security.core.managers.KeroAccessManager;
@@ -21,12 +20,6 @@ public class PreparedGrantRule extends PreparedActionBase implements PreparedAct
 		try {
 		
 			Object methodResult = method.invoke(original, args);
-			Class<?> methodResultClass = methodResult.getClass();
-			
-			if(Modifier.isFinal(methodResultClass.getModifiers())) {
-				
-				return methodResult;
-			}
 			
 			KeroAccessManager manager = this.scheme.getManager();
 			
