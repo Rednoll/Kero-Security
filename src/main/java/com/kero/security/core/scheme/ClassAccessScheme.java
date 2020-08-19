@@ -49,7 +49,9 @@ public class ClassAccessScheme extends AccessSchemeBase implements InvocationHan
 		
 	}
 	
-	protected void initAutoProxy() throws Exception {
+	protected void initProxy() throws Exception {
+		
+		if(this.proxyClass != null) return;
 		
 		if(!Modifier.isAbstract(type.getModifiers())) {
 			
@@ -65,6 +67,8 @@ public class ClassAccessScheme extends AccessSchemeBase implements InvocationHan
 					.intercept(MethodCall.invoke(type.getConstructor()).andThen(FieldAccessor.ofField("original").setsArgumentAt(0).andThen(FieldAccessor.ofField("pac").setsArgumentAt(1))))
 					.method(ElementMatchers.isPublic())
 					.intercept(InvocationHandlerAdapter.of(this))
+					.defineMethod("getOriginal", Object.class, Visibility.PUBLIC).intercept(FieldAccessor.ofField("original"))
+					.defineMethod("getConfiguration", PreparedAccessConfiguration.class, Visibility.PUBLIC).intercept(FieldAccessor.ofField("pac"))
 					.make()
 					.load(manager.getClassLoader())
 					.getLoaded();
@@ -92,7 +96,12 @@ public class ClassAccessScheme extends AccessSchemeBase implements InvocationHan
 			configsCache.put(Collections.unmodifiableSet(new HashSet<>(roles)), config);
 		}
 		
-		return (T) this.proxyClass.getConstructor(object.getClass(), config.getClass()).newInstance(object, config);
+		if(this.proxyClass == null) {
+			
+			initProxy();
+		}
+		
+		return (T) this.proxyClass.getConstructor(object.getClass(), PreparedAccessConfiguration.class).newInstance(object, config);
 	}
 	
 	private PreparedAccessConfiguration prepareAccessConfiguration(Set<Role> roles) {

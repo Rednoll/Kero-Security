@@ -28,10 +28,14 @@ public class MainTest {
 				.property("text")
 					.denyFor("FRIEND")
 					.grantFor("OWNER");
+
+		manager
+			.scheme(TestObjectDeep.class)
+				.defaultGrant();
 		
 		TestObjectDeep deep = manager.protect(new TestObjectDeep(new TestObject("test text!!")), "NONE");
 		
-		System.out.println("text: "+deep.getObjects().iterator().getClass().getCanonicalName());
+		System.out.println("text: "+deep.getObjects().iterator().next().getText());
 		
 		//TEST IN IN
 		
