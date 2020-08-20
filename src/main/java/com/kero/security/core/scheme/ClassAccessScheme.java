@@ -27,7 +27,6 @@ import com.kero.security.core.rules.AccessRule;
 
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.description.modifier.Visibility;
-import net.bytebuddy.description.type.TypeDefinition;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.implementation.FieldAccessor;
 import net.bytebuddy.implementation.InvocationHandlerAdapter;
@@ -60,74 +59,120 @@ public class ClassAccessScheme extends AccessSchemeBase implements InvocationHan
 			
 			LOGGER.debug("Building proxy for: "+type.getCanonicalName());
 		
-			//TODO: REFACTOR
-			boolean accessible = ((TypeDefinition) TypeDescription.ForLoadedType.of(this.type)).asErasure().isAccessibleTo(TypeDescription.ForLoadedType.of(this.getClass()));
-			
-			if(!Modifier.isFinal(type.getModifiers()) && accessible) {
-				
-				boolean hasDefaultConstructor = true;
-				
-				try {
-					
-					type.getDeclaredConstructor();
-				}
-				catch(NoSuchMethodException e) {
-					
-					hasDefaultConstructor = false;
-				}
-				
-				this.proxyClass = new ByteBuddy()
-					.subclass(this.type)
-					.implement(AccessProxy.class)
-					.defineField("original", Object.class, Visibility.PRIVATE)
-					.defineField("pac", PreparedAccessConfiguration.class, Visibility.PRIVATE)
-					.defineConstructor(Visibility.PUBLIC)
-					.withParameters(Object.class, PreparedAccessConfiguration.class)
-					.intercept(hasDefaultConstructor
-						? MethodCall.invoke(type.getDeclaredConstructor()).andThen(FieldAccessor.ofField("original").setsArgumentAt(0).andThen(FieldAccessor.ofField("pac").setsArgumentAt(1)))
-						: FieldAccessor.ofField("original").setsArgumentAt(0).andThen(FieldAccessor.ofField("pac").setsArgumentAt(1)))
-					.method(ElementMatchers.isPublic())
-					.intercept(InvocationHandlerAdapter.of(this))
-					.defineMethod("getOriginal", Object.class, Visibility.PUBLIC).intercept(FieldAccessor.ofField("original"))
-					.defineMethod("getConfiguration", PreparedAccessConfiguration.class, Visibility.PUBLIC).intercept(FieldAccessor.ofField("pac"))
-					.make()
-					.load(manager.getClassLoader())
-					.getLoaded();
-			}
-			else {
-
-				List<Class<?>> interfaces = new ArrayList<>();
-					interfaces.add(AccessProxy.class);
-				
-					Class<?> interfacesClass = type;
-					
-					while(interfacesClass != Object.class) {
-						
-						for(Class<?> inter : interfacesClass.getInterfaces()) {
-							
-							interfaces.add(inter);
-						}
-						
-						interfacesClass = interfacesClass.getSuperclass();
-					}
-				
-				this.proxyClass = new ByteBuddy()
-					.subclass(Object.class)
-					.implement(interfaces)
-					.defineField("original", Object.class, Visibility.PRIVATE)
-					.defineField("pac", PreparedAccessConfiguration.class, Visibility.PRIVATE)
-					.defineConstructor(Visibility.PUBLIC)
-					.withParameters(Object.class, PreparedAccessConfiguration.class)
-					.intercept(MethodCall.invoke(Object.class.getDeclaredConstructor()).andThen(FieldAccessor.ofField("original").setsArgumentAt(0).andThen(FieldAccessor.ofField("pac").setsArgumentAt(1))))
-					.method(ElementMatchers.isPublic())
-					.intercept(InvocationHandlerAdapter.of(this))
-					.defineMethod("getOriginal", Object.class, Visibility.PUBLIC).intercept(FieldAccessor.ofField("original"))
-					.defineMethod("getConfiguration", PreparedAccessConfiguration.class, Visibility.PUBLIC).intercept(FieldAccessor.ofField("pac"))
-					.make()
-					.load(manager.getClassLoader())
-					.getLoaded();
-			}
+			this.proxyClass = createProxy();
 		}
+	}
+	
+	private Class<?> createProxy() throws Exception {
+		
+		boolean accessible = checkAccessible(this.getClass(), this.type);
+		
+		if(!Modifier.isFinal(this.type.getModifiers()) && accessible) {
+			
+			return createSubclassProxy();
+		}
+		else {
+			
+			return createAdaptiveProxy();
+		}
+	}
+	
+	private Class<?> createSubclassProxy() throws Exception {
+		
+		boolean hasDefaultConstructor = true;
+		
+		try {
+			
+			type.getDeclaredConstructor();
+		}
+		catch(NoSuchMethodException e) {
+			
+			hasDefaultConstructor = false;
+		}
+		
+		return new ByteBuddy()
+			.subclass(type)
+			.implement(AccessProxy.class)
+			.defineField("original", Object.class, Visibility.PRIVATE)
+			.defineField("pac", PreparedAccessConfiguration.class, Visibility.PRIVATE)
+			.defineConstructor(Visibility.PUBLIC)
+			.withParameters(Object.class, PreparedAccessConfiguration.class)
+			.intercept(hasDefaultConstructor
+				? MethodCall.invoke(type.getDeclaredConstructor()).andThen(FieldAccessor.ofField("original").setsArgumentAt(0).andThen(FieldAccessor.ofField("pac").setsArgumentAt(1)))
+				: FieldAccessor.ofField("original").setsArgumentAt(0).andThen(FieldAccessor.ofField("pac").setsArgumentAt(1)))
+			.method(ElementMatchers.isPublic())
+			.intercept(InvocationHandlerAdapter.of(this))
+			.defineMethod("getOriginal", Object.class, Visibility.PUBLIC).intercept(FieldAccessor.ofField("original"))
+			.defineMethod("getConfiguration", PreparedAccessConfiguration.class, Visibility.PUBLIC).intercept(FieldAccessor.ofField("pac"))
+			.make()
+			.load(manager.getClassLoader())
+			.getLoaded();
+	}
+	
+	private Class<?> createAdaptiveProxy() throws Exception {
+
+		List<Class<?>> interfaces = collectInterfaces();
+		Class<?> superType = determineSuperclass();
+		
+		return new ByteBuddy()
+			.subclass(superType)
+			.implement(interfaces)
+			.defineField("original", Object.class, Visibility.PRIVATE)
+			.defineField("pac", PreparedAccessConfiguration.class, Visibility.PRIVATE)
+			.defineConstructor(Visibility.PUBLIC)
+			.withParameters(Object.class, PreparedAccessConfiguration.class)
+			.intercept(MethodCall.invoke(superType.getDeclaredConstructor()).andThen(FieldAccessor.ofField("original").setsArgumentAt(0).andThen(FieldAccessor.ofField("pac").setsArgumentAt(1))))
+			.method(ElementMatchers.isPublic())
+			.intercept(InvocationHandlerAdapter.of(this))
+			.defineMethod("getOriginal", Object.class, Visibility.PUBLIC).intercept(FieldAccessor.ofField("original"))
+			.defineMethod("getConfiguration", PreparedAccessConfiguration.class, Visibility.PUBLIC).intercept(FieldAccessor.ofField("pac"))
+			.make()
+			.load(manager.getClassLoader())
+			.getLoaded();
+	}
+	
+	private List<Class<?>> collectInterfaces() {
+		
+		List<Class<?>> interfaces = new ArrayList<>();
+			interfaces.add(AccessProxy.class);
+		
+			Class<?> interfacesClass = type;
+			
+			while(interfacesClass != Object.class) {
+				
+				for(Class<?> inter : interfacesClass.getInterfaces()) {
+					
+					interfaces.add(inter);
+				}
+				
+				interfacesClass = interfacesClass.getSuperclass();
+			}
+		
+		return interfaces;
+	}
+	
+	private Class<?> determineSuperclass() {
+		
+		Class<?> superType = this.type.getSuperclass();
+		
+		while(superType != Object.class) {
+			
+			boolean superAccessible = TypeDescription.ForLoadedType.of(superType).asErasure().isAccessibleTo(TypeDescription.ForLoadedType.of(this.getClass()));
+			
+			if(!Modifier.isFinal(superType.getModifiers()) && superAccessible) {
+				
+				break;
+			}
+			
+			superType = superType.getSuperclass();
+		}
+		
+		return superType;
+	}
+	
+	private boolean checkAccessible(Class<?> requester, Class<?> target) {
+		
+		return TypeDescription.ForLoadedType.of(target).asErasure().isAccessibleTo(TypeDescription.ForLoadedType.of(requester));
 	}
 	
 	@Override
