@@ -1,6 +1,6 @@
 package com.kero.security.core;
 
-public class TestObject implements TestInterface {
+public class TestObject implements TestInterface, Comparable<TestObject> {
 	
 	private String text;
 	
@@ -16,5 +16,11 @@ public class TestObject implements TestInterface {
 	public String getText() {
 		
 		return this.text;
+	}
+
+	@Override
+	public int compareTo(TestObject o) {
+		
+		return this.text.compareTo(o.text);
 	}
 }

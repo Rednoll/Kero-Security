@@ -3,6 +3,7 @@ package com.kero.security.core.scheme;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -26,6 +27,8 @@ import com.kero.security.core.rules.AccessRule;
 
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.description.modifier.Visibility;
+import net.bytebuddy.description.type.TypeDefinition;
+import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.implementation.FieldAccessor;
 import net.bytebuddy.implementation.InvocationHandlerAdapter;
 import net.bytebuddy.implementation.MethodCall;
@@ -57,14 +60,32 @@ public class ClassAccessScheme extends AccessSchemeBase implements InvocationHan
 			
 			LOGGER.debug("Building proxy for: "+type.getCanonicalName());
 		
-			this.proxyClass = new ByteBuddy()
-					.subclass(type)
+			//TODO: REFACTOR
+			boolean accessible = ((TypeDefinition) TypeDescription.ForLoadedType.of(this.type)).asErasure().isAccessibleTo(TypeDescription.ForLoadedType.of(this.getClass()));
+			
+			if(!Modifier.isFinal(type.getModifiers()) && accessible) {
+				
+				boolean hasDefaultConstructor = true;
+				
+				try {
+					
+					type.getDeclaredConstructor();
+				}
+				catch(NoSuchMethodException e) {
+					
+					hasDefaultConstructor = false;
+				}
+				
+				this.proxyClass = new ByteBuddy()
+					.subclass(this.type)
 					.implement(AccessProxy.class)
-					.defineField("original", type, Visibility.PRIVATE)
+					.defineField("original", Object.class, Visibility.PRIVATE)
 					.defineField("pac", PreparedAccessConfiguration.class, Visibility.PRIVATE)
 					.defineConstructor(Visibility.PUBLIC)
-					.withParameters(type, PreparedAccessConfiguration.class)
-					.intercept(MethodCall.invoke(type.getConstructor()).andThen(FieldAccessor.ofField("original").setsArgumentAt(0).andThen(FieldAccessor.ofField("pac").setsArgumentAt(1))))
+					.withParameters(Object.class, PreparedAccessConfiguration.class)
+					.intercept(hasDefaultConstructor
+						? MethodCall.invoke(type.getDeclaredConstructor()).andThen(FieldAccessor.ofField("original").setsArgumentAt(0).andThen(FieldAccessor.ofField("pac").setsArgumentAt(1)))
+						: FieldAccessor.ofField("original").setsArgumentAt(0).andThen(FieldAccessor.ofField("pac").setsArgumentAt(1)))
 					.method(ElementMatchers.isPublic())
 					.intercept(InvocationHandlerAdapter.of(this))
 					.defineMethod("getOriginal", Object.class, Visibility.PUBLIC).intercept(FieldAccessor.ofField("original"))
@@ -72,6 +93,40 @@ public class ClassAccessScheme extends AccessSchemeBase implements InvocationHan
 					.make()
 					.load(manager.getClassLoader())
 					.getLoaded();
+			}
+			else {
+
+				List<Class<?>> interfaces = new ArrayList<>();
+					interfaces.add(AccessProxy.class);
+				
+					Class<?> interfacesClass = type;
+					
+					while(interfacesClass != Object.class) {
+						
+						for(Class<?> inter : interfacesClass.getInterfaces()) {
+							
+							interfaces.add(inter);
+						}
+						
+						interfacesClass = interfacesClass.getSuperclass();
+					}
+				
+				this.proxyClass = new ByteBuddy()
+					.subclass(Object.class)
+					.implement(interfaces)
+					.defineField("original", Object.class, Visibility.PRIVATE)
+					.defineField("pac", PreparedAccessConfiguration.class, Visibility.PRIVATE)
+					.defineConstructor(Visibility.PUBLIC)
+					.withParameters(Object.class, PreparedAccessConfiguration.class)
+					.intercept(MethodCall.invoke(Object.class.getDeclaredConstructor()).andThen(FieldAccessor.ofField("original").setsArgumentAt(0).andThen(FieldAccessor.ofField("pac").setsArgumentAt(1))))
+					.method(ElementMatchers.isPublic())
+					.intercept(InvocationHandlerAdapter.of(this))
+					.defineMethod("getOriginal", Object.class, Visibility.PUBLIC).intercept(FieldAccessor.ofField("original"))
+					.defineMethod("getConfiguration", PreparedAccessConfiguration.class, Visibility.PUBLIC).intercept(FieldAccessor.ofField("pac"))
+					.make()
+					.load(manager.getClassLoader())
+					.getLoaded();
+			}
 		}
 	}
 	
@@ -101,7 +156,7 @@ public class ClassAccessScheme extends AccessSchemeBase implements InvocationHan
 			initProxy();
 		}
 		
-		return (T) this.proxyClass.getConstructor(object.getClass(), PreparedAccessConfiguration.class).newInstance(object, config);
+		return (T) this.proxyClass.getConstructor(Object.class, PreparedAccessConfiguration.class).newInstance(object, config);
 	}
 	
 	private PreparedAccessConfiguration prepareAccessConfiguration(Set<Role> roles) {

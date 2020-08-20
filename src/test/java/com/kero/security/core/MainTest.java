@@ -1,7 +1,8 @@
 package com.kero.security.core;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.TreeMap;
 
 import org.junit.jupiter.api.Test;
 
@@ -33,9 +34,9 @@ public class MainTest {
 			.scheme(TestObjectDeep.class)
 				.defaultGrant();
 		
-		TestObjectDeep deep = manager.protect(new TestObjectDeep(new TestObject("test text!!")), "NONE");
+		TestObjectDeep deep = manager.protect(new TestObjectDeep(new TestObject("test text!!")), "FRIEND");
 		
-		System.out.println("text: "+deep.getObjects().iterator().next().getText());
+		System.out.println("text: "+deep.getObjects().entrySet().iterator().next().getValue().getText());
 		
 		//TEST IN IN
 		
@@ -84,12 +85,12 @@ public class MainTest {
 
 	public static class TestObjectDeep {
 		
-		private Set<TestObject> objects = new HashSet<>();
+		private Map<String, TestObject> objects = new TreeMap<>();
 		private TestObject testObject = null;
 		
 		public TestObjectDeep() {
 			
-			objects.add(new TestObject("collection object"));
+			objects.put("kek", new TestObject("collection object"));
 		}
 		
 		public TestObjectDeep(TestObject testObject) {
@@ -98,7 +99,7 @@ public class MainTest {
 			this.testObject = testObject;
 		}
 		
-		public Set<TestObject> getObjects() {
+		public Map<String, TestObject> getObjects() {
 		
 			return this.objects;
 		}
