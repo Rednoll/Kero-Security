@@ -3,7 +3,6 @@ package com.kero.security.core.scheme;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -24,20 +23,17 @@ import com.kero.security.core.managers.KeroAccessManager;
 import com.kero.security.core.property.Property;
 import com.kero.security.core.role.Role;
 import com.kero.security.core.rules.AccessRule;
-
-import net.bytebuddy.ByteBuddy;
-import net.bytebuddy.description.modifier.Visibility;
-import net.bytebuddy.description.type.TypeDescription;
-import net.bytebuddy.implementation.FieldAccessor;
-import net.bytebuddy.implementation.InvocationHandlerAdapter;
-import net.bytebuddy.implementation.MethodCall;
-import net.bytebuddy.matcher.ElementMatchers;
+import com.kero.security.core.scheme.proxy.AdaptiveProxyAgent;
+import com.kero.security.core.scheme.proxy.CustomProxyAgent;
+import com.kero.security.core.scheme.proxy.ProxyAgent;
+import com.kero.security.core.scheme.proxy.SubclassProxyAgent;
+import com.kero.security.core.utils.ByteBuddyClassUtils;
 
 public class ClassAccessScheme extends AccessSchemeBase implements InvocationHandler {
 
 	private static Logger LOGGER = LoggerFactory.getLogger("KeroSecurity");
 	
-	private Class<?> proxyClass = null;
+	private ProxyAgent proxyAgent = null;
 	
 	private Map<Set<Role>, PreparedAccessConfiguration> configsCache = new HashMap<>();
 	
@@ -53,126 +49,14 @@ public class ClassAccessScheme extends AccessSchemeBase implements InvocationHan
 	
 	protected void initProxy() throws Exception {
 		
-		if(this.proxyClass != null) return;
+		if(this.proxyAgent != null) return;
 		
 		if(!Modifier.isAbstract(type.getModifiers())) {
 			
 			LOGGER.debug("Building proxy for: "+type.getCanonicalName());
 		
-			this.proxyClass = createProxy();
+			this.proxyAgent = createProxyAgent();
 		}
-	}
-	
-	private Class<?> createProxy() throws Exception {
-		
-		boolean accessible = checkAccessible(this.getClass(), this.type);
-		
-		if(!Modifier.isFinal(this.type.getModifiers()) && accessible) {
-			
-			return createSubclassProxy();
-		}
-		else {
-			
-			return createAdaptiveProxy();
-		}
-	}
-	
-	private Class<?> createSubclassProxy() throws Exception {
-		
-		boolean hasDefaultConstructor = true;
-		
-		try {
-			
-			type.getDeclaredConstructor();
-		}
-		catch(NoSuchMethodException e) {
-			
-			hasDefaultConstructor = false;
-		}
-		
-		return new ByteBuddy()
-			.subclass(type)
-			.implement(AccessProxy.class)
-			.defineField("original", Object.class, Visibility.PRIVATE)
-			.defineField("pac", PreparedAccessConfiguration.class, Visibility.PRIVATE)
-			.defineConstructor(Visibility.PUBLIC)
-			.withParameters(Object.class, PreparedAccessConfiguration.class)
-			.intercept(hasDefaultConstructor
-				? MethodCall.invoke(type.getDeclaredConstructor()).andThen(FieldAccessor.ofField("original").setsArgumentAt(0).andThen(FieldAccessor.ofField("pac").setsArgumentAt(1)))
-				: FieldAccessor.ofField("original").setsArgumentAt(0).andThen(FieldAccessor.ofField("pac").setsArgumentAt(1)))
-			.method(ElementMatchers.isPublic())
-			.intercept(InvocationHandlerAdapter.of(this))
-			.defineMethod("getOriginal", Object.class, Visibility.PUBLIC).intercept(FieldAccessor.ofField("original"))
-			.defineMethod("getConfiguration", PreparedAccessConfiguration.class, Visibility.PUBLIC).intercept(FieldAccessor.ofField("pac"))
-			.make()
-			.load(manager.getClassLoader())
-			.getLoaded();
-	}
-	
-	private Class<?> createAdaptiveProxy() throws Exception {
-
-		List<Class<?>> interfaces = collectInterfaces();
-		Class<?> superType = determineSuperclass();
-		
-		return new ByteBuddy()
-			.subclass(superType)
-			.implement(interfaces)
-			.defineField("original", Object.class, Visibility.PRIVATE)
-			.defineField("pac", PreparedAccessConfiguration.class, Visibility.PRIVATE)
-			.defineConstructor(Visibility.PUBLIC)
-			.withParameters(Object.class, PreparedAccessConfiguration.class)
-			.intercept(MethodCall.invoke(superType.getDeclaredConstructor()).andThen(FieldAccessor.ofField("original").setsArgumentAt(0).andThen(FieldAccessor.ofField("pac").setsArgumentAt(1))))
-			.method(ElementMatchers.isPublic())
-			.intercept(InvocationHandlerAdapter.of(this))
-			.defineMethod("getOriginal", Object.class, Visibility.PUBLIC).intercept(FieldAccessor.ofField("original"))
-			.defineMethod("getConfiguration", PreparedAccessConfiguration.class, Visibility.PUBLIC).intercept(FieldAccessor.ofField("pac"))
-			.make()
-			.load(manager.getClassLoader())
-			.getLoaded();
-	}
-	
-	private List<Class<?>> collectInterfaces() {
-		
-		List<Class<?>> interfaces = new ArrayList<>();
-			interfaces.add(AccessProxy.class);
-		
-			Class<?> interfacesClass = type;
-			
-			while(interfacesClass != Object.class) {
-				
-				for(Class<?> inter : interfacesClass.getInterfaces()) {
-					
-					interfaces.add(inter);
-				}
-				
-				interfacesClass = interfacesClass.getSuperclass();
-			}
-		
-		return interfaces;
-	}
-	
-	private Class<?> determineSuperclass() {
-		
-		Class<?> superType = this.type.getSuperclass();
-		
-		while(superType != Object.class) {
-			
-			boolean superAccessible = TypeDescription.ForLoadedType.of(superType).asErasure().isAccessibleTo(TypeDescription.ForLoadedType.of(this.getClass()));
-			
-			if(!Modifier.isFinal(superType.getModifiers()) && superAccessible) {
-				
-				break;
-			}
-			
-			superType = superType.getSuperclass();
-		}
-		
-		return superType;
-	}
-	
-	private boolean checkAccessible(Class<?> requester, Class<?> target) {
-		
-		return TypeDescription.ForLoadedType.of(target).asErasure().isAccessibleTo(TypeDescription.ForLoadedType.of(requester));
 	}
 	
 	@Override
@@ -196,12 +80,12 @@ public class ClassAccessScheme extends AccessSchemeBase implements InvocationHan
 			configsCache.put(Collections.unmodifiableSet(new HashSet<>(roles)), config);
 		}
 		
-		if(this.proxyClass == null) {
+		if(this.proxyAgent == null) {
 			
 			initProxy();
 		}
 		
-		return (T) this.proxyClass.getConstructor(Object.class, PreparedAccessConfiguration.class).newInstance(object, config);
+		return (T) this.proxyAgent.wrap(object, config);
 	}
 	
 	private PreparedAccessConfiguration prepareAccessConfiguration(Set<Role> roles) {
@@ -366,11 +250,11 @@ public class ClassAccessScheme extends AccessSchemeBase implements InvocationHan
 		if(this.inherit) {
 			
 			collectFromInterfaces(complexProperties);
-			collectFromSuperclass(complexProperties);
+			collectPropertiesFromSuperclass(complexProperties);
 		}
 	}
 	
-	protected void collectFromSuperclass(Map<String, Property> complexProperties) {
+	protected void collectPropertiesFromSuperclass(Map<String, Property> complexProperties) {
 		
 		Class<?> superClass = type.getSuperclass();
 		
@@ -381,6 +265,25 @@ public class ClassAccessScheme extends AccessSchemeBase implements InvocationHan
 			supeclassScheme.collectProperties(complexProperties);
 
 			superClass = superClass.getSuperclass();
+		}
+	}
+	
+	public void setProxyClass(Class<? extends AccessProxy> proxyClass) {
+		
+		this.proxyAgent = CustomProxyAgent.create(this, proxyClass);
+	}
+	
+	public ProxyAgent createProxyAgent() { 
+	
+		boolean accessible = ByteBuddyClassUtils.checkAccessible(this.type);
+		
+		if(!Modifier.isFinal(this.type.getModifiers()) && accessible) {
+			
+			return SubclassProxyAgent.create(this);
+		}
+		else {
+			
+			return AdaptiveProxyAgent.create(this);
 		}
 	}
 }
