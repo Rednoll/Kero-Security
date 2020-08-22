@@ -6,7 +6,9 @@ import java.util.List;
 import com.kero.security.core.property.Property;
 import com.kero.security.core.rules.AccessRule;
 import com.kero.security.core.rules.AccessRuleImpl;
+import com.kero.security.core.scheme.AccessProxy;
 import com.kero.security.core.scheme.AccessScheme;
+import com.kero.security.core.scheme.ClassAccessScheme;
 
 public class AccessSchemeManager {
 
@@ -77,7 +79,16 @@ public class AccessSchemeManager {
 	
 	public AccessSchemeManager inherit(boolean inherit) {
 		
-		scheme.setInherit(inherit);
+		this.scheme.setInherit(inherit);
+		return this;
+	}
+	
+	public AccessSchemeManager proxy(Class<? extends AccessProxy> proxy) {
+		
+		if(!(this.scheme instanceof ClassAccessScheme)) throw new RuntimeException("Can't set proxy class to not CLASS scheme!");
+	
+		((ClassAccessScheme) this.scheme).setProxyClass(proxy);
+		
 		return this;
 	}
 	
