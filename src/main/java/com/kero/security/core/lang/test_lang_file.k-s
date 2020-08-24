@@ -1,0 +1,10 @@
+
+protect Human(G):
+	name(D): +OWNER +FRIEND -COMMON
+	sex(D): +OWNER
+	mass(D): +OWNER
+	
+protect KeroHealthAccount(G):
+	login(G)
+	pass(D)
+	owner(G)

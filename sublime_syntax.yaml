@@ -1,0 +1,14 @@
+%YAML 1.2
+---
+name: Kero-Security
+file_extensions: [k-s]
+scope: source.kero-security
+
+contexts:
+  main:
+    - match: '//'
+      scope: punctuation.definition.comment.kero-security
+      push: line_comment
+
+    - match: '\b(protect)\b'
+      scope: keyword.control.kero-security
