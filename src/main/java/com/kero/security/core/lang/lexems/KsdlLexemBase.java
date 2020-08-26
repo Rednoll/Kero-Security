@@ -1,5 +1,7 @@
 package com.kero.security.core.lang.lexems;
 
+import java.util.regex.Pattern;
+
 import com.kero.security.core.lang.tokens.KsdlToken;
 
 public abstract class KsdlLexemBase<T extends KsdlToken> implements KsdlLexem<T> {
@@ -12,9 +14,9 @@ public abstract class KsdlLexemBase<T extends KsdlToken> implements KsdlLexem<T>
 	}
 	
 	@Override
-	public boolean isMatch(String data) {
+	public boolean isMatch(CharSequence data) {
 		
-		return data.matches(pattern);
+		return Pattern.matches(pattern, data);
 	}
 	
 	@Override

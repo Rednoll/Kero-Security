@@ -3,21 +3,26 @@ package com.kero.security.core.lang;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.kero.security.core.lang.lexems.DefaultRuleLexem;
+import com.kero.security.core.lang.lexems.KeyWordLexem;
 import com.kero.security.core.lang.lexems.KsdlLexem;
-import com.kero.security.core.lang.lexems.PropertyLexem;
+import com.kero.security.core.lang.lexems.NameLexem;
 import com.kero.security.core.lang.lexems.RoleLexem;
-import com.kero.security.core.lang.lexems.TypeLexem;
 import com.kero.security.core.lang.tokens.KsdlToken;
 
 public class KsdlLexer {
 
+	private List<KeyWordLexem> keyWords = new LinkedList<>();
 	private List<KsdlLexem> lexems = new LinkedList<>();
 	
 	public KsdlLexer() {
+	
+		keyWords.add(new KeyWordLexem("protect"));
+		keyWords.add(new KeyWordLexem(":"));
 		
-		lexems.add(new PropertyLexem());
+		lexems.add(new DefaultRuleLexem());
 		lexems.add(new RoleLexem());
-		lexems.add(new TypeLexem());
+		lexems.add(new NameLexem());
 	}
 	
 	public List<KsdlToken> tokenize(String data) {
@@ -27,27 +32,64 @@ public class KsdlLexer {
 		data = data.replaceAll(" +", " ");
 		
 		List<KsdlToken> tokens = new LinkedList<>();
-		
-		c2: while(data.isEmpty()) {
+
+		StringBuilder currentRawToken = new StringBuilder();
+
+		c2: for(char ch : data.toCharArray()) {
 			
-			for(KsdlLexem lexem : lexems) {
+			boolean found = checkWord(tokens, currentRawToken, ch);
+			
+			if(found) {
 				
-				String lexemaPattern = lexem.getPattern();
-				
-				String newData = data.replaceFirst(lexemaPattern, "");
-				
-				String rawToken = data.substring(0, data.length() - newData.length());
-				
-				if(!data.startsWith(rawToken)) continue;
-				
-				tokens.add(lexem.tokenize(rawToken));
-				
+				if(ch != ' ')
+				currentRawToken.append(ch);
 				continue c2;
 			}
 			
-			throw new RuntimeException("Lexem not found!");
+			checkLexem(tokens, currentRawToken, ch);
+
+			if(ch != ' ')
+			currentRawToken.append(ch);
 		}
 		
+		checkLexem(tokens, currentRawToken, '\0');
+		
 		return tokens;
+	}
+	
+	private boolean checkLexem(List<KsdlToken> tokens, StringBuilder currentRawToken, char ch) {
+		
+		for(KsdlLexem lexem : lexems) {
+			
+			if(lexem.isMatch(currentRawToken) && !lexem.isMatch(currentRawToken.toString()+ch)) {
+				
+				KsdlToken token = lexem.tokenize(currentRawToken.toString());
+
+				tokens.add(token);
+				currentRawToken.setLength(0);
+				
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	private boolean checkWord(List<KsdlToken> tokens, StringBuilder currentRawToken, char ch) {
+		
+		for(KsdlLexem word : keyWords) {
+			
+			if(word.isMatch(currentRawToken) && ch == ' ') {
+				
+				KsdlToken token = word.tokenize(currentRawToken.toString());
+				
+				tokens.add(token);
+				currentRawToken.setLength(0);
+
+				return true;
+			}			
+		}
+		
+		return false;
 	}
 }

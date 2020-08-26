@@ -4,7 +4,7 @@ protect Human(G):
 	sex(D): +OWNER
 	mass(D): +OWNER
 	
-protect KeroHealthAccount(G):
+protect KeroHealthAccount:
 	login(G)
-	pass(D)
+	pass: -SYSTEM
 	owner(G)

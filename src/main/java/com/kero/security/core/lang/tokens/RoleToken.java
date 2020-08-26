@@ -11,6 +11,12 @@ public class RoleToken extends KsdlTokenBase {
 		this.roleName = roleName;
 	}
 	
+	@Override
+	public String toString() {
+		
+		return "RoleToken [accessible=" + accessible + ", roleName=" + roleName + "]";
+	}
+
 	public String getRoleName() {
 		
 		return this.roleName;
