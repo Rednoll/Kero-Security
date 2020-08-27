@@ -12,13 +12,16 @@ import com.kero.security.core.lang.tokens.KsdlToken;
 
 public class KsdlLexer {
 
+	public static KeyWordLexem WORD_PROTECT = new KeyWordLexem("protect");
+	public static KeyWordLexem WORD_METABLOCK = new KeyWordLexem(":");
+	
 	private List<KeyWordLexem> keyWords = new LinkedList<>();
 	private List<KsdlLexem> lexems = new LinkedList<>();
 	
 	public KsdlLexer() {
 	
-		keyWords.add(new KeyWordLexem("protect"));
-		keyWords.add(new KeyWordLexem(":"));
+		keyWords.add(WORD_PROTECT);
+		keyWords.add(WORD_METABLOCK);
 		
 		lexems.add(new DefaultRuleLexem());
 		lexems.add(new RoleLexem());
