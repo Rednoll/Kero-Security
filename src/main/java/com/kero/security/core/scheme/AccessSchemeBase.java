@@ -5,6 +5,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.kero.security.core.managers.KeroAccessManager;
 import com.kero.security.core.property.Property;
 import com.kero.security.core.property.PropertyImpl;
@@ -12,6 +15,8 @@ import com.kero.security.core.rules.AccessRule;
 
 public abstract class AccessSchemeBase implements AccessScheme {
 
+	protected static Logger LOGGER = LoggerFactory.getLogger("KeroSecurity");
+	
 	protected Class<?> type;
 	
 	protected AccessRule defaultRule;
@@ -83,6 +88,8 @@ public abstract class AccessSchemeBase implements AccessScheme {
 	
 	@Override
 	public Property createLocalProperty(String name) {
+		
+		LOGGER.debug("Creating property: "+name+" for scheme: "+this.getTypeClass().getSimpleName());
 		
 		Property prop = new PropertyImpl(name);
 		

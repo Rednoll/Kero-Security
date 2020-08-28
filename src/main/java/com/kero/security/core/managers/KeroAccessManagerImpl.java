@@ -4,8 +4,6 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -33,6 +31,11 @@ import com.kero.security.core.scheme.AccessScheme;
 import com.kero.security.core.scheme.ClassAccessScheme;
 import com.kero.security.core.scheme.InterfaceAccessScheme;
 
+import io.github.classgraph.ClassGraph;
+import io.github.classgraph.ClassInfo;
+import io.github.classgraph.ClassInfoList;
+import io.github.classgraph.ScanResult;
+
 public class KeroAccessManagerImpl implements KeroAccessManager {
 	
 	protected static Logger LOGGER = LoggerFactory.getLogger("KeroSecurity");
@@ -46,6 +49,9 @@ public class KeroAccessManagerImpl implements KeroAccessManager {
 	protected ClassLoader proxiesClassLoader = ClassLoader.getSystemClassLoader();
 	
 	protected Set<Class> ignoreList = new HashSet<>();
+	
+	protected String basePackage = "com.kero";
+	protected Map<String, Class<?>> aliasedTypes = new HashMap<>();
 	
 	public KeroAccessManagerImpl() {
 		
@@ -120,6 +126,34 @@ public class KeroAccessManagerImpl implements KeroAccessManager {
 	}
 	
 	@Override
+	public Class<?> getTypeByAliase(String aliase) {
+		
+		if(aliasedTypes.containsKey(aliase)) return aliasedTypes.get(aliase);
+		
+		if(aliasedTypes.isEmpty()) {
+			
+			LOGGER.debug("Begin scan base package: "+basePackage);
+			
+			ScanResult scanResult = new ClassGraph().verbose().enableAllInfo().acceptPackages(basePackage).scan();
+			
+			ClassInfoList classInfoList = scanResult.getAllClasses();
+			
+			for(ClassInfo typeInfo : classInfoList) {
+				
+				String typeAliase = typeInfo.getSimpleName();
+				
+				Class<?> type = typeInfo.loadClass();
+				
+				LOGGER.debug("Registered type: "+typeAliase);
+				
+				aliasedTypes.put(typeAliase, type);
+			}
+		}
+		
+		return aliasedTypes.get(aliase);
+	}
+	
+	@Override
 	public AccessSchemeManager scheme(Class<?> rawType) {
 		
 		try {
@@ -143,12 +177,12 @@ public class KeroAccessManagerImpl implements KeroAccessManager {
 		
 		if(rawType.isInterface()) {
 			
-			LOGGER.debug("Creating protected type INTERFACE for: "+rawType.getCanonicalName());
+			LOGGER.debug("Creating access scheme for interface: "+rawType.getCanonicalName());
 			scheme = new InterfaceAccessScheme(this, rawType);
 		}
 		else {
-
-			LOGGER.debug("Creating protected type CLASS for: "+rawType.getCanonicalName());
+			
+			LOGGER.debug("Creating access scheme for class: "+rawType.getCanonicalName());
 			scheme = new ClassAccessScheme(this, rawType);
 		}
 		

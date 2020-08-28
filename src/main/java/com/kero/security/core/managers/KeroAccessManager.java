@@ -10,6 +10,8 @@ import com.kero.security.core.scheme.AccessScheme;
 
 public interface KeroAccessManager {
 	
+	public Class<?> getTypeByAliase(String aliase);
+	
 	public void ignoreType(Class<?> type);
 	
 	public Role createRole(String name);
