@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
+import com.kero.security.lang.lexems.NameLexem;
+
 public class NameLexemTest {
 
 	@Test

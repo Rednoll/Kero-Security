@@ -1,23 +1,27 @@
 package com.kero.security.core.property;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import com.kero.security.core.interceptor.DenyInterceptor;
+import com.kero.security.core.role.Role;
 import com.kero.security.core.rules.AccessRule;
-import com.kero.security.core.scheme.AccessScheme;
 
 public class PropertyImpl implements Property {
 
 	private String name;
 	
+	private AccessRule defaultRule;
 	private List<AccessRule> rules = new LinkedList<>();
-	
+
+	private DenyInterceptor defaultInterceptor;
 	private List<DenyInterceptor> interceptors = new LinkedList<>();
 	
-	private AccessRule defaultRule;
-	
-	private DenyInterceptor defaultInterceptor;
+	private Map<Role, Role> rolesPropagations = new HashMap<>();
 	
 	public PropertyImpl(String name) {
 		
@@ -40,6 +44,31 @@ public class PropertyImpl implements Property {
 		}
 		
 		this.interceptors.addAll(parent.getInterceptors());
+		
+		parent.getRolesPropagation().forEach((from, to)-> {
+			
+			if(!this.rolesPropagations.containsKey(from)) {
+				
+				this.addRolePropagation(from, to);
+			}
+		});
+	}
+	
+	public Set<Role> propagateRoles(Set<Role> roles) {
+		
+		Set<Role> result = new HashSet<>();
+		
+		for(Role role : roles) {
+		
+			result.add(rolesPropagations.getOrDefault(role, role));
+		}
+		
+		return result;
+	}
+	
+	public void addRolePropagation(Role from, Role to) {
+		
+		this.rolesPropagations.put(from, to);
 	}
 	
 	public void addInterceptor(DenyInterceptor interceptor) {
@@ -102,5 +131,11 @@ public class PropertyImpl implements Property {
 	public DenyInterceptor getDefaultInterceptor() {
 		
 		return this.defaultInterceptor;
+	}
+
+	@Override
+	public Map<Role, Role> getRolesPropagation() {
+	
+		return this.rolesPropagations;
 	}
 }

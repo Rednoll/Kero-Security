@@ -19,7 +19,6 @@ import com.kero.security.core.config.prepared.PreparedAction;
 import com.kero.security.core.config.prepared.PreparedDenyRule;
 import com.kero.security.core.config.prepared.PreparedGrantRule;
 import com.kero.security.core.interceptor.DenyInterceptor;
-import com.kero.security.core.managers.KeroAccessManager;
 import com.kero.security.core.property.Property;
 import com.kero.security.core.role.Role;
 import com.kero.security.core.rules.AccessRule;
@@ -28,6 +27,7 @@ import com.kero.security.core.scheme.proxy.CustomProxyAgent;
 import com.kero.security.core.scheme.proxy.ProxyAgent;
 import com.kero.security.core.scheme.proxy.SubclassProxyAgent;
 import com.kero.security.core.utils.ByteBuddyClassUtils;
+import com.kero.security.managers.KeroAccessManager;
 
 public class ClassAccessScheme extends AccessSchemeBase implements InvocationHandler {
 
@@ -109,6 +109,8 @@ public class ClassAccessScheme extends AccessSchemeBase implements InvocationHan
 			
 			String propertyName = property.getName();
 			
+			Set<Role> propogatedRoles = property.propagateRoles(roles);
+			
 			Set<Role> significantRoles = new HashSet<>(roles);
 			
 			List<AccessRule> rules = property.getRules();
@@ -116,10 +118,10 @@ public class ClassAccessScheme extends AccessSchemeBase implements InvocationHan
 			for(AccessRule rule : rules) {
  
 				if(!rule.manage(significantRoles)) continue;
- 
+				
 				if(rule.accessible(significantRoles)) {
- 
-					preparedActions.put(propertyName, new PreparedGrantRule(this, roles));
+
+					preparedActions.put(propertyName, new PreparedGrantRule(this, propogatedRoles));
 					return;
 				}
 				else if(rule.isDisallower()) {
@@ -138,7 +140,7 @@ public class ClassAccessScheme extends AccessSchemeBase implements InvocationHan
 			
 			if(significantRoles.isEmpty()) {
 			
-				preparedActions.put(propertyName, new PreparedDenyRule(this, roles));
+				preparedActions.put(propertyName, new PreparedDenyRule(this));
 				return;
 			}
 

@@ -3,9 +3,9 @@ package com.kero.security.core.scheme;
 import java.util.Map;
 import java.util.Set;
 
-import com.kero.security.core.managers.KeroAccessManager;
 import com.kero.security.core.property.Property;
 import com.kero.security.core.rules.AccessRule;
+import com.kero.security.managers.KeroAccessManager;
 
 public interface AccessScheme {
 

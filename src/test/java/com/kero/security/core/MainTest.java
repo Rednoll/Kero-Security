@@ -1,13 +1,13 @@
 package com.kero.security.core;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
 import org.junit.jupiter.api.Test;
 
-import com.kero.security.core.managers.KeroAccessManager;
-import com.kero.security.core.managers.KeroAccessManagerImpl;
+import com.kero.security.core.role.annotations.PropagateRole;
+import com.kero.security.managers.KeroAccessManager;
+import com.kero.security.managers.KeroAccessManagerImpl;
 
 public class MainTest {
 
@@ -32,11 +32,13 @@ public class MainTest {
 
 		manager
 			.scheme(TestObjectDeep.class)
-				.defaultGrant();
+				.defaultDeny()
+				.property("testObject")
+					.grantFor("OWNER");
 		
-		TestObjectDeep deep = manager.protect(new TestObjectDeep(new TestObject("test text!!")), "FRIEND");
+		TestObjectDeep deep = manager.protect(new TestObjectDeep(new TestObject("test text!!")), "OWNER");
 		
-		System.out.println("text: "+deep.getObjects().entrySet().iterator().next().getValue().getText());
+		System.out.println("text: "+deep.getTestObject().getText());
 		
 		//TEST IN IN
 		
@@ -86,6 +88,7 @@ public class MainTest {
 	public static class TestObjectDeep {
 		
 		private Map<String, TestObject> objects = new TreeMap<>();
+
 		private TestObject testObject = null;
 		
 		public TestObjectDeep() {

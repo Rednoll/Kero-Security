@@ -22,6 +22,11 @@ public class AccessRuleImpl implements AccessRule {
 	}
 	
 	@Override
+	public String toString() {
+		return "AccessRuleImpl [roles=" + roles + ", accessible=" + accessible + "]";
+	}
+
+	@Override
 	public int hashCode() {
 		
 		return Objects.hash(accessible, roles);
@@ -41,15 +46,15 @@ public class AccessRuleImpl implements AccessRule {
 	}
 	
 	@Override
-	public PreparedAction prepare(AccessScheme scheme, Set<Role> roles) {
+	public PreparedAction prepare(AccessScheme scheme, Set<Role> propagatedRoles) {
 		
 		if(this.accessible(roles)) {
 			
-			return new PreparedGrantRule(scheme, roles);
+			return new PreparedGrantRule(scheme, propagatedRoles);
 		}
 		else {
 			
-			return new PreparedDenyRule(scheme, roles);
+			return new PreparedDenyRule(scheme);
 		}
 	}
 	

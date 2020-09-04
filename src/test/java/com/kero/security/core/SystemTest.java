@@ -7,8 +7,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.kero.security.core.exception.AccessException;
-import com.kero.security.core.managers.KeroAccessManager;
-import com.kero.security.core.managers.KeroAccessManagerImpl;
+import com.kero.security.managers.KeroAccessManager;
+import com.kero.security.managers.KeroAccessManagerImpl;
 
 public class SystemTest {
 

@@ -26,7 +26,7 @@ public abstract class DenyInterceptorBase implements DenyInterceptor {
 		
 		if(manage(roles) || this.roles.isEmpty()) {
 		
-			return new PreparedInterceptor(this.scheme, roles, this::intercept);
+			return new PreparedInterceptor(this.scheme, this::intercept);
 		}
 		else {
 			
