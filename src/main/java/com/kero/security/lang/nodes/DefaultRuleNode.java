@@ -1,0 +1,33 @@
+package com.kero.security.lang.nodes;
+
+import com.kero.security.core.DefaultRuleOwner;
+import com.kero.security.core.rules.AccessRule;
+import com.kero.security.managers.KeroAccessManager;
+
+public enum DefaultRuleNode implements KsdlNode {
+	
+	EMPTY(null), GRANT(true), DENY(false);
+
+	private Boolean accessible;
+		
+	private DefaultRuleNode(Boolean accessible) {
+		
+		this.accessible = accessible;
+	}
+	
+	public void interpret(KeroAccessManager manager, DefaultRuleOwner target) {
+		
+		if(accessible == null) {
+			
+			target.setDefaultRule(null);
+		}
+		else if(accessible) {
+			
+			target.setDefaultRule(AccessRule.GRANT_ALL);
+		}
+		else {
+			
+			target.setDefaultRule(AccessRule.DENY_ALL);
+		}
+	}
+}

@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import com.kero.security.core.TestObject;
 import com.kero.security.lang.KsdlLexer;
 import com.kero.security.lang.KsdlParser;
-import com.kero.security.lang.nodes.TypeNode;
+import com.kero.security.lang.nodes.SchemeNode;
 import com.kero.security.lang.tokens.KsdlToken;
 import com.kero.security.managers.KeroAccessManager;
 import com.kero.security.managers.KeroAccessManagerImpl;
@@ -31,14 +31,14 @@ public class KsdlLexerTest {
 			System.out.println(token);
 		}
 		
-		Thread.sleep(5000);
+		Thread.sleep(2000);
 		
-		KsdlParser parser = new KsdlParser(manager);
+		KsdlParser parser = new KsdlParser();
 	
-		TypeNode node = (TypeNode) parser.parse(tokens).iterator().next();
+		SchemeNode node = (SchemeNode) parser.parse(tokens).iterator().next();
 		
 		node.interpret(manager);
 		
-		manager.protect(new TestObject("test text"), "COMMON").getText();
+		manager.protect(new TestObject("test text"), "OWNER").getText();
 	}
 }

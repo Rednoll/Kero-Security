@@ -4,17 +4,21 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Queue;
 
-import com.kero.security.core.role.Role;
-import com.kero.security.lang.nodes.PropagationLineNode;
+import com.kero.security.lang.nodes.PropagationMetaline;
+import com.kero.security.lang.parsers.metaline.MetalineParserBase;
 import com.kero.security.lang.tokens.KeyWordToken;
 import com.kero.security.lang.tokens.KsdlToken;
 import com.kero.security.lang.tokens.NameToken;
-import com.kero.security.managers.KeroAccessManager;
 
-public class PropagationNodeParser extends KsdlNodeParserBase<PropagationLineNode>{
+public class PropagationParser extends MetalineParserBase<PropagationMetaline> {
+	
+	public PropagationParser() {
+		super("propagation");
+		
+	}
 
 	@Override
-	public PropagationLineNode parse(Queue<KsdlToken> tokens) {
+	public PropagationMetaline parse(Queue<KsdlToken> tokens) {
 		
 		tokens.poll(); // META_LINE
 		tokens.poll(); // PROPAGATION
@@ -29,8 +33,14 @@ public class PropagationNodeParser extends KsdlNodeParserBase<PropagationLineNod
 		
 		Map<String, String> propagationMap = new HashMap<>();
 		
-		while(tokens.isEmpty()) {
-
+		while(!tokens.isEmpty()) {
+			
+			if(tokens.peek() == KeyWordToken.CLOSE_BLOCK) {
+			
+				tokens.poll();
+				break;
+			}
+			
 			if(tokens.peek() != KeyWordToken.FORWARD_DIRECTION) throw new RuntimeException("Can't parse!");
 			
 			tokens.poll(); // FORWARD_DIRECTION
@@ -44,6 +54,6 @@ public class PropagationNodeParser extends KsdlNodeParserBase<PropagationLineNod
 			fromRoleName = toRoleName;
 		}
 		
-		return new PropagationLineNode(propagationMap);
+		return new PropagationMetaline(propagationMap);
 	}
 }

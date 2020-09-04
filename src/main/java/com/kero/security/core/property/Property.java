@@ -4,18 +4,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.kero.security.core.DefaultRuleOwner;
 import com.kero.security.core.interceptor.DenyInterceptor;
 import com.kero.security.core.role.Role;
 import com.kero.security.core.rules.AccessRule;
 
-public interface Property {
+public interface Property extends DefaultRuleOwner {
 
 	public void addRolePropagation(Role from, Role to);
 	public Set<Role> propagateRoles(Set<Role> roles);
-	
-	public void setDefaultRule(AccessRule rule);
-	public boolean hasDefaultRule();
-	public AccessRule getDefaultRule();
 	
 	public void addRule(AccessRule rule);
 	

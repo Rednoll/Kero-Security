@@ -1,18 +1,19 @@
 package com.kero.security.lang.nodes;
 
-import java.util.Set;
+import java.util.List;
 
-import com.kero.security.core.rules.AccessRule;
 import com.kero.security.core.scheme.AccessScheme;
 import com.kero.security.managers.KeroAccessManager;
 
-public class TypeNode extends KsdlNodeBase implements KsdlRootNode {
+public class SchemeNode extends KsdlNodeBase implements KsdlRootNode {
 
 	private String typeName;
-	private Boolean defaultRule;
-	private Set<PropertyNode> properties;
 	
-	public TypeNode(String typeName, Boolean defaultRule, Set<PropertyNode> properties) {
+	private DefaultRuleNode defaultRule;
+	
+	private List<PropertyNode> properties;
+	
+	public SchemeNode(String typeName, DefaultRuleNode defaultRule, List<PropertyNode> properties) {
 		
 		this.typeName = typeName;
 		this.defaultRule = defaultRule;
@@ -23,10 +24,7 @@ public class TypeNode extends KsdlNodeBase implements KsdlRootNode {
 		
 		AccessScheme scheme = manager.getOrCreateScheme(manager.getTypeByAliase(typeName));
 	
-		if(defaultRule != null) {
-			
-			scheme.setDefaultRule(defaultRule ? AccessRule.GRANT_ALL : AccessRule.DENY_ALL);
-		}
+		defaultRule.interpret(manager, scheme);
 		
 		properties.forEach((prop)-> prop.interpret(scheme));
 	}

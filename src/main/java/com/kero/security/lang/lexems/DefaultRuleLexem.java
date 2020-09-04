@@ -11,7 +11,14 @@ public class DefaultRuleLexem extends KsdlLexemBase<DefaultRuleToken> {
 
 	@Override
 	public DefaultRuleToken tokenize(String data) {
-				
-		return new DefaultRuleToken(data.charAt(1) == 'G');
+		
+		if(data.charAt(1) == 'G') {
+			
+			return DefaultRuleToken.GRANT;
+		}
+		else {
+			
+			return DefaultRuleToken.DENY;
+		}	
 	}
 }

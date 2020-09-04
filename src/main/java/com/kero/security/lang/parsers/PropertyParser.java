@@ -1,71 +1,80 @@
 package com.kero.security.lang.parsers;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Queue;
 import java.util.Set;
 
-import com.kero.security.core.role.Role;
-import com.kero.security.core.rules.AccessRule;
-import com.kero.security.core.rules.AccessRuleImpl;
+import com.kero.security.lang.nodes.AccessRuleNode;
+import com.kero.security.lang.nodes.DefaultRuleNode;
+import com.kero.security.lang.nodes.PropertyMetalineBase;
 import com.kero.security.lang.nodes.PropertyNode;
+import com.kero.security.lang.parsers.metaline.HasMetalines;
+import com.kero.security.lang.parsers.metaline.MetalineParser;
 import com.kero.security.lang.tokens.DefaultRuleToken;
-import com.kero.security.lang.tokens.KeyWordToken;
 import com.kero.security.lang.tokens.KsdlToken;
 import com.kero.security.lang.tokens.NameToken;
 import com.kero.security.lang.tokens.RoleToken;
-import com.kero.security.managers.KeroAccessManager;
 
-public class PropertyParser extends KsdlNodeParserBase<PropertyNode> {
+public class PropertyParser extends KsdlNodeParserBase<PropertyNode> implements HasBlock<RoleToken>, HasMetalines<PropertyMetalineBase> {
 
+	private List<MetalineParser<? extends PropertyMetalineBase>> metalineParsers = new ArrayList<>();
+	
+	public PropertyParser() {
+	
+		metalineParsers.add(new PropagationParser());
+	}
+	
 	public PropertyNode parse(Queue<KsdlToken> tokens) {
 		
 		NameToken nameToken = (NameToken) tokens.poll();
 		
-		DefaultRuleToken defaultRuleToken = null;
+		DefaultRuleToken defaultRuleToken = DefaultRuleToken.EMPTY;
 		
 		if(tokens.peek() instanceof DefaultRuleToken) {
 			
 			defaultRuleToken = (DefaultRuleToken) tokens.poll();
 		}
 		
-		String name = nameToken.getRaw();
-		Boolean defaultRule = defaultRuleToken != null ? defaultRuleToken.getDefaultAccessible() : null;
+		Set<String> grantRoles = new HashSet<>();
+		Set<String> denyRoles = new HashSet<>();
+		
+		List<RoleToken> roles = this.parseBlock(tokens);
+		
+		for(RoleToken role : roles) {
 			
-		if(tokens.peek() == KeyWordToken.OPEN_BLOCK) {
-			
-			tokens.poll();
-			
-			Set<String> grantRoles = new HashSet<>();
-			Set<String> denyRoles = new HashSet<>();
-			
-			while(!tokens.isEmpty()) {
+			if(role.getAccessible()) {
 				
-				if(tokens.peek() instanceof RoleToken) {
-					
-					RoleToken roleToken = (RoleToken) tokens.poll();
-				
-					if(roleToken.getAccessible()) {
-						
-						grantRoles.add(roleToken.getRoleName());
-					}
-					else {
-						
-						denyRoles.add(roleToken.getRoleName());
-					}
-				}
-				else if(tokens.peek() == KeyWordToken.CLOSE_BLOCK){
-					
-					tokens.poll();
-					
-					break;
-				}
+				grantRoles.add(role.getRoleName());
 			}
-			
-			return new PropertyNode(name, defaultRule, grantRoles, grantRoles);	
+			else {
+				
+				denyRoles.add(role.getRoleName());
+			}
 		}
-		else {
-			
-			return new PropertyNode(name, defaultRule, null, null);
-		}
+		
+		List<PropertyMetalineBase> metalines = this.parseMetalines(tokens);
+		
+		String name = nameToken.getRaw();
+		
+		DefaultRuleNode defaultRule = defaultRuleToken.toNode();
+		
+		AccessRuleNode grantRule = new AccessRuleNode(grantRoles, true);
+		AccessRuleNode denyRule = new AccessRuleNode(denyRoles, false);
+		
+		return new PropertyNode(name, defaultRule, grantRule, denyRule, metalines);
+	}
+
+	@Override
+	public List<MetalineParser<? extends PropertyMetalineBase>> getMetalineParsers() {
+		
+		return metalineParsers;
+	}
+	
+	@Override
+	public RoleToken parseBlockUnit(Queue<KsdlToken> tokens) {
+		
+		return (RoleToken) tokens.poll();
 	}
 }

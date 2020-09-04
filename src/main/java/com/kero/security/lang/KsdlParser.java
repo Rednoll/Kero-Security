@@ -3,26 +3,20 @@ package com.kero.security.lang;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 
 import com.kero.security.lang.nodes.KsdlRootNode;
 import com.kero.security.lang.parsers.KsdlRootNodeParser;
-import com.kero.security.lang.parsers.TypeParser;
+import com.kero.security.lang.parsers.SchemeParser;
 import com.kero.security.lang.tokens.KsdlToken;
-import com.kero.security.managers.KeroAccessManager;
 
 public class KsdlParser {
 
-	protected KeroAccessManager manager;
-	
 	protected List<KsdlRootNodeParser<? extends KsdlRootNode>> parsers;
 	
-	public KsdlParser(KeroAccessManager manager) {
-		
-		this.manager = manager;
+	public KsdlParser() {
 		
 		this.parsers = new ArrayList<>();
-			parsers.add(new TypeParser(manager));
+			parsers.add(new SchemeParser());
 	}
 	
 	public List<KsdlRootNode> parse(List<KsdlToken> tokens) {

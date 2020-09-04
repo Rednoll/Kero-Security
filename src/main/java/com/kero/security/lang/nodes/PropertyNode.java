@@ -1,30 +1,29 @@
 package com.kero.security.lang.nodes;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import com.kero.security.core.property.Property;
-import com.kero.security.core.role.Role;
-import com.kero.security.core.rules.AccessRule;
-import com.kero.security.core.rules.AccessRuleImpl;
 import com.kero.security.core.scheme.AccessScheme;
 import com.kero.security.managers.KeroAccessManager;
 
 public class PropertyNode extends KsdlNodeBase {
 
 	private String name;
-	private Boolean defaultRule;
+	private DefaultRuleNode defaultRule;
 	
-	private Set<String> grantRoleNames;
-	private Set<String> denyRoleNames;
+	private AccessRuleNode grantRule;
+	private AccessRuleNode denyRule;
 	
-	public PropertyNode(String name, Boolean defaultRule, Set<String> grantRoleNames, Set<String> denyRoleNames) {
+	private List<PropertyMetalineBase> metalines;
+	
+	public PropertyNode(String name, DefaultRuleNode defaultRule, AccessRuleNode grantRule, AccessRuleNode denyRule, List<PropertyMetalineBase> metalines) {
 		
 		this.name = name;
 		this.defaultRule = defaultRule;
 		
-		this.grantRoleNames = grantRoleNames;
-		this.denyRoleNames = denyRoleNames;
+		this.grantRule = grantRule;
+		this.denyRule = denyRule;
+		this.metalines = metalines;
 	}
 
 	public void interpret(AccessScheme scheme) {
@@ -32,30 +31,15 @@ public class PropertyNode extends KsdlNodeBase {
 		KeroAccessManager manager = scheme.getManager();
 		
 		Property prop = scheme.getOrCreateLocalProperty(name);
+
+		defaultRule.interpret(manager, scheme);
 		
-		if(defaultRule != null) {
+		grantRule.interpret(manager, prop);
+		denyRule.interpret(manager, prop);
+		
+		for(PropertyMetalineBase metaline : metalines) {
 			
-			prop.setDefaultRule(defaultRule ? AccessRule.GRANT_ALL : AccessRule.DENY_ALL);
+			metaline.interpret(manager, prop);
 		}
-		
-		Set<Role> grantRoles = new HashSet<>();
-
-			for(String roleName : grantRoleNames) {
-				
-				grantRoles.add(manager.getOrCreateRole(roleName));
-			}
-
-		Set<Role> denyRoles = new HashSet<>();
-			
-			for(String roleName : denyRoleNames) {
-				
-				denyRoles.add(manager.getOrCreateRole(roleName));
-			}
-		
-		AccessRule grantRule = new AccessRuleImpl(grantRoles, true);
-		AccessRule denyRule = new AccessRuleImpl(denyRoles, false);
-		
-		prop.addRule(grantRule);
-		prop.addRule(denyRule);
 	}
 }
