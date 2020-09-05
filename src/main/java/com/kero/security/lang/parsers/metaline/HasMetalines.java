@@ -1,17 +1,15 @@
 package com.kero.security.lang.parsers.metaline;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 
+import com.kero.security.lang.TokensSequence;
 import com.kero.security.lang.nodes.metaline.MetalineNode;
 import com.kero.security.lang.tokens.KeyWordToken;
-import com.kero.security.lang.tokens.KsdlToken;
 
 public interface HasMetalines<N extends MetalineNode> {
 
-	public default List<N> parseMetalines(Queue<KsdlToken> tokens) {
+	public default List<N> parseMetalines(TokensSequence tokens) {
 		
 		List<N> metalines = new LinkedList<>();
 		
@@ -23,15 +21,13 @@ public interface HasMetalines<N extends MetalineNode> {
 		return metalines;
 	}
 	
-	public default N parseLine(Queue<KsdlToken> tokens) {
+	public default N parseLine(TokensSequence tokens) {
 
-		List<KsdlToken> tokensList = new ArrayList<>(tokens);
-		
 		List<? extends MetalineParser<? extends N>> parsers = getMetalineParsers();
 		
 		for(MetalineParser<? extends N> parser : parsers) {
 			
-			if(parser.isMatch(tokensList)) {
+			if(parser.isMatch(tokens)) {
 				
 				return parser.parse(tokens);
 			}

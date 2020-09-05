@@ -28,18 +28,13 @@ public class KsdlLexer {
 		lexems.add(new NameLexem());
 	}
 	
-	public List<KsdlToken> tokenize(String data) {
+	public TokensSequence tokenize(String data) {
 		
-		data += " ";
-		data = data.replaceAll("\\r\\n", "\n");
-		data = data.replaceAll("	", " ");
-		data = data.replaceAll(" +", " ");
-		
-		System.out.println("data:" +data);
+		data = prepareRawText(data);
 		
 		boolean findShortEnd = false;
 		
-		LinkedList<KsdlToken> tokens = new LinkedList<>();
+		TokensSequence tokens = new TokensSequence();
 
 		StringBuilder currentRawToken = new StringBuilder();
 
@@ -74,6 +69,16 @@ public class KsdlLexer {
 		checkLexem(tokens, currentRawToken, '\0');
 		
 		return tokens;
+	}
+
+	private String prepareRawText(String text) {
+		
+		text += " ";
+		text = text.replaceAll("\\r\\n", "\n");
+		text = text.replaceAll("	", " ");
+		text = text.replaceAll(" +", " ");
+		
+		return text;
 	}
 	
 	private boolean checkLexem(List<KsdlToken> tokens, StringBuilder currentRawToken, char ch) {

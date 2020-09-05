@@ -3,14 +3,13 @@ package com.kero.security.lang.parsers;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 
+import com.kero.security.lang.TokensSequence;
 import com.kero.security.lang.tokens.KeyWordToken;
-import com.kero.security.lang.tokens.KsdlToken;
 
 public interface HasBlock<U> {
 
-	public default List<U> parseBlock(Queue<KsdlToken> tokens) {
+	public default List<U> parseBlock(TokensSequence tokens) {
 		
 		if(tokens.peek() != KeyWordToken.OPEN_BLOCK) return Collections.EMPTY_LIST;
 		
@@ -28,5 +27,5 @@ public interface HasBlock<U> {
 		return units;
 	}
 	
-	public U parseBlockUnit(Queue<KsdlToken> tokens);
+	public U parseBlockUnit(TokensSequence tokens);
 }

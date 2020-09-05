@@ -3,9 +3,9 @@ package com.kero.security.lang.parsers;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Queue;
 import java.util.Set;
 
+import com.kero.security.lang.TokensSequence;
 import com.kero.security.lang.nodes.AccessRuleNode;
 import com.kero.security.lang.nodes.DefaultRuleNode;
 import com.kero.security.lang.nodes.PropertyMetalineBase;
@@ -13,7 +13,6 @@ import com.kero.security.lang.nodes.PropertyNode;
 import com.kero.security.lang.parsers.metaline.HasMetalines;
 import com.kero.security.lang.parsers.metaline.MetalineParser;
 import com.kero.security.lang.tokens.DefaultRuleToken;
-import com.kero.security.lang.tokens.KsdlToken;
 import com.kero.security.lang.tokens.NameToken;
 import com.kero.security.lang.tokens.RoleToken;
 
@@ -26,16 +25,11 @@ public class PropertyParser extends KsdlNodeParserBase<PropertyNode> implements 
 		metalineParsers.add(new PropagationParser());
 	}
 	
-	public PropertyNode parse(Queue<KsdlToken> tokens) {
+	public PropertyNode parse(TokensSequence tokens) {
 		
 		NameToken nameToken = (NameToken) tokens.poll();
 		
-		DefaultRuleToken defaultRuleToken = DefaultRuleToken.EMPTY;
-		
-		if(tokens.peek() instanceof DefaultRuleToken) {
-			
-			defaultRuleToken = (DefaultRuleToken) tokens.poll();
-		}
+		DefaultRuleToken defaultRuleToken = tokens.tryGetOrDefault(DefaultRuleToken.EMPTY);
 		
 		Set<String> grantRoles = new HashSet<>();
 		Set<String> denyRoles = new HashSet<>();
@@ -73,7 +67,7 @@ public class PropertyParser extends KsdlNodeParserBase<PropertyNode> implements 
 	}
 	
 	@Override
-	public RoleToken parseBlockUnit(Queue<KsdlToken> tokens) {
+	public RoleToken parseBlockUnit(TokensSequence tokens) {
 		
 		return (RoleToken) tokens.poll();
 	}

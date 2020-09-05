@@ -2,12 +2,11 @@ package com.kero.security.lang.parsers;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Queue;
 
+import com.kero.security.lang.TokensSequence;
 import com.kero.security.lang.nodes.PropagationMetaline;
 import com.kero.security.lang.parsers.metaline.MetalineParserBase;
 import com.kero.security.lang.tokens.KeyWordToken;
-import com.kero.security.lang.tokens.KsdlToken;
 import com.kero.security.lang.tokens.NameToken;
 
 public class PropagationParser extends MetalineParserBase<PropagationMetaline> {
@@ -18,7 +17,7 @@ public class PropagationParser extends MetalineParserBase<PropagationMetaline> {
 	}
 
 	@Override
-	public PropagationMetaline parse(Queue<KsdlToken> tokens) {
+	public PropagationMetaline parse(TokensSequence tokens) {
 		
 		tokens.poll(); // META_LINE
 		tokens.poll(); // PROPAGATION

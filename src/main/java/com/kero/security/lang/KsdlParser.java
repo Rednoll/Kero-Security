@@ -1,13 +1,11 @@
 package com.kero.security.lang;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import com.kero.security.lang.nodes.KsdlRootNode;
 import com.kero.security.lang.parsers.KsdlRootNodeParser;
 import com.kero.security.lang.parsers.SchemeParser;
-import com.kero.security.lang.tokens.KsdlToken;
 
 public class KsdlParser {
 
@@ -19,19 +17,17 @@ public class KsdlParser {
 			parsers.add(new SchemeParser());
 	}
 	
-	public List<KsdlRootNode> parse(List<KsdlToken> tokens) {
-		
-		LinkedList<KsdlToken> tokensQueue = new LinkedList<>(tokens);
+	public List<KsdlRootNode> parse(TokensSequence tokens) {
 		
 		List<KsdlRootNode> roots = new ArrayList<>();
 		
-		c2: while(!tokensQueue.isEmpty()) {
+		c2: while(!tokens.isEmpty()) {
 			
 			for(KsdlRootNodeParser<? extends KsdlRootNode> parser : this.parsers) {
 				
-				if(parser.isMatch(tokensQueue)) {
+				if(parser.isMatch(tokens)) {
 					
-					KsdlRootNode node = parser.parse(tokensQueue);
+					KsdlRootNode node = parser.parse(tokens);
 				
 					System.out.println("Node: "+node);
 					
