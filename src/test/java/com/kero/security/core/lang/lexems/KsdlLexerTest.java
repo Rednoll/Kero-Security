@@ -6,14 +6,14 @@ import java.nio.file.Files;
 
 import org.junit.jupiter.api.Test;
 
+import com.kero.security.core.KeroAccessManager;
+import com.kero.security.core.KeroAccessManagerImpl;
 import com.kero.security.core.TestObject;
 import com.kero.security.lang.KsdlLexer;
 import com.kero.security.lang.KsdlParser;
 import com.kero.security.lang.TokensSequence;
 import com.kero.security.lang.nodes.SchemeNode;
 import com.kero.security.lang.tokens.KsdlToken;
-import com.kero.security.managers.KeroAccessManager;
-import com.kero.security.managers.KeroAccessManagerImpl;
 
 public class KsdlLexerTest {
 

@@ -1,4 +1,4 @@
-package com.kero.security.managers;
+package com.kero.security.core;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -7,6 +7,7 @@ import java.util.Set;
 import com.kero.security.core.role.Role;
 import com.kero.security.core.rules.AccessRule;
 import com.kero.security.core.scheme.AccessScheme;
+import com.kero.security.core.scheme.configuration.KeroAccessConfigurator;
 
 public interface KeroAccessManager {
 	
@@ -19,10 +20,8 @@ public interface KeroAccessManager {
 	public Role getOrCreateRole(String name);
 	
 	public AccessScheme getOrCreateScheme(Class<?> rawType);
-	
 	public boolean hasScheme(Class<?> rawType);
 	public AccessScheme getScheme(Class<?> rawType);
-	public AccessSchemeManager scheme(Class<?> rawType);
 	
 	public ClassLoader getClassLoader();
 	
@@ -52,4 +51,6 @@ public interface KeroAccessManager {
 	public AccessRule getDefaultRule();
 	
 	public String extractName(String rawName);
+	
+	public KeroAccessConfigurator getConfigurator();
 }

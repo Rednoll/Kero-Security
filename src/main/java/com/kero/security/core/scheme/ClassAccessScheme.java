@@ -13,6 +13,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.kero.security.core.KeroAccessManager;
 import com.kero.security.core.config.PreparedAccessConfiguration;
 import com.kero.security.core.config.PreparedAccessConfigurationImpl;
 import com.kero.security.core.config.prepared.PreparedAction;
@@ -27,7 +28,6 @@ import com.kero.security.core.scheme.proxy.CustomProxyAgent;
 import com.kero.security.core.scheme.proxy.ProxyAgent;
 import com.kero.security.core.scheme.proxy.SubclassProxyAgent;
 import com.kero.security.core.utils.ByteBuddyClassUtils;
-import com.kero.security.managers.KeroAccessManager;
 
 public class ClassAccessScheme extends AccessSchemeBase implements InvocationHandler {
 

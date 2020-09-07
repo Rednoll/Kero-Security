@@ -8,10 +8,10 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.kero.security.core.KeroAccessManager;
 import com.kero.security.core.property.Property;
 import com.kero.security.core.property.PropertyImpl;
 import com.kero.security.core.rules.AccessRule;
-import com.kero.security.managers.KeroAccessManager;
 
 public abstract class AccessSchemeBase implements AccessScheme {
 

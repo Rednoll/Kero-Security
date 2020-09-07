@@ -6,8 +6,6 @@ import org.junit.jupiter.api.Test;
 
 import com.kero.security.core.config.PreparedAccessConfiguration;
 import com.kero.security.core.scheme.AccessProxy;
-import com.kero.security.managers.KeroAccessManager;
-import com.kero.security.managers.KeroAccessManagerImpl;
 
 public class CustomProxyTest {
 
@@ -16,7 +14,7 @@ public class CustomProxyTest {
 		
 		KeroAccessManager manager = new KeroAccessManagerImpl();
 		
-		manager
+		manager.getConfigurator()
 			.scheme(TestObject.class)
 				.defaultDeny()
 				.proxy(TestObjectProxy.class)

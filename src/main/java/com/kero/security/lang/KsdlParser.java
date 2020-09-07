@@ -17,7 +17,9 @@ public class KsdlParser {
 			parsers.add(new SchemeParser());
 	}
 	
-	public List<KsdlRootNode> parse(TokensSequence tokens) {
+	public List<KsdlRootNode> parse(TokensSequence tokensArg) {
+		
+		TokensSequence tokens = new TokensSequence(tokensArg);
 		
 		List<KsdlRootNode> roots = new ArrayList<>();
 		

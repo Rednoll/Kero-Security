@@ -3,9 +3,9 @@ package com.kero.security.core.config.prepared;
 import java.lang.reflect.Method;
 import java.util.Set;
 
+import com.kero.security.core.KeroAccessManager;
 import com.kero.security.core.role.Role;
 import com.kero.security.core.scheme.AccessScheme;
-import com.kero.security.managers.KeroAccessManager;
 
 public class PreparedGrantRule extends PreparedActionBase implements PreparedAction {
 	

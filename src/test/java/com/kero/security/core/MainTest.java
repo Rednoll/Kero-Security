@@ -6,8 +6,6 @@ import java.util.TreeMap;
 import org.junit.jupiter.api.Test;
 
 import com.kero.security.core.role.annotations.PropagateRole;
-import com.kero.security.managers.KeroAccessManager;
-import com.kero.security.managers.KeroAccessManagerImpl;
 
 public class MainTest {
 
@@ -16,21 +14,22 @@ public class MainTest {
 
 		KeroAccessManager manager = new KeroAccessManagerImpl();
 
-		manager
+		manager.getConfigurator()
 			.scheme(TestInterface.class)
 				.property("text")
 					.denyWithInterceptor((obj)-> {
 					
 						return "You not have access!";
 					}, "FRIEND");
-		manager
+		
+		manager.getConfigurator()
 			.scheme(TestObject.class)
 				.defaultDeny()
 				.property("text")
 					.denyFor("FRIEND")
 					.grantFor("OWNER");
 
-		manager
+		manager.getConfigurator()
 			.scheme(TestObjectDeep.class)
 				.defaultDeny()
 				.property("testObject")

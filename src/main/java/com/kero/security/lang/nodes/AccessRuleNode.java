@@ -3,10 +3,10 @@ package com.kero.security.lang.nodes;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.kero.security.core.KeroAccessManager;
 import com.kero.security.core.property.Property;
 import com.kero.security.core.role.Role;
 import com.kero.security.core.rules.AccessRuleImpl;
-import com.kero.security.managers.KeroAccessManager;
 
 public class AccessRuleNode extends KsdlNodeBase {
 

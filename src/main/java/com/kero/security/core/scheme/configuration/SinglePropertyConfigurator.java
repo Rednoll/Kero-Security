@@ -1,10 +1,11 @@
-package com.kero.security.managers;
+package com.kero.security.core.scheme.configuration;
 
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Function;
 
+import com.kero.security.core.KeroAccessManager;
 import com.kero.security.core.interceptor.DenyInterceptor;
 import com.kero.security.core.interceptor.DenyInterceptorImpl;
 import com.kero.security.core.property.Property;
@@ -12,50 +13,50 @@ import com.kero.security.core.role.Role;
 import com.kero.security.core.rules.AccessRule;
 import com.kero.security.core.rules.AccessRuleImpl;
 
-public class SinglePropertyManager {
+public class SinglePropertyConfigurator {
 
 	private Property property;
-	private AccessSchemeManager schemeManager;
+	private AccessSchemeConfigurator schemeConf;
 	
-	public SinglePropertyManager(AccessSchemeManager schemeManager, Property property) {
+	public SinglePropertyConfigurator(AccessSchemeConfigurator schemeConf, Property property) {
 		
-		this.schemeManager = schemeManager;
+		this.schemeConf = schemeConf;
 		this.property = property;
 	}
 	
-	public SinglePropertyManager propagateRole(String from, String to) {
+	public SinglePropertyConfigurator propagateRole(String from, String to) {
 		
-		KeroAccessManager manager = schemeManager.getManager();
+		KeroAccessManager manager = schemeConf.getManager();
 		
 		property.addRolePropagation(manager.getOrCreateRole(from), manager.getOrCreateRole(to));
 	
 		return this;
 	}
 	
-	public SinglePropertyManager defaultGrant() {
+	public SinglePropertyConfigurator defaultGrant() {
 		
 		return defaultRule(AccessRuleImpl.GRANT_ALL);
 	}
 	
-	public SinglePropertyManager defaultDeny() {
+	public SinglePropertyConfigurator defaultDeny() {
 		
 		return defaultRule(AccessRuleImpl.DENY_ALL);
 	}
 	
-	public SinglePropertyManager defaultRule(AccessRule rule) {
+	public SinglePropertyConfigurator defaultRule(AccessRule rule) {
 
 		property.setDefaultRule(rule);
 		
 		return this;
 	}
 	
-	public SinglePropertyManager grantFor(String... roleNames) {
+	public SinglePropertyConfigurator grantFor(String... roleNames) {
 		
 		Set<Role> roles = new HashSet<>();
 		
 		for(String name : roleNames) {
 			
-			roles.add(schemeManager.getManager().getOrCreateRole(name));
+			roles.add(schemeConf.getManager().getOrCreateRole(name));
 		}
 		
 		setAccessible(roles, true);
@@ -63,13 +64,13 @@ public class SinglePropertyManager {
 		return this;
 	}
 	
-	public SinglePropertyManager denyFor(String... roleNames) {
+	public SinglePropertyConfigurator denyFor(String... roleNames) {
 		
 		Set<Role> roles = new HashSet<>();
 		
 		for(String name : roleNames) {
 			
-			roles.add(schemeManager.getManager().getOrCreateRole(name));
+			roles.add(schemeConf.getManager().getOrCreateRole(name));
 		}
 		
 		setAccessible(roles, false);
@@ -77,7 +78,7 @@ public class SinglePropertyManager {
 		return this;
 	}
 	
-	public SinglePropertyManager setAccessible(Set<Role> roles, boolean accessible) {
+	public SinglePropertyConfigurator setAccessible(Set<Role> roles, boolean accessible) {
 		
 		if(roles.isEmpty()) return this;
 	
@@ -86,24 +87,24 @@ public class SinglePropertyManager {
 		return this;
 	}
 	
-	public SinglePropertyManager denyWithInterceptor(Function<Object, Object> silentInterceptor, String... roleNames) {
+	public SinglePropertyConfigurator denyWithInterceptor(Function<Object, Object> silentInterceptor, String... roleNames) {
 		
 		Set<Role> roles = new HashSet<>();
 		
 		for(String name : roleNames) {
 			
-			roles.add(schemeManager.getManager().getOrCreateRole(name));
+			roles.add(schemeConf.getManager().getOrCreateRole(name));
 		}
 		
 		return denyWithInterceptor(silentInterceptor, roles);
 	}
 	
-	public SinglePropertyManager denyWithInterceptor(Function<Object, Object> function, Set<Role> roles) {
+	public SinglePropertyConfigurator denyWithInterceptor(Function<Object, Object> function, Set<Role> roles) {
 			
 		return denyWithInterceptor(createInterceptor(function, roles));
 	}
 	
-	public SinglePropertyManager denyWithInterceptor(DenyInterceptor interceptor) {
+	public SinglePropertyConfigurator denyWithInterceptor(DenyInterceptor interceptor) {
 		
 		if(interceptor.getRoles().isEmpty()) {
 			
@@ -117,24 +118,24 @@ public class SinglePropertyManager {
 		}
 	}
 
-	public SinglePropertyManager addDenyInterceptor(Function<Object, Object> function, String... roleNames) {
+	public SinglePropertyConfigurator addDenyInterceptor(Function<Object, Object> function, String... roleNames) {
 		
 		Set<Role> roles = new HashSet<>();
 		
 		for(String name : roleNames) {
 			
-			roles.add(schemeManager.getManager().getOrCreateRole(name));
+			roles.add(schemeConf.getManager().getOrCreateRole(name));
 		}
 		
 		return addDenyInterceptor(function, roles);
 	}
 	
-	public SinglePropertyManager addDenyInterceptor(Function<Object, Object> function, Set<Role> roles) {
+	public SinglePropertyConfigurator addDenyInterceptor(Function<Object, Object> function, Set<Role> roles) {
 		
 		return addDenyInterceptor(createInterceptor(function, roles));
 	}
 	
-	public SinglePropertyManager addDenyInterceptor(DenyInterceptor interceptor) {
+	public SinglePropertyConfigurator addDenyInterceptor(DenyInterceptor interceptor) {
 		
 		if(interceptor.getRoles() == null || interceptor.getRoles().isEmpty()) return defaultInterceptor(interceptor);
 		
@@ -143,12 +144,12 @@ public class SinglePropertyManager {
 		return this;
 	}
 	
-	public SinglePropertyManager defaultInterceptor(Function<Object, Object> function) {
+	public SinglePropertyConfigurator defaultInterceptor(Function<Object, Object> function) {
 		
 		return defaultInterceptor(createInterceptor(function, Collections.EMPTY_SET));
 	}
 	
-	public SinglePropertyManager defaultInterceptor(DenyInterceptor interceptor) {
+	public SinglePropertyConfigurator defaultInterceptor(DenyInterceptor interceptor) {
 		
 		property.setDefaultInterceptor(interceptor);
 		
@@ -157,6 +158,6 @@ public class SinglePropertyManager {
 	
 	private DenyInterceptorImpl createInterceptor(Function<Object, Object> function, Set<Role> roles) {
 	
-		return new DenyInterceptorImpl(this.schemeManager.getScheme(), roles, function);
+		return new DenyInterceptorImpl(this.schemeConf.getScheme(), roles, function);
 	}
 }

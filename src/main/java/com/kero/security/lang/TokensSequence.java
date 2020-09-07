@@ -6,6 +6,18 @@ import com.kero.security.lang.tokens.KsdlToken;
 
 public class TokensSequence extends LinkedList<KsdlToken> {
 
+	private static final long serialVersionUID = 1L;
+
+	public TokensSequence() {
+		super();
+		
+	}
+	
+	public TokensSequence(TokensSequence seq) {
+		super(seq);
+		
+	}
+	
 	public <T extends KsdlToken> T tryGetOrDefault(T def) {
 		
 		return tryGetOrDefault((Class<T>) def.getClass(), def);

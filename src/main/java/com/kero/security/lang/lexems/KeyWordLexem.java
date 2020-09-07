@@ -12,7 +12,7 @@ public enum KeyWordLexem implements KsdlLexem<KeyWordToken> {
 	OPEN_BLOCK("\\{", false, KeyWordToken.OPEN_BLOCK),
 	CLOSE_BLOCK("\\}", false, KeyWordToken.CLOSE_BLOCK),
 	OPEN_SHORT_BLOCK(":", false, KeyWordToken.OPEN_BLOCK),
-	CLOSE_SHORT_BLOCK("\\n", false, KeyWordToken.CLOSE_BLOCK);
+	CLOSE_SHORT_BLOCK("\\n", false, KeyWordToken.CLOSE_BLOCK); //Anonymous, not common work (detecting)
 	
 	private String pattern;
 	private boolean requireSpace;

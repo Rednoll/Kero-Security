@@ -10,10 +10,10 @@ import java.util.Queue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import com.kero.security.core.KeroAccessManager;
+import com.kero.security.core.KeroAccessManagerImpl;
 import com.kero.security.core.TestObject;
 import com.kero.security.core.exception.AccessException;
-import com.kero.security.managers.KeroAccessManager;
-import com.kero.security.managers.KeroAccessManagerImpl;
 
 public class QueuesTest {
 
@@ -22,7 +22,7 @@ public class QueuesTest {
 	@BeforeEach
 	public void init() {
 		
-		manager
+		manager.getConfigurator()
 			.scheme(TestObject.class)
 				.defaultGrant()
 				.property("text")

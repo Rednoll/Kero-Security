@@ -32,37 +32,30 @@ public class KsdlLexer {
 		
 		data = prepareRawText(data);
 		
-		boolean findShortEnd = false;
+		int findShortEnd = 0;
 		
 		TokensSequence tokens = new TokensSequence();
 
 		StringBuilder currentRawToken = new StringBuilder();
 
-		c2: for(char ch : data.toCharArray()) {
+		c2: for(char cursor : data.toCharArray()) {
 			
-			boolean found = checkWord(tokens, currentRawToken, ch);
-			
-			if(found) {
-				
-				if(ch != ' ' && ch != '\n')
-					currentRawToken.append(ch);
-				continue c2;
-			}
-			
-			checkLexem(tokens, currentRawToken, ch);
+			checkLexem(tokens, currentRawToken, cursor);
 
-			if(ch != ' ' && ch != '\n')
-				currentRawToken.append(ch);
-		
-			if(ch == ':') {
-				
-				findShortEnd = true;
+			if(cursor != ' ' && cursor != '\n') {
+			
+				currentRawToken.append(cursor);
 			}
 			
-			if(ch == '\n' && findShortEnd) {
+			if(cursor == ':') {
+				
+				findShortEnd++;
+			}
+			
+			if(cursor == '\n' && findShortEnd > 0) {
 				
 				tokens.add(KeyWordToken.CLOSE_BLOCK);
-				findShortEnd = false;
+				findShortEnd--;
 			}
 		}
 		
@@ -81,11 +74,13 @@ public class KsdlLexer {
 		return text;
 	}
 	
-	private boolean checkLexem(List<KsdlToken> tokens, StringBuilder currentRawToken, char ch) {
+	private boolean checkLexem(List<KsdlToken> tokens, StringBuilder currentRawToken, char cursor) {
+		
+		if(checkWord(tokens, currentRawToken, cursor)) return true;
 		
 		for(KsdlLexem lexem : lexems) {
 			
-			if(lexem.isMatch(currentRawToken) && !lexem.isMatch(currentRawToken.toString()+ch)) {
+			if(lexem.isMatch(currentRawToken) && !lexem.isMatch(currentRawToken.toString()+cursor)) {
 				
 				KsdlToken token = lexem.tokenize(currentRawToken.toString());
 
@@ -99,14 +94,14 @@ public class KsdlLexer {
 		return false;
 	}
 	
-	private boolean checkWord(List<KsdlToken> tokens, StringBuilder currentRawToken, char ch) {
+	private boolean checkWord(List<KsdlToken> tokens, StringBuilder currentRawToken, char cursor) {
 		
 		for(KeyWordLexem word : keyWords) {
 			
-			if(word.isMatch(currentRawToken) && (!word.isRequireSpace() || (ch == ' ' || ch == '\n'))) {
+			if(word.isMatch(currentRawToken) && (!word.isRequireSpace() || (cursor == ' ' || cursor == '\n'))) {
 				
 				KsdlToken token = word.tokenize(currentRawToken.toString());
-				
+
 				tokens.add(token);
 				currentRawToken.setLength(0);
 

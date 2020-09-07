@@ -2,8 +2,8 @@ package com.kero.security.core.scheme;
 
 import java.util.Map;
 
+import com.kero.security.core.KeroAccessManager;
 import com.kero.security.core.property.Property;
-import com.kero.security.managers.KeroAccessManager;
 
 public class InterfaceAccessScheme extends AccessSchemeBase {
 
