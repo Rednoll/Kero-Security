@@ -18,7 +18,7 @@ public class DenyWithInterceptorInterpreter extends PropertyAnnotationInterprete
 
 	@Override
 	public void interpret(SinglePropertyConfigurator configurator, DenyWithInterceptor annotation) {
-	
+		
 		Set<Role> roles = new HashSet<>();
 		
 		for(String roleName : annotation.roles()) {
