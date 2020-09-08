@@ -3,7 +3,7 @@ package com.kero.security.lang.parsers;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.kero.security.lang.TokensSequence;
+import com.kero.security.lang.collections.TokenSequence;
 import com.kero.security.lang.nodes.PropagationMetaline;
 import com.kero.security.lang.parsers.metaline.MetalineParserBase;
 import com.kero.security.lang.tokens.KeyWordToken;
@@ -17,7 +17,7 @@ public class PropagationParser extends MetalineParserBase<PropagationMetaline> {
 	}
 
 	@Override
-	public PropagationMetaline parse(TokensSequence tokens) {
+	public PropagationMetaline parse(TokenSequence tokens) {
 		
 		tokens.poll(); // META_LINE
 		tokens.poll(); // PROPAGATION

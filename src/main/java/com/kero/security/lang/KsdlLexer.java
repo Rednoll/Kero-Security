@@ -3,6 +3,7 @@ package com.kero.security.lang;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.kero.security.lang.collections.TokenSequence;
 import com.kero.security.lang.lexems.DefaultRuleLexem;
 import com.kero.security.lang.lexems.KeyWordLexem;
 import com.kero.security.lang.lexems.KsdlLexem;
@@ -28,13 +29,13 @@ public class KsdlLexer {
 		lexems.add(new NameLexem());
 	}
 	
-	public TokensSequence tokenize(String data) {
+	public TokenSequence tokenize(String data) {
 		
 		data = prepareRawText(data);
 		
 		int findShortEnd = 0;
 		
-		TokensSequence tokens = new TokensSequence();
+		TokenSequence tokens = new TokenSequence();
 
 		StringBuilder currentRawToken = new StringBuilder();
 
