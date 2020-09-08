@@ -4,12 +4,12 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.kero.security.lang.TokensSequence;
+import com.kero.security.lang.collections.TokenSequence;
 import com.kero.security.lang.tokens.KeyWordToken;
 
 public interface HasBlock<U> {
 
-	public default List<U> parseBlock(TokensSequence tokens) {
+	public default List<U> parseBlock(TokenSequence tokens) {
 		
 		if(tokens.peek() != KeyWordToken.OPEN_BLOCK) return Collections.EMPTY_LIST;
 		
@@ -27,5 +27,5 @@ public interface HasBlock<U> {
 		return units;
 	}
 	
-	public U parseBlockUnit(TokensSequence tokens);
+	public U parseBlockUnit(TokenSequence tokens);
 }

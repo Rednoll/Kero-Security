@@ -2,7 +2,7 @@ package com.kero.security.lang.parsers;
 
 import java.util.List;
 
-import com.kero.security.lang.TokensSequence;
+import com.kero.security.lang.collections.TokenSequence;
 import com.kero.security.lang.nodes.DefaultRuleNode;
 import com.kero.security.lang.nodes.PropertyNode;
 import com.kero.security.lang.nodes.SchemeNode;
@@ -14,7 +14,7 @@ public class SchemeParser extends KsdlNodeParserBase<SchemeNode> implements Ksdl
 
 	private PropertyParser propertyParser = new PropertyParser();
 	
-	public boolean isMatch(TokensSequence tokens) {
+	public boolean isMatch(TokenSequence tokens) {
 		
 		if(!tokens.isToken(0, KeyWordToken.SCHEME)) return false;
 		if(!tokens.isToken(1, NameToken.class)) return false;
@@ -22,7 +22,7 @@ public class SchemeParser extends KsdlNodeParserBase<SchemeNode> implements Ksdl
 		return true;
 	}
 	
-	public SchemeNode parse(TokensSequence tokens) {
+	public SchemeNode parse(TokenSequence tokens) {
 	
 		tokens.poll(); //SCHEME
 		
@@ -38,7 +38,7 @@ public class SchemeParser extends KsdlNodeParserBase<SchemeNode> implements Ksdl
 	}
 
 	@Override
-	public PropertyNode parseBlockUnit(TokensSequence tokens) {
+	public PropertyNode parseBlockUnit(TokenSequence tokens) {
 		
 		return propertyParser.parse(tokens);
 	}

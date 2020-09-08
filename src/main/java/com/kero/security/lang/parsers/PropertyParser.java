@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.kero.security.lang.TokensSequence;
+import com.kero.security.lang.collections.TokenSequence;
 import com.kero.security.lang.nodes.AccessRuleNode;
 import com.kero.security.lang.nodes.DefaultRuleNode;
 import com.kero.security.lang.nodes.PropertyMetalineBase;
@@ -25,7 +25,7 @@ public class PropertyParser extends KsdlNodeParserBase<PropertyNode> implements 
 		metalineParsers.add(new PropagationParser());
 	}
 	
-	public PropertyNode parse(TokensSequence tokens) {
+	public PropertyNode parse(TokenSequence tokens) {
 		
 		NameToken nameToken = (NameToken) tokens.poll();
 		
@@ -67,7 +67,7 @@ public class PropertyParser extends KsdlNodeParserBase<PropertyNode> implements 
 	}
 	
 	@Override
-	public RoleToken parseBlockUnit(TokensSequence tokens) {
+	public RoleToken parseBlockUnit(TokenSequence tokens) {
 		
 		return (RoleToken) tokens.poll();
 	}

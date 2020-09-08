@@ -1,19 +1,19 @@
-package com.kero.security.lang;
+package com.kero.security.lang.collections;
 
 import java.util.LinkedList;
 
 import com.kero.security.lang.tokens.KsdlToken;
 
-public class TokensSequence extends LinkedList<KsdlToken> {
+public class TokenSequence extends LinkedList<KsdlToken> {
 
 	private static final long serialVersionUID = 1L;
 
-	public TokensSequence() {
+	public TokenSequence() {
 		super();
 		
 	}
 	
-	public TokensSequence(TokensSequence seq) {
+	public TokenSequence(TokenSequence seq) {
 		super(seq);
 		
 	}
