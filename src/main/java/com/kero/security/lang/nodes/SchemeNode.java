@@ -22,9 +22,14 @@ public class SchemeNode extends KsdlNodeBase implements KsdlRootNode {
 	
 	public void interpret(KeroAccessManager manager) {
 		
-		AccessScheme scheme = manager.getOrCreateScheme(manager.getTypeByAliase(typeAliase));
+		AccessScheme scheme = manager.getSchemeByAlise(this.typeAliase);
 	
-		defaultRule.interpret(manager, scheme);
+		this.interpret(scheme);
+	}
+	
+	public void interpret(AccessScheme scheme) {
+		
+		defaultRule.interpret(scheme.getManager(), scheme);
 		
 		properties.forEach((prop)-> prop.interpret(scheme));
 	}

@@ -11,8 +11,6 @@ import com.kero.security.core.scheme.configuration.KeroAccessConfigurator;
 
 public interface KeroAccessManager {
 	
-	public Class<?> getTypeByAliase(String aliase);
-	
 	public void ignoreType(Class<?> type);
 	
 	public Role createRole(String name);
@@ -21,13 +19,14 @@ public interface KeroAccessManager {
 	
 	public AccessScheme getOrCreateScheme(Class<?> rawType);
 	public boolean hasScheme(Class<?> rawType);
+	public AccessScheme getSchemeByAlise(String aliase);
 	public AccessScheme getScheme(Class<?> rawType);
 	
 	public ClassLoader getClassLoader();
 	
 	public void setBasePackage(String basePackage);
 	
-	public void addTypeAliase(String aliase, Class<?> type);
+	public void setTypeAliase(String aliase, Class<?> type);
 	
 	public default <T> T protect(T object, String... roleNames) {
 		

@@ -19,11 +19,6 @@ import com.kero.security.core.scheme.configuration.KeroAccessConfigurator;
 import com.kero.security.core.scheme.configuration.auto.AccessSchemeAutoConfigurator;
 import com.kero.security.core.scheme.configuration.auto.AnnotationAccessSchemeConfigurator;
 
-import io.github.classgraph.ClassGraph;
-import io.github.classgraph.ClassInfo;
-import io.github.classgraph.ClassInfoList;
-import io.github.classgraph.ScanResult;
-
 public class KeroAccessManagerImpl implements KeroAccessManager {
 	
 	protected static Logger LOGGER = LoggerFactory.getLogger("KeroSecurity");
@@ -41,7 +36,7 @@ public class KeroAccessManagerImpl implements KeroAccessManager {
 	protected String basePackage = "com.kero";
 	protected boolean scaned = false;
 	
-	protected Map<String, Class<?>> aliasedTypes = new HashMap<>();
+	protected Map<Class, String> aliasesMap = new HashMap<>();
 	
 	protected KeroAccessConfigurator configurator = new KeroAccessConfigurator(this);
 	
@@ -72,9 +67,9 @@ public class KeroAccessManagerImpl implements KeroAccessManager {
 		autoConfigurators.add(new AnnotationAccessSchemeConfigurator(this));
 	}
 	
-	public void addTypeAliase(String aliase, Class<?> type) {
+	public void setTypeAliase(String aliase, Class<?> type) {
 		
-		this.aliasedTypes.put(aliase, type);
+		this.aliasesMap.put(type, aliase);
 	}
 	
 	public void setBasePackage(String basePackage) {
@@ -132,35 +127,19 @@ public class KeroAccessManagerImpl implements KeroAccessManager {
 	}
 	
 	@Override
-	public Class<?> getTypeByAliase(String aliase) {
+	public AccessScheme getSchemeByAlise(String aliase) {
 		
-		if(aliasedTypes.containsKey(aliase)) return aliasedTypes.get(aliase);
-		
-		if(!scaned) {
+		for(AccessScheme scheme : schemes.values()) {
 			
-			LOGGER.debug("Begin scan base package: "+basePackage);
-			
-			ScanResult scanResult = new ClassGraph().verbose().enableAllInfo().acceptPackages(basePackage).scan();
-			
-			ClassInfoList classInfoList = scanResult.getAllClasses();
-			
-			for(ClassInfo typeInfo : classInfoList) {
+			if(scheme.getAliase().equals(aliase)) {
 				
-				String typeAliase = typeInfo.getSimpleName();
-				
-				Class<?> type = typeInfo.loadClass();
-				
-				LOGGER.debug("Registered type: "+typeAliase);
-				
-				aliasedTypes.put(typeAliase, type);
+				return scheme;
 			}
-			
-			scaned = true;
 		}
 		
-		return aliasedTypes.get(aliase);
+		return null;
 	}
-	
+
 	public AccessScheme getOrCreateScheme(Class<?> rawType){
 		
 		return hasScheme(rawType) ? getScheme(rawType) : createScheme(rawType);
@@ -170,15 +149,22 @@ public class KeroAccessManagerImpl implements KeroAccessManager {
 		
 		AccessScheme scheme = null;
 		
+		String aliase = rawType.getSimpleName();
+		
+		if(aliasesMap.containsKey(rawType)) {
+			
+			aliase = aliasesMap.get(rawType);
+		}
+		
 		if(rawType.isInterface()) {
 			
 			LOGGER.debug("Creating access scheme for interface: "+rawType.getCanonicalName());
-			scheme = new InterfaceAccessScheme(this, rawType);
+			scheme = new InterfaceAccessScheme(this, aliase, rawType);
 		}
 		else {
 			
 			LOGGER.debug("Creating access scheme for class: "+rawType.getCanonicalName());
-			scheme = new ClassAccessScheme(this, rawType);
+			scheme = new ClassAccessScheme(this, aliase, rawType);
 		}
 		
 		for(AccessSchemeAutoConfigurator ac : autoConfigurators) {

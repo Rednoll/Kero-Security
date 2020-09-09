@@ -18,6 +18,7 @@ public abstract class AccessSchemeBase implements AccessScheme {
 	protected static Logger LOGGER = LoggerFactory.getLogger("KeroSecurity");
 	
 	protected Class<?> type;
+	protected String aliase;
 	
 	protected AccessRule defaultRule;
 	
@@ -26,7 +27,7 @@ public abstract class AccessSchemeBase implements AccessScheme {
 	protected KeroAccessManager manager;
 	
 	protected boolean inherit = true;
-
+	
 	public AccessSchemeBase() {
 		
 	}
@@ -35,6 +36,14 @@ public abstract class AccessSchemeBase implements AccessScheme {
 		
 		this.manager = manager;
 		this.type = type;
+		this.aliase = type.getSimpleName();
+	}
+	
+	public AccessSchemeBase(KeroAccessManager manager, String aliase, Class<?> type) {
+		
+		this.manager = manager;
+		this.type = type;
+		this.aliase = aliase;
 	}
 
 	public Set<Property> getProperties() {
@@ -144,5 +153,11 @@ public abstract class AccessSchemeBase implements AccessScheme {
 	public KeroAccessManager getManager() {
 		
 		return this.manager;
+	}
+	
+	@Override
+	public String getAliase() {
+		
+		return this.aliase;
 	}
 }

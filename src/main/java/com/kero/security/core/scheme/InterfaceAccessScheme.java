@@ -16,6 +16,11 @@ public class InterfaceAccessScheme extends AccessSchemeBase {
 		super(manager, type);
 		
 	}
+
+	public InterfaceAccessScheme(KeroAccessManager manager, String aliase, Class<?> type) {
+		super(manager, aliase, type);
+		
+	}
 	
 	public void collectProperties(Map<String, Property> complexProperties) {
 		

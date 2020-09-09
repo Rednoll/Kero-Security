@@ -35,5 +35,7 @@ public interface AccessScheme extends DefaultRuleOwner {
 	
 	public Class<?> getTypeClass();
 	
+	public String getAliase();
+	
 	public KeroAccessManager getManager();
 }

@@ -47,6 +47,11 @@ public class ClassAccessScheme extends AccessSchemeBase implements InvocationHan
 		
 	}
 	
+	public ClassAccessScheme(KeroAccessManager manager, String aliase, Class<?> type) {
+		super(manager, aliase, type);
+		
+	}
+	
 	protected void initProxy() throws Exception {
 		
 		if(this.proxyAgent != null) return;
