@@ -1,10 +1,12 @@
 package com.kero.security.core;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
 import com.kero.security.core.role.Role;
+import com.kero.security.core.role.storage.RoleStorage;
 import com.kero.security.core.rules.AccessRule;
 import com.kero.security.core.scheme.AccessScheme;
 import com.kero.security.core.scheme.configuration.KeroAccessConfigurator;
@@ -13,10 +15,13 @@ import com.kero.security.core.scheme.configuration.auto.AccessSchemeAutoConfigur
 public interface KeroAccessManager {
 	
 	public void ignoreType(Class<?> type);
-	
+
 	public Role createRole(String name);
 	public Role getRole(String name);
+	public Role hasRole(String name);
 	public Role getOrCreateRole(String name);
+	public Set<Role> getOrCreateRole(Collection<String> names);
+	public Set<Role> getOrCreateRole(String[] names);
 	
 	public AccessScheme getOrCreateScheme(Class<?> rawType);
 	public boolean hasScheme(Class<?> rawType);
@@ -54,5 +59,6 @@ public interface KeroAccessManager {
 	
 	public String extractName(String rawName);
 	
+	public RoleStorage getRoleStorage();
 	public KeroAccessConfigurator getConfigurator();
 }

@@ -1,5 +1,6 @@
 package com.kero.security.core;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -9,7 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.kero.security.core.role.Role;
-import com.kero.security.core.role.RoleImpl;
+import com.kero.security.core.role.storage.RoleStorage;
 import com.kero.security.core.rules.AccessRule;
 import com.kero.security.core.rules.AccessRuleImpl;
 import com.kero.security.core.scheme.AccessScheme;
@@ -24,7 +25,7 @@ public class KeroAccessManagerImpl implements KeroAccessManager {
 	
 	protected Map<Class, AccessScheme> schemes = new HashMap<>();
 	
-	protected Map<String, Role> roles = new HashMap<>();
+	protected RoleStorage roleStorage = RoleStorage.create();
 	
 	protected AccessRule defaultRule = AccessRuleImpl.GRANT_ALL;
 	
@@ -82,38 +83,6 @@ public class KeroAccessManagerImpl implements KeroAccessManager {
 	public void ignoreType(Class<?> type) {
 		
 		ignoreList.add(type);
-	}
-	
-	@Override
-	public Role createRole(String name) {
-		
-		Role role = new RoleImpl(name);
-		
-		roles.put(name, role);
-		
-		return role;
-	}
-	
-	public Role getRole(String name) {
-		
-		return roles.get(name);
-	}
-	
-	public Role getOrCreateRole(String name) {
-		
-		if(hasRole(name)) {
-			
-			return getRole(name);
-		}
-		else {
-
-			return createRole(name);
-		}
-	}
-	
-	public boolean hasRole(String name) {
-		
-		return this.roles.containsKey(name);
 	}
 	
 	@Override
@@ -210,6 +179,7 @@ public class KeroAccessManagerImpl implements KeroAccessManager {
 		return rawName;
 	}
 	
+	@Override
 	public AccessRule getDefaultRule() {
 		
 		return this.defaultRule;
@@ -221,8 +191,51 @@ public class KeroAccessManagerImpl implements KeroAccessManager {
 		return this.proxiesClassLoader;
 	}
 	
+	@Override
 	public KeroAccessConfigurator getConfigurator() {
 		
 		return this.configurator;
+	}
+
+	@Override
+	public Role createRole(String name) {
+		
+		return this.roleStorage.create(name);
+	}
+
+	@Override
+	public Role getRole(String name) {
+		
+		return this.roleStorage.get(name);
+	}
+
+	@Override
+	public Role hasRole(String name) {
+		
+		return this.roleStorage.create(name);
+	}
+
+	@Override
+	public Role getOrCreateRole(String name) {
+		
+		return this.roleStorage.getOrCreate(name);
+	}
+
+	@Override
+	public Set<Role> getOrCreateRole(Collection<String> names) {
+		
+		return this.roleStorage.getOrCreate(names);
+	}
+
+	@Override
+	public Set<Role> getOrCreateRole(String[] names) {
+		
+		return this.roleStorage.getOrCreate(names);
+	}
+
+	@Override
+	public RoleStorage getRoleStorage() {
+		
+		return this.roleStorage;
 	}
 }

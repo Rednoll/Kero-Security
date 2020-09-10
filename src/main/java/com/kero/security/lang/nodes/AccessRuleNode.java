@@ -1,6 +1,5 @@
 package com.kero.security.lang.nodes;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import com.kero.security.core.KeroAccessManager;
@@ -25,12 +24,7 @@ public class AccessRuleNode extends KsdlNodeBase {
 		
 		if(roleNames.isEmpty()) return;
 		
-		Set<Role> roles = new HashSet<>();
-		
-		for(String name : this.roleNames) {
-			
-			roles.add(manager.getOrCreateRole(name));
-		}
+		Set<Role> roles = manager.getOrCreateRole(roleNames);
 		
 		property.addRule(new AccessRuleImpl(roles, this.accessible));
 	}

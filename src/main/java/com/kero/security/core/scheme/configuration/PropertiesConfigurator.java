@@ -1,6 +1,5 @@
 package com.kero.security.core.scheme.configuration;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -42,12 +41,7 @@ public class PropertiesConfigurator {
 	
 	public PropertiesConfigurator grantFor(String... roleNames) {
 		
-		Set<Role> roles = new HashSet<>();
-		
-		for(String name : roleNames) {
-			
-			roles.add(schemeConf.getManager().getOrCreateRole(name));
-		}
+		Set<Role> roles = schemeConf.getManager().getOrCreateRole(roleNames);
 		
 		setAccessible(roles, true);
 		
@@ -56,12 +50,7 @@ public class PropertiesConfigurator {
 	
 	public PropertiesConfigurator denyFor(String... roleNames) {
 		
-		Set<Role> roles = new HashSet<>();
-		
-		for(String name : roleNames) {
-			
-			roles.add(schemeConf.getManager().getOrCreateRole(name));
-		}
+		Set<Role> roles = schemeConf.getManager().getOrCreateRole(roleNames);
 		
 		setAccessible(roles, false);
 		

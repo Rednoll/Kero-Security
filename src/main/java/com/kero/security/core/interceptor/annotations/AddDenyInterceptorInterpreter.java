@@ -1,6 +1,5 @@
 package com.kero.security.core.interceptor.annotations;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import com.kero.security.core.KeroAccessManager;
@@ -19,12 +18,7 @@ public class AddDenyInterceptorInterpreter extends PropertyAnnotationInterpreter
 	@Override
 	public void interpret(SinglePropertyConfigurator configurator, AddDenyInterceptor annotation) {
 		
-		Set<Role> roles = new HashSet<>();
-		
-		for(String roleName : annotation.roles()) {
-			
-			roles.add(this.manager.getOrCreateRole(roleName));
-		}
+		Set<Role> roles = this.manager.getOrCreateRole(annotation.roles());
 		
 		Class<? extends DenyInterceptor> interceptorClass = annotation.value();
 		

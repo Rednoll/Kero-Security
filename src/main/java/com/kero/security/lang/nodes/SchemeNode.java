@@ -7,6 +7,8 @@ import com.kero.security.core.scheme.AccessScheme;
 
 public class SchemeNode extends KsdlNodeBase implements KsdlRootNode {
 
+	public static final SchemeNode EMPTY = new Empty();
+	
 	private String typeAliase;
 	
 	private DefaultRuleNode defaultRule;
@@ -37,5 +39,16 @@ public class SchemeNode extends KsdlNodeBase implements KsdlRootNode {
 	public String getTypeAlise() {
 		
 		return this.typeAliase;
+	}
+	
+	private static class Empty extends SchemeNode {
+
+		public Empty() {
+			super(null, null, null);
+		
+		}
+		
+		public void interpret(KeroAccessManager manager) {}
+		public void interpret(AccessScheme scheme) {}
 	}
 }

@@ -24,12 +24,8 @@ public class KsdlAccessSchemeConfigurator extends AccessSchemeAutoConfiguratorBa
 	
 		SchemeNodeMap schemeNodes = roots.getSchemeNodes();
 		
-		SchemeNode schemeNode = schemeNodes.get(scheme.getAliase());
+		SchemeNode schemeNode = schemeNodes.getOrDefault(scheme.getAliase(), SchemeNode.EMPTY);
 
-		//REMOVE NULL CHECK -> NULL OBJECT
-		if(schemeNode != null) {
-			
-			schemeNode.interpret(scheme);
-		}
+		schemeNode.interpret(scheme);
 	}
 }

@@ -1,7 +1,6 @@
 package com.kero.security.core.scheme.configuration;
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Function;
 
@@ -52,12 +51,7 @@ public class SinglePropertyConfigurator {
 	
 	public SinglePropertyConfigurator grantFor(String... roleNames) {
 		
-		Set<Role> roles = new HashSet<>();
-		
-		for(String name : roleNames) {
-			
-			roles.add(schemeConf.getManager().getOrCreateRole(name));
-		}
+		Set<Role> roles = schemeConf.getManager().getOrCreateRole(roleNames);
 		
 		setAccessible(roles, true);
 		
@@ -66,12 +60,7 @@ public class SinglePropertyConfigurator {
 	
 	public SinglePropertyConfigurator denyFor(String... roleNames) {
 		
-		Set<Role> roles = new HashSet<>();
-		
-		for(String name : roleNames) {
-			
-			roles.add(schemeConf.getManager().getOrCreateRole(name));
-		}
+		Set<Role> roles = schemeConf.getManager().getOrCreateRole(roleNames);
 		
 		setAccessible(roles, false);
 		
@@ -89,12 +78,7 @@ public class SinglePropertyConfigurator {
 	
 	public SinglePropertyConfigurator denyWithInterceptor(Function<Object, Object> silentInterceptor, String... roleNames) {
 		
-		Set<Role> roles = new HashSet<>();
-		
-		for(String name : roleNames) {
-			
-			roles.add(schemeConf.getManager().getOrCreateRole(name));
-		}
+		Set<Role> roles = schemeConf.getManager().getOrCreateRole(roleNames);
 		
 		return denyWithInterceptor(silentInterceptor, roles);
 	}
@@ -120,12 +104,7 @@ public class SinglePropertyConfigurator {
 
 	public SinglePropertyConfigurator addDenyInterceptor(Function<Object, Object> function, String... roleNames) {
 		
-		Set<Role> roles = new HashSet<>();
-		
-		for(String name : roleNames) {
-			
-			roles.add(schemeConf.getManager().getOrCreateRole(name));
-		}
+		Set<Role> roles = schemeConf.getManager().getOrCreateRole(roleNames);
 		
 		return addDenyInterceptor(function, roles);
 	}
