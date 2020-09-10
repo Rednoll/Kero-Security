@@ -14,10 +14,12 @@ import com.kero.security.lang.tokens.KsdlToken;
 
 public class KsdlLexer {
 
+	private static final KsdlLexer INSTANCE = new KsdlLexer();
+	
 	private List<KeyWordLexem> keyWords = new LinkedList<>();
 	private List<KsdlLexem> lexems = new LinkedList<>();
 	
-	public KsdlLexer() {
+	private KsdlLexer() {
 	
 		for(KeyWordLexem word : KeyWordLexem.values()) {
 			
@@ -111,5 +113,10 @@ public class KsdlLexer {
 		}
 		
 		return false;
+	}
+	
+	public static KsdlLexer getInstance() {
+		
+		return INSTANCE;
 	}
 }

@@ -1,31 +1,34 @@
-package com.kero.security.lang.source;
+package com.kero.security.lang.source.resource;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
-public class FileSource extends KsdlSourceBase {
+public class FileResource implements KsdlTextResource {
 
 	private String[] suffixes;
 	private File file;
 	
-	public FileSource(File file, String... suffixes) {
-	
+	public FileResource(File file) {
+		
 		this.file = file;
+		this.suffixes = new String[] {".ks", ".k-s"};
+	}
+	
+	public FileResource(File file, String... suffixes) {
+		this(file);
+		
 		this.suffixes = suffixes;
 	}
 	
 	@Override
 	public String getRawText() {
 		
-		return collectText(this.file);
-	}
-
-	private String collectText(File src) {
+		System.out.println("Call getRawText");
 		
 		StringBuilder builder = new StringBuilder();
 		 
-		collectText(src, builder);
+		collectText(this.file, builder);
 		
 		return builder.toString();
 	}

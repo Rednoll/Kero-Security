@@ -8,6 +8,7 @@ import com.kero.security.core.role.Role;
 import com.kero.security.core.rules.AccessRule;
 import com.kero.security.core.scheme.AccessScheme;
 import com.kero.security.core.scheme.configuration.KeroAccessConfigurator;
+import com.kero.security.core.scheme.configuration.auto.AccessSchemeAutoConfigurator;
 
 public interface KeroAccessManager {
 	
@@ -21,6 +22,8 @@ public interface KeroAccessManager {
 	public boolean hasScheme(Class<?> rawType);
 	public AccessScheme getSchemeByAlise(String aliase);
 	public AccessScheme getScheme(Class<?> rawType);
+	
+	public void addConfigurator(AccessSchemeAutoConfigurator configurator);
 	
 	public ClassLoader getClassLoader();
 	

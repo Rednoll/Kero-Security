@@ -2,18 +2,15 @@ package com.kero.security.core.lang.lexems;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 
 import org.junit.jupiter.api.Test;
 
 import com.kero.security.core.KeroAccessManager;
 import com.kero.security.core.KeroAccessManagerImpl;
 import com.kero.security.core.TestObject;
-import com.kero.security.lang.KsdlLexer;
-import com.kero.security.lang.KsdlParser;
-import com.kero.security.lang.collections.TokenSequence;
-import com.kero.security.lang.nodes.SchemeNode;
-import com.kero.security.lang.tokens.KsdlToken;
+import com.kero.security.core.scheme.configuration.auto.KsdlAccessSchemeConfigurator;
+import com.kero.security.lang.source.TextualSource;
+import com.kero.security.lang.source.resource.FileResource;
 
 public class KsdlLexerTest {
 
@@ -21,8 +18,15 @@ public class KsdlLexerTest {
 	public void test() throws IOException, InterruptedException {
 		
 		KeroAccessManager manager = new KeroAccessManagerImpl();
+//			manager.addConfigurator(new AnnotationAccessSchemeConfigurator(manager));
+			manager.addConfigurator(new KsdlAccessSchemeConfigurator(manager, new TextualSource(new FileResource(new File("test schemes")))));
 		
-		KsdlLexer lexer = new KsdlLexer();
+		TestObject obj = manager.protect(new TestObject("test text"), "OWNER");
+		
+		obj.getText();
+		
+		/*
+		KsdlLexer lexer = KsdlLexer.getInstance();
 		
 		TokenSequence tokens = lexer.tokenize(new String(Files.readAllBytes(new File("test_syntax_file.k-s").toPath())));
 		
@@ -33,12 +37,13 @@ public class KsdlLexerTest {
 		
 		Thread.sleep(2000);
 		
-		KsdlParser parser = new KsdlParser();
+		KsdlParser parser = KsdlParser.getInstance();
 	
 		SchemeNode node = (SchemeNode) parser.parse(tokens).iterator().next();
 		
 		node.interpret(manager);
 		
 		manager.protect(new TestObject("test text"), "OWNER").getText();
+		*/
 	}
 }

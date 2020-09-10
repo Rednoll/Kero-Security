@@ -11,9 +11,11 @@ import com.kero.security.lang.parsers.SchemeParser;
 
 public class KsdlParser {
 
+	private static final KsdlParser INSTANCE = new KsdlParser();
+	
 	protected List<KsdlRootNodeParser<? extends KsdlRootNode>> parsers;
 	
-	public KsdlParser() {
+	private KsdlParser() {
 		
 		this.parsers = new ArrayList<>();
 			parsers.add(new SchemeParser());
@@ -41,5 +43,10 @@ public class KsdlParser {
 		}
 		
 		return roots;
+	}
+	
+	public static KsdlParser getInstance() {
+		
+		return INSTANCE;
 	}
 }

@@ -17,7 +17,6 @@ import com.kero.security.core.scheme.ClassAccessScheme;
 import com.kero.security.core.scheme.InterfaceAccessScheme;
 import com.kero.security.core.scheme.configuration.KeroAccessConfigurator;
 import com.kero.security.core.scheme.configuration.auto.AccessSchemeAutoConfigurator;
-import com.kero.security.core.scheme.configuration.auto.AnnotationAccessSchemeConfigurator;
 
 public class KeroAccessManagerImpl implements KeroAccessManager {
 	
@@ -63,8 +62,11 @@ public class KeroAccessManagerImpl implements KeroAccessManager {
 		
 		ignoreType(Boolean.class);
 		ignoreType(boolean.class);
+	}
+	
+	public void addConfigurator(AccessSchemeAutoConfigurator configurator) {
 		
-		autoConfigurators.add(new AnnotationAccessSchemeConfigurator(this));
+		this.autoConfigurators.add(configurator);
 	}
 	
 	public void setTypeAliase(String aliase, Class<?> type) {
