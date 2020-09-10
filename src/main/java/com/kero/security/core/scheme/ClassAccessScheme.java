@@ -3,6 +3,7 @@ package com.kero.security.core.scheme;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -75,7 +76,7 @@ public class ClassAccessScheme extends AccessSchemeBase implements InvocationHan
 		return pac.process(original, method, args);
 	}
 	
-	public <T> T protect(T object, Set<Role> roles) throws Exception {
+	public <T> T protect(T object, Collection<Role> roles) throws Exception {
 		
 		PreparedAccessConfiguration config = configsCache.get(roles);
 		
@@ -93,7 +94,7 @@ public class ClassAccessScheme extends AccessSchemeBase implements InvocationHan
 		return (T) this.proxyAgent.wrap(object, config);
 	}
 	
-	private PreparedAccessConfiguration prepareAccessConfiguration(Set<Role> roles) {
+	private PreparedAccessConfiguration prepareAccessConfiguration(Collection<Role> roles) {
 		
 		String rolesList = "[";
 		
@@ -114,7 +115,7 @@ public class ClassAccessScheme extends AccessSchemeBase implements InvocationHan
 			
 			String propertyName = property.getName();
 			
-			Set<Role> propogatedRoles = property.propagateRoles(roles);
+			Collection<Role> propogatedRoles = property.propagateRoles(roles);
 			
 			Set<Role> significantRoles = new HashSet<>(roles);
 			
@@ -176,7 +177,7 @@ public class ClassAccessScheme extends AccessSchemeBase implements InvocationHan
 		return new PreparedAccessConfigurationImpl(this, preparedActions, defaultTypeAction);
 	}
 	
-	private DenyInterceptor determineInterceptor(Property property, Set<Role> roles) {
+	private DenyInterceptor determineInterceptor(Property property, Collection<Role> roles) {
 	
 		int maxOverlap = 0;
 		int minTrash = Integer.MAX_VALUE;

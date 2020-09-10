@@ -1,5 +1,6 @@
 package com.kero.security.core.property;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -54,7 +55,8 @@ public class PropertyImpl implements Property {
 		});
 	}
 	
-	public Set<Role> propagateRoles(Set<Role> roles) {
+	@Override
+	public Set<Role> propagateRoles(Collection<Role> roles) {
 		
 		Set<Role> result = new HashSet<>();
 		
@@ -66,26 +68,31 @@ public class PropertyImpl implements Property {
 		return result;
 	}
 	
+	@Override
 	public void addRolePropagation(Role from, Role to) {
 		
 		this.rolesPropagations.put(from, to);
 	}
 	
+	@Override
 	public void addInterceptor(DenyInterceptor interceptor) {
 		
 		this.interceptors.add(interceptor);
 	}
 	
+	@Override
 	public List<DenyInterceptor> getInterceptors() {
 	
 		return this.interceptors;
 	}
 	
+	@Override
 	public void addRule(AccessRule rule) {
 		
 		this.rules.add(rule);
 	}
 	
+	@Override
 	public List<AccessRule> getRules() {
 		
 		return this.rules;

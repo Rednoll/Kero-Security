@@ -149,7 +149,7 @@ public class KeroAccessManagerImpl implements KeroAccessManager {
 	}
 
 	@Override
-	public <T> T protect(T object, Set<Role> roles) {
+	public <T> T protect(T object, Collection<Role> roles) {
 		
 		if(object == null) return null;
 		

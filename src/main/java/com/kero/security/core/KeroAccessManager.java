@@ -38,12 +38,7 @@ public interface KeroAccessManager {
 	
 	public default <T> T protect(T object, String... roleNames) {
 		
-		Set<Role> roles = new HashSet<>();
-		
-		for(String name : roleNames) {
-			
-			roles.add(this.getOrCreateRole(name));
-		}
+		Set<Role> roles = this.getOrCreateRole(roleNames);
 		
 		return protect(object, roles);
 	}
@@ -53,7 +48,7 @@ public interface KeroAccessManager {
 		return protect(object, new HashSet<>(Arrays.asList(roles)));
 	}
 	
-	public <T> T protect(T object, Set<Role> roles);
+	public <T> T protect(T object, Collection<Role> roles);
 	
 	public AccessRule getDefaultRule();
 	

@@ -1,5 +1,6 @@
 package com.kero.security.core.interceptor;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -22,7 +23,7 @@ public abstract class DenyInterceptorBase implements DenyInterceptor {
 	}
 	
 	@Override
-	public PreparedInterceptor prepare(Set<Role> roles) {
+	public PreparedInterceptor prepare(Collection<Role> roles) {
 		
 		if(manage(roles) || this.roles.isEmpty()) {
 		
@@ -41,7 +42,7 @@ public abstract class DenyInterceptorBase implements DenyInterceptor {
 		}
 	}
 
-	private boolean manage(Set<Role> roles) {
+	private boolean manage(Collection<Role> roles) {
 		
 		return !Collections.disjoint(this.roles, roles);
 	}

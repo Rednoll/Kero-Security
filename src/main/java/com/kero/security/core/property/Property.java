@@ -1,5 +1,6 @@
 package com.kero.security.core.property;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -12,7 +13,7 @@ import com.kero.security.core.rules.AccessRule;
 public interface Property extends DefaultRuleOwner {
 
 	public void addRolePropagation(Role from, Role to);
-	public Set<Role> propagateRoles(Set<Role> roles);
+	public Set<Role> propagateRoles(Collection<Role> roles);
 	
 	public void addRule(AccessRule rule);
 	

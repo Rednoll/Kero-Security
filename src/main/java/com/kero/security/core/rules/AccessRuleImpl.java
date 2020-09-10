@@ -1,8 +1,8 @@
 package com.kero.security.core.rules;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
-import java.util.Set;
 
 import com.kero.security.core.config.prepared.PreparedAction;
 import com.kero.security.core.config.prepared.PreparedDenyRule;
@@ -12,10 +12,10 @@ import com.kero.security.core.scheme.AccessScheme;
 
 public class AccessRuleImpl implements AccessRule {
 
-	private Set<Role> roles;
+	private Collection<Role> roles;
 	private boolean accessible;
 	
-	public AccessRuleImpl(Set<Role> roles, boolean accessible) {
+	public AccessRuleImpl(Collection<Role> roles, boolean accessible) {
 		
 		this.roles = roles;
 		this.accessible = accessible;
@@ -46,7 +46,7 @@ public class AccessRuleImpl implements AccessRule {
 	}
 	
 	@Override
-	public PreparedAction prepare(AccessScheme scheme, Set<Role> propagatedRoles) {
+	public PreparedAction prepare(AccessScheme scheme, Collection<Role> propagatedRoles) {
 		
 		if(this.accessible(roles)) {
 			
@@ -59,13 +59,13 @@ public class AccessRuleImpl implements AccessRule {
 	}
 	
 	@Override
-	public boolean manage(Set<Role> roles) {
+	public boolean manage(Collection<Role> roles) {
 		
 		return !Collections.disjoint(this.roles, roles);
 	}
 	
 	@Override
-	public boolean accessible(Set<Role> roles) {
+	public boolean accessible(Collection<Role> roles) {
 		
 		return Collections.disjoint(this.roles, roles) ? !this.accessible : this.accessible;
 	}
@@ -82,7 +82,7 @@ public class AccessRuleImpl implements AccessRule {
 		return !this.accessible;
 	}
 	
-	public Set<Role> getRoles() {
+	public Collection<Role> getRoles() {
 		
 		return this.roles;
 	}
