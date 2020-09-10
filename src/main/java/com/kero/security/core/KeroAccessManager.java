@@ -14,8 +14,7 @@ import com.kero.security.core.scheme.configuration.auto.AccessSchemeAutoConfigur
 
 public interface KeroAccessManager {
 	
-	public void ignoreType(Class<?> type);
-
+	//Roles
 	public Role createRole(String name);
 	public Role getRole(String name);
 	public Role hasRole(String name);
@@ -23,19 +22,13 @@ public interface KeroAccessManager {
 	public Set<Role> getOrCreateRole(Collection<String> names);
 	public Set<Role> getOrCreateRole(String[] names);
 	
+	//AccessScheme
 	public AccessScheme getOrCreateScheme(Class<?> rawType);
 	public boolean hasScheme(Class<?> rawType);
 	public AccessScheme getSchemeByAlise(String aliase);
 	public AccessScheme getScheme(Class<?> rawType);
-	
-	public void addConfigurator(AccessSchemeAutoConfigurator configurator);
-	
-	public ClassLoader getClassLoader();
-	
-	public void setBasePackage(String basePackage);
-	
-	public void setTypeAliase(String aliase, Class<?> type);
-	
+
+	//protect
 	public default <T> T protect(T object, String... roleNames) {
 		
 		Set<Role> roles = this.getOrCreateRole(roleNames);
@@ -50,10 +43,22 @@ public interface KeroAccessManager {
 	
 	public <T> T protect(T object, Collection<Role> roles);
 	
+	//uniq
+	public void ignoreType(Class<?> type);
+
+	public void addConfigurator(AccessSchemeAutoConfigurator configurator);
+	
+	public ClassLoader getClassLoader();
+	
+	public void setBasePackage(String basePackage);
+	
+	public void setTypeAliase(String aliase, Class<?> type);
+
 	public AccessRule getDefaultRule();
 	
 	public String extractName(String rawName);
-	
+
+	//Delegates
 	public RoleStorage getRoleStorage();
 	public KeroAccessConfigurator getConfigurator();
 }

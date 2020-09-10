@@ -18,14 +18,14 @@ import com.kero.security.core.scheme.ClassAccessScheme;
 import com.kero.security.core.scheme.InterfaceAccessScheme;
 import com.kero.security.core.scheme.configuration.KeroAccessConfigurator;
 import com.kero.security.core.scheme.configuration.auto.AccessSchemeAutoConfigurator;
+import com.kero.security.core.scheme.storage.AccessSchemeStorage;
 
 public class KeroAccessManagerImpl implements KeroAccessManager {
 	
 	protected static Logger LOGGER = LoggerFactory.getLogger("KeroSecurity");
 	
-	protected Map<Class, AccessScheme> schemes = new HashMap<>();
-	
 	protected RoleStorage roleStorage = RoleStorage.create();
+	protected AccessSchemeStorage schemeStorage = AccessSchemeStorage.create();
 	
 	protected AccessRule defaultRule = AccessRuleImpl.GRANT_ALL;
 	
@@ -88,27 +88,19 @@ public class KeroAccessManagerImpl implements KeroAccessManager {
 	@Override
 	public boolean hasScheme(Class<?> rawType) {
 		
-		return schemes.containsKey(rawType);
+		return schemeStorage.has(rawType);
 	}
 
 	@Override
 	public AccessScheme getScheme(Class<?> rawType) {
 		
-		return schemes.get(rawType);
+		return schemeStorage.get(rawType);
 	}
 	
 	@Override
 	public AccessScheme getSchemeByAlise(String aliase) {
 		
-		for(AccessScheme scheme : schemes.values()) {
-			
-			if(scheme.getAliase().equals(aliase)) {
-				
-				return scheme;
-			}
-		}
-		
-		return null;
+		return schemeStorage.getByAliase(aliase);
 	}
 
 	public AccessScheme getOrCreateScheme(Class<?> rawType){
@@ -143,7 +135,7 @@ public class KeroAccessManagerImpl implements KeroAccessManager {
 			ac.configure(scheme);
 		}
 		
-		schemes.put(rawType, scheme);
+		schemeStorage.add(scheme);
 		
 		return scheme;
 	}
