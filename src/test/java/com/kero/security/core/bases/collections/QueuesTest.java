@@ -10,14 +10,14 @@ import java.util.Queue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.kero.security.core.KeroAccessManager;
-import com.kero.security.core.KeroAccessManagerImpl;
+import com.kero.security.core.KeroAccessAgent;
+import com.kero.security.core.KeroAccessAgentImpl;
 import com.kero.security.core.TestObject;
 import com.kero.security.core.exception.AccessException;
 
 public class QueuesTest {
 
-	private KeroAccessManager manager = new KeroAccessManagerImpl();
+	private KeroAccessAgent manager = new KeroAccessAgentImpl();
 	
 	@BeforeEach
 	public void init() {

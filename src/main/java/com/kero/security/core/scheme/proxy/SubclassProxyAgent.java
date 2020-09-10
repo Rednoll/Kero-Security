@@ -49,7 +49,7 @@ public class SubclassProxyAgent extends ProxyAgentBaseCached {
 			.defineMethod("getOriginal", Object.class, Visibility.PUBLIC).intercept(FieldAccessor.ofField("original"))
 			.defineMethod("getConfiguration", PreparedAccessConfiguration.class, Visibility.PUBLIC).intercept(FieldAccessor.ofField("pac"))
 			.make()
-			.load(this.scheme.getManager().getClassLoader())
+			.load(this.scheme.getAgent().getClassLoader())
 			.getLoaded();
 	}
 	

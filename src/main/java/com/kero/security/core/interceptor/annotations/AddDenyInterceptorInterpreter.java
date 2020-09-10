@@ -2,7 +2,7 @@ package com.kero.security.core.interceptor.annotations;
 
 import java.util.Set;
 
-import com.kero.security.core.KeroAccessManager;
+import com.kero.security.core.KeroAccessAgent;
 import com.kero.security.core.annotations.PropertyAnnotationInterpreterBase;
 import com.kero.security.core.interceptor.DenyInterceptor;
 import com.kero.security.core.role.Role;
@@ -10,15 +10,15 @@ import com.kero.security.core.scheme.configuration.SinglePropertyConfigurator;
 
 public class AddDenyInterceptorInterpreter extends PropertyAnnotationInterpreterBase<AddDenyInterceptor> {
 	
-	public AddDenyInterceptorInterpreter(KeroAccessManager manager) {
-		super(manager);
+	public AddDenyInterceptorInterpreter(KeroAccessAgent agent) {
+		super(agent);
 	
 	}
 
 	@Override
 	public void interpret(SinglePropertyConfigurator configurator, AddDenyInterceptor annotation) {
 		
-		Set<Role> roles = this.manager.getOrCreateRole(annotation.roles());
+		Set<Role> roles = this.agent.getOrCreateRole(annotation.roles());
 		
 		Class<? extends DenyInterceptor> interceptorClass = annotation.value();
 		

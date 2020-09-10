@@ -1,13 +1,13 @@
 package com.kero.security.core.scheme.configuration.auto;
 
-import com.kero.security.core.KeroAccessManager;
+import com.kero.security.core.KeroAccessAgent;
 
 public abstract class AccessSchemeAutoConfiguratorBase implements AccessSchemeAutoConfigurator {
 
-	protected KeroAccessManager manager;
+	protected KeroAccessAgent agent;
 	
-	public AccessSchemeAutoConfiguratorBase(KeroAccessManager manager) {
+	public AccessSchemeAutoConfiguratorBase(KeroAccessAgent manager) {
 		
-		this.manager = manager;
+		this.agent = manager;
 	}
 }

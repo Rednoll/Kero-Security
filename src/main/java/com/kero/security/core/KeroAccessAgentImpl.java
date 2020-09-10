@@ -20,7 +20,7 @@ import com.kero.security.core.scheme.configuration.KeroAccessConfigurator;
 import com.kero.security.core.scheme.configuration.auto.AccessSchemeAutoConfigurator;
 import com.kero.security.core.scheme.storage.AccessSchemeStorage;
 
-public class KeroAccessManagerImpl implements KeroAccessManager {
+public class KeroAccessAgentImpl implements KeroAccessAgent {
 	
 	protected static Logger LOGGER = LoggerFactory.getLogger("KeroSecurity");
 	
@@ -32,17 +32,14 @@ public class KeroAccessManagerImpl implements KeroAccessManager {
 	protected ClassLoader proxiesClassLoader = ClassLoader.getSystemClassLoader();
 	
 	protected Set<Class> ignoreList = new HashSet<>();
-	
-	protected String basePackage = "com.kero";
-	protected boolean scaned = false;
-	
+
 	protected Map<Class, String> aliasesMap = new HashMap<>();
 	
 	protected KeroAccessConfigurator configurator = new KeroAccessConfigurator(this);
 	
 	protected Set<AccessSchemeAutoConfigurator> autoConfigurators = new HashSet<>();
 	
-	public KeroAccessManagerImpl() {
+	public KeroAccessAgentImpl() {
 		
 		ignoreType(String.class);
 		
@@ -73,11 +70,6 @@ public class KeroAccessManagerImpl implements KeroAccessManager {
 	public void setTypeAliase(String aliase, Class<?> type) {
 		
 		this.aliasesMap.put(type, aliase);
-	}
-	
-	public void setBasePackage(String basePackage) {
-		
-		this.basePackage = basePackage;
 	}
 	
 	public void ignoreType(Class<?> type) {
@@ -229,5 +221,11 @@ public class KeroAccessManagerImpl implements KeroAccessManager {
 	public RoleStorage getRoleStorage() {
 		
 		return this.roleStorage;
+	}
+
+	@Override
+	public AccessSchemeStorage getSchemeStorage() {
+		
+		return this.schemeStorage;
 	}
 }

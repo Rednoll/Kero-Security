@@ -1,13 +1,13 @@
 package com.kero.security.core.property.annotations;
 
-import com.kero.security.core.KeroAccessManager;
+import com.kero.security.core.KeroAccessAgent;
 import com.kero.security.core.annotations.SchemeAnnotationInterpreterBase;
 import com.kero.security.core.scheme.configuration.AccessSchemeConfigurator;
 
 public class DisableInheritPropertiesInterpreter extends SchemeAnnotationInterpreterBase<DisableInheritProperties> {
 
-	public DisableInheritPropertiesInterpreter(KeroAccessManager manager) {
-		super(manager);
+	public DisableInheritPropertiesInterpreter(KeroAccessAgent agent) {
+		super(agent);
 	
 	}
 

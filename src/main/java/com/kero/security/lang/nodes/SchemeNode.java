@@ -2,7 +2,7 @@ package com.kero.security.lang.nodes;
 
 import java.util.List;
 
-import com.kero.security.core.KeroAccessManager;
+import com.kero.security.core.KeroAccessAgent;
 import com.kero.security.core.scheme.AccessScheme;
 
 public class SchemeNode extends KsdlNodeBase implements KsdlRootNode {
@@ -22,7 +22,7 @@ public class SchemeNode extends KsdlNodeBase implements KsdlRootNode {
 		this.properties = properties;
 	}
 	
-	public void interpret(KeroAccessManager manager) {
+	public void interpret(KeroAccessAgent manager) {
 		
 		AccessScheme scheme = manager.getSchemeByAlise(this.typeAliase);
 	
@@ -31,7 +31,7 @@ public class SchemeNode extends KsdlNodeBase implements KsdlRootNode {
 	
 	public void interpret(AccessScheme scheme) {
 		
-		defaultRule.interpret(scheme.getManager(), scheme);
+		defaultRule.interpret(scheme.getAgent(), scheme);
 		
 		properties.forEach((prop)-> prop.interpret(scheme));
 	}
@@ -48,7 +48,7 @@ public class SchemeNode extends KsdlNodeBase implements KsdlRootNode {
 		
 		}
 		
-		public void interpret(KeroAccessManager manager) {}
+		public void interpret(KeroAccessAgent manager) {}
 		public void interpret(AccessScheme scheme) {}
 	}
 }

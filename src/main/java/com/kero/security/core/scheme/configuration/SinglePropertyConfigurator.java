@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.function.Function;
 
-import com.kero.security.core.KeroAccessManager;
+import com.kero.security.core.KeroAccessAgent;
 import com.kero.security.core.interceptor.DenyInterceptor;
 import com.kero.security.core.interceptor.DenyInterceptorImpl;
 import com.kero.security.core.property.Property;
@@ -25,9 +25,9 @@ public class SinglePropertyConfigurator {
 	
 	public SinglePropertyConfigurator propagateRole(String from, String to) {
 		
-		KeroAccessManager manager = schemeConf.getManager();
+		KeroAccessAgent agent = schemeConf.getAgent();
 		
-		property.addRolePropagation(manager.getOrCreateRole(from), manager.getOrCreateRole(to));
+		property.addRolePropagation(agent.getOrCreateRole(from), agent.getOrCreateRole(to));
 	
 		return this;
 	}
@@ -51,7 +51,7 @@ public class SinglePropertyConfigurator {
 	
 	public SinglePropertyConfigurator grantFor(String... roleNames) {
 		
-		Set<Role> roles = schemeConf.getManager().getOrCreateRole(roleNames);
+		Set<Role> roles = schemeConf.getAgent().getOrCreateRole(roleNames);
 		
 		setAccessible(roles, true);
 		
@@ -60,7 +60,7 @@ public class SinglePropertyConfigurator {
 	
 	public SinglePropertyConfigurator denyFor(String... roleNames) {
 		
-		Set<Role> roles = schemeConf.getManager().getOrCreateRole(roleNames);
+		Set<Role> roles = schemeConf.getAgent().getOrCreateRole(roleNames);
 		
 		setAccessible(roles, false);
 		
@@ -78,7 +78,7 @@ public class SinglePropertyConfigurator {
 	
 	public SinglePropertyConfigurator denyWithInterceptor(Function<Object, Object> silentInterceptor, String... roleNames) {
 		
-		Set<Role> roles = schemeConf.getManager().getOrCreateRole(roleNames);
+		Set<Role> roles = schemeConf.getAgent().getOrCreateRole(roleNames);
 		
 		return denyWithInterceptor(silentInterceptor, roles);
 	}
@@ -104,7 +104,7 @@ public class SinglePropertyConfigurator {
 
 	public SinglePropertyConfigurator addDenyInterceptor(Function<Object, Object> function, String... roleNames) {
 		
-		Set<Role> roles = schemeConf.getManager().getOrCreateRole(roleNames);
+		Set<Role> roles = schemeConf.getAgent().getOrCreateRole(roleNames);
 		
 		return addDenyInterceptor(function, roles);
 	}

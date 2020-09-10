@@ -8,7 +8,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.kero.security.core.KeroAccessManager;
+import com.kero.security.core.KeroAccessAgent;
 import com.kero.security.core.property.Property;
 import com.kero.security.core.property.PropertyImpl;
 import com.kero.security.core.rules.AccessRule;
@@ -24,7 +24,7 @@ public abstract class AccessSchemeBase implements AccessScheme {
 	
 	protected Map<String, Property> localProperties = new HashMap<>();
 	
-	protected KeroAccessManager manager;
+	protected KeroAccessAgent agent;
 	
 	protected boolean inherit = true;
 	
@@ -32,16 +32,16 @@ public abstract class AccessSchemeBase implements AccessScheme {
 		
 	}
 	
-	public AccessSchemeBase(KeroAccessManager manager, Class<?> type) {
+	public AccessSchemeBase(KeroAccessAgent agent, Class<?> type) {
 		
-		this.manager = manager;
+		this.agent = agent;
 		this.type = type;
 		this.aliase = type.getSimpleName();
 	}
 	
-	public AccessSchemeBase(KeroAccessManager manager, String aliase, Class<?> type) {
+	public AccessSchemeBase(KeroAccessAgent agent, String aliase, Class<?> type) {
 		
-		this.manager = manager;
+		this.agent = agent;
 		this.type = type;
 		this.aliase = aliase;
 	}
@@ -77,7 +77,7 @@ public abstract class AccessSchemeBase implements AccessScheme {
 		
 		for(Class<?> interfaze : interfaces) {
 			
-			AccessScheme interfazeScheme = manager.getOrCreateScheme(interfaze);
+			AccessScheme interfazeScheme = agent.getOrCreateScheme(interfaze);
 		
 			interfazeScheme.collectProperties(complexProperties);
 		}
@@ -150,9 +150,9 @@ public abstract class AccessSchemeBase implements AccessScheme {
 	}
 	
 	@Override
-	public KeroAccessManager getManager() {
+	public KeroAccessAgent getAgent() {
 		
-		return this.manager;
+		return this.agent;
 	}
 	
 	@Override

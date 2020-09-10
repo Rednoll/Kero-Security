@@ -2,7 +2,7 @@ package com.kero.security.core.scheme;
 
 import java.util.Map;
 
-import com.kero.security.core.KeroAccessManager;
+import com.kero.security.core.KeroAccessAgent;
 import com.kero.security.core.property.Property;
 
 public class InterfaceAccessScheme extends AccessSchemeBase {
@@ -12,13 +12,13 @@ public class InterfaceAccessScheme extends AccessSchemeBase {
 		
 	}
 	
-	public InterfaceAccessScheme(KeroAccessManager manager, Class<?> type) {
-		super(manager, type);
+	public InterfaceAccessScheme(KeroAccessAgent agent, Class<?> type) {
+		super(agent, type);
 		
 	}
 
-	public InterfaceAccessScheme(KeroAccessManager manager, String aliase, Class<?> type) {
-		super(manager, aliase, type);
+	public InterfaceAccessScheme(KeroAccessAgent agent, String aliase, Class<?> type) {
+		super(agent, aliase, type);
 		
 	}
 	

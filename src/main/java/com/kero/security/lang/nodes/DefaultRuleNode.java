@@ -1,7 +1,7 @@
 package com.kero.security.lang.nodes;
 
 import com.kero.security.core.DefaultRuleOwner;
-import com.kero.security.core.KeroAccessManager;
+import com.kero.security.core.KeroAccessAgent;
 import com.kero.security.core.rules.AccessRule;
 
 public enum DefaultRuleNode implements KsdlNode {
@@ -15,7 +15,7 @@ public enum DefaultRuleNode implements KsdlNode {
 		this.accessible = accessible;
 	}
 	
-	public void interpret(KeroAccessManager manager, DefaultRuleOwner target) {
+	public void interpret(KeroAccessAgent manager, DefaultRuleOwner target) {
 		
 		if(accessible == null) {
 			

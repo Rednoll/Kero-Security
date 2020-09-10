@@ -11,10 +11,22 @@ import com.kero.security.core.rules.AccessRule;
 import com.kero.security.core.scheme.AccessScheme;
 import com.kero.security.core.scheme.configuration.KeroAccessConfigurator;
 import com.kero.security.core.scheme.configuration.auto.AccessSchemeAutoConfigurator;
+import com.kero.security.core.scheme.storage.AccessSchemeStorage;
 
-public interface KeroAccessManager {
+public interface KeroAccessAgent {
 	
-	//Roles
+	public void ignoreType(Class<?> type);
+
+	public void addConfigurator(AccessSchemeAutoConfigurator configurator);
+	
+	public ClassLoader getClassLoader();
+	
+	public void setTypeAliase(String aliase, Class<?> type);
+
+	public AccessRule getDefaultRule();
+	
+	public String extractName(String rawName);
+
 	public Role createRole(String name);
 	public Role getRole(String name);
 	public Role hasRole(String name);
@@ -22,13 +34,11 @@ public interface KeroAccessManager {
 	public Set<Role> getOrCreateRole(Collection<String> names);
 	public Set<Role> getOrCreateRole(String[] names);
 	
-	//AccessScheme
 	public AccessScheme getOrCreateScheme(Class<?> rawType);
 	public boolean hasScheme(Class<?> rawType);
 	public AccessScheme getSchemeByAlise(String aliase);
 	public AccessScheme getScheme(Class<?> rawType);
 
-	//protect
 	public default <T> T protect(T object, String... roleNames) {
 		
 		Set<Role> roles = this.getOrCreateRole(roleNames);
@@ -42,23 +52,8 @@ public interface KeroAccessManager {
 	}
 	
 	public <T> T protect(T object, Collection<Role> roles);
-	
-	//uniq
-	public void ignoreType(Class<?> type);
 
-	public void addConfigurator(AccessSchemeAutoConfigurator configurator);
-	
-	public ClassLoader getClassLoader();
-	
-	public void setBasePackage(String basePackage);
-	
-	public void setTypeAliase(String aliase, Class<?> type);
-
-	public AccessRule getDefaultRule();
-	
-	public String extractName(String rawName);
-
-	//Delegates
+	public AccessSchemeStorage getSchemeStorage();
 	public RoleStorage getRoleStorage();
 	public KeroAccessConfigurator getConfigurator();
 }

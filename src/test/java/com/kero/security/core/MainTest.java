@@ -12,9 +12,9 @@ public class MainTest {
 	@Test
 	public void test() {
 
-		KeroAccessManager manager = new KeroAccessManagerImpl();
+		KeroAccessAgent agent = new KeroAccessAgentImpl();
 
-		manager.getConfigurator()
+		agent.getConfigurator()
 			.scheme(TestInterface.class)
 				.property("text")
 					.denyWithInterceptor((obj)-> {
@@ -22,20 +22,20 @@ public class MainTest {
 						return "You not have access!";
 					}, "FRIEND");
 		
-		manager.getConfigurator()
+		agent.getConfigurator()
 			.scheme(TestObject.class)
 				.defaultDeny()
 				.property("text")
 					.denyFor("FRIEND")
 					.grantFor("OWNER");
 
-		manager.getConfigurator()
+		agent.getConfigurator()
 			.scheme(TestObjectDeep.class)
 				.defaultDeny()
 				.property("testObject")
 					.grantFor("OWNER");
 		
-		TestObjectDeep deep = manager.protect(new TestObjectDeep(new TestObject("test text!!")), "OWNER");
+		TestObjectDeep deep = agent.protect(new TestObjectDeep(new TestObject("test text!!")), "OWNER");
 		
 		System.out.println("text: "+deep.getTestObject().getText());
 		

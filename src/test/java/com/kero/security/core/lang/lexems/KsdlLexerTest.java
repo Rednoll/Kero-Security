@@ -5,8 +5,8 @@ import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
-import com.kero.security.core.KeroAccessManager;
-import com.kero.security.core.KeroAccessManagerImpl;
+import com.kero.security.core.KeroAccessAgent;
+import com.kero.security.core.KeroAccessAgentImpl;
 import com.kero.security.core.TestObject;
 import com.kero.security.core.scheme.configuration.auto.KsdlAccessSchemeConfigurator;
 import com.kero.security.lang.provider.TextualProvider;
@@ -17,7 +17,7 @@ public class KsdlLexerTest {
 	@Test
 	public void test() throws IOException, InterruptedException {
 		
-		KeroAccessManager manager = new KeroAccessManagerImpl();
+		KeroAccessAgent manager = new KeroAccessAgentImpl();
 //			manager.addConfigurator(new AnnotationAccessSchemeConfigurator(manager));
 			manager.addConfigurator(new KsdlAccessSchemeConfigurator(manager, new TextualProvider(new FileResource(new File("test schemes")))));
 		

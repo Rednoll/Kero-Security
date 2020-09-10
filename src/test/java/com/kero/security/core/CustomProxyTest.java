@@ -12,7 +12,7 @@ public class CustomProxyTest {
 	@Test
 	public void customProxy() {
 		
-		KeroAccessManager manager = new KeroAccessManagerImpl();
+		KeroAccessAgent manager = new KeroAccessAgentImpl();
 		
 		manager.getConfigurator()
 			.scheme(TestObject.class)

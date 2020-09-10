@@ -3,7 +3,7 @@ package com.kero.security.core.config.prepared;
 import java.lang.reflect.Method;
 import java.util.Collection;
 
-import com.kero.security.core.KeroAccessManager;
+import com.kero.security.core.KeroAccessAgent;
 import com.kero.security.core.role.Role;
 import com.kero.security.core.scheme.AccessScheme;
 
@@ -24,9 +24,9 @@ public class PreparedGrantRule extends PreparedActionBase implements PreparedAct
 		
 			Object methodResult = method.invoke(original, args);
 			
-			KeroAccessManager manager = this.scheme.getManager();
+			KeroAccessAgent agent = this.scheme.getAgent();
 			
-			methodResult = manager.protect(methodResult, this.propagatedRoles);
+			methodResult = agent.protect(methodResult, this.propagatedRoles);
 
 			return methodResult;
 		}

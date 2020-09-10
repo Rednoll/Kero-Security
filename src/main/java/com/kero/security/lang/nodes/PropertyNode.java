@@ -2,7 +2,7 @@ package com.kero.security.lang.nodes;
 
 import java.util.List;
 
-import com.kero.security.core.KeroAccessManager;
+import com.kero.security.core.KeroAccessAgent;
 import com.kero.security.core.property.Property;
 import com.kero.security.core.scheme.AccessScheme;
 
@@ -28,7 +28,7 @@ public class PropertyNode extends KsdlNodeBase {
 
 	public void interpret(AccessScheme scheme) {
 		
-		KeroAccessManager manager = scheme.getManager();
+		KeroAccessAgent manager = scheme.getAgent();
 		
 		Property prop = scheme.getOrCreateLocalProperty(name);
 

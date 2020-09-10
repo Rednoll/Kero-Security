@@ -15,6 +15,6 @@ public class PreparedDenyRule extends PreparedActionBase implements PreparedActi
 	@Override
 	public Object process(Method method, Object original, Object[] args) {
 		
-		throw new AccessException("Access denied for: "+scheme.getManager().extractName(method.getName()));
+		throw new AccessException("Access denied for: "+scheme.getAgent().extractName(method.getName()));
 	}
 }

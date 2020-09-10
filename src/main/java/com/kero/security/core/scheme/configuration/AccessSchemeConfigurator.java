@@ -3,7 +3,7 @@ package com.kero.security.core.scheme.configuration;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.kero.security.core.KeroAccessManager;
+import com.kero.security.core.KeroAccessAgent;
 import com.kero.security.core.property.Property;
 import com.kero.security.core.rules.AccessRule;
 import com.kero.security.core.rules.AccessRuleImpl;
@@ -14,11 +14,11 @@ import com.kero.security.core.scheme.ClassAccessScheme;
 public class AccessSchemeConfigurator {
 
 	private AccessScheme scheme;
-	private KeroAccessManager manager;
+	private KeroAccessAgent agent;
 	
-	public AccessSchemeConfigurator(KeroAccessManager manager, AccessScheme scheme) {
+	public AccessSchemeConfigurator(KeroAccessAgent agent, AccessScheme scheme) {
 		
-		this.manager = manager;
+		this.agent = agent;
 		this.scheme = scheme;
 	}
 	
@@ -45,7 +45,7 @@ public class AccessSchemeConfigurator {
 		
 		for(String name : propertyNames) {
 			
-			name = manager.extractName(name);
+			name = agent.extractName(name);
 			
 			properties.add(this.scheme.getOrCreateLocalProperty(name));
 		}
@@ -61,7 +61,7 @@ public class AccessSchemeConfigurator {
 	
 	public SinglePropertyConfigurator property(String propertyName) {
 		
-		propertyName = manager.extractName(propertyName);
+		propertyName = agent.extractName(propertyName);
 		
 		return property(this.scheme.getOrCreateLocalProperty(propertyName));
 	}
@@ -97,9 +97,9 @@ public class AccessSchemeConfigurator {
 		return this;
 	}
 	
-	public KeroAccessManager getManager() {
+	public KeroAccessAgent getAgent() {
 		
-		return this.manager;
+		return this.agent;
 	}
 	
 	public AccessScheme getScheme() {

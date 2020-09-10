@@ -3,21 +3,21 @@ package com.kero.security.core.scheme.configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.kero.security.core.KeroAccessManager;
+import com.kero.security.core.KeroAccessAgent;
 
 public class KeroAccessConfigurator {
 
 	protected static Logger LOGGER = LoggerFactory.getLogger("KeroSecurity");
 	
-	private KeroAccessManager manager;
+	private KeroAccessAgent agent;
 	
-	public KeroAccessConfigurator(KeroAccessManager manager) {
+	public KeroAccessConfigurator(KeroAccessAgent agent) {
 		
-		this.manager = manager;
+		this.agent = agent;
 	}
 	
 	public AccessSchemeConfigurator scheme(Class<?> type) {
 		
-		return new AccessSchemeConfigurator(manager, manager.getOrCreateScheme(type));
+		return new AccessSchemeConfigurator(agent, agent.getOrCreateScheme(type));
 	}
 }

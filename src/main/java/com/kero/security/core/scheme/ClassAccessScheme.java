@@ -14,7 +14,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.kero.security.core.KeroAccessManager;
+import com.kero.security.core.KeroAccessAgent;
 import com.kero.security.core.config.PreparedAccessConfiguration;
 import com.kero.security.core.config.PreparedAccessConfigurationImpl;
 import com.kero.security.core.config.prepared.PreparedAction;
@@ -43,13 +43,13 @@ public class ClassAccessScheme extends AccessSchemeBase implements InvocationHan
 	
 	}
 	
-	public ClassAccessScheme(KeroAccessManager manager, Class<?> type) {
-		super(manager, type);
+	public ClassAccessScheme(KeroAccessAgent agent, Class<?> type) {
+		super(agent, type);
 		
 	}
 	
-	public ClassAccessScheme(KeroAccessManager manager, String aliase, Class<?> type) {
-		super(manager, aliase, type);
+	public ClassAccessScheme(KeroAccessAgent agent, String aliase, Class<?> type) {
+		super(agent, aliase, type);
 		
 	}
 	
@@ -166,7 +166,7 @@ public class ClassAccessScheme extends AccessSchemeBase implements InvocationHan
 				}
 				else {
 					
-					preparedActions.put(propertyName, this.manager.getDefaultRule().prepare(this, roles));
+					preparedActions.put(propertyName, this.agent.getDefaultRule().prepare(this, roles));
 					return;
 				}
 			}
@@ -234,9 +234,9 @@ public class ClassAccessScheme extends AccessSchemeBase implements InvocationHan
 			
 			while(superClass != Object.class) {
 				
-				if(manager.hasScheme(superClass)) {
+				if(agent.hasScheme(superClass)) {
 					
-					AccessScheme scheme = manager.getScheme(superClass);
+					AccessScheme scheme = agent.getScheme(superClass);
 				
 					if(scheme.hasDefaultRule()) {
 						
@@ -248,7 +248,7 @@ public class ClassAccessScheme extends AccessSchemeBase implements InvocationHan
 			}
 		}
 		
-		return manager.getDefaultRule();
+		return agent.getDefaultRule();
 	}
 	
 	public void collectProperties(Map<String, Property> complexProperties) {
@@ -268,7 +268,7 @@ public class ClassAccessScheme extends AccessSchemeBase implements InvocationHan
 		
 		while(superClass != Object.class) {
 			
-			AccessScheme supeclassScheme = manager.getOrCreateScheme(superClass);
+			AccessScheme supeclassScheme = agent.getOrCreateScheme(superClass);
 
 			supeclassScheme.collectProperties(complexProperties);
 

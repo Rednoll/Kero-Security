@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.kero.security.core.DefaultRuleOwner;
-import com.kero.security.core.KeroAccessManager;
+import com.kero.security.core.KeroAccessAgent;
 import com.kero.security.core.property.Property;
 
 public interface AccessScheme extends DefaultRuleOwner {
@@ -37,5 +37,5 @@ public interface AccessScheme extends DefaultRuleOwner {
 	
 	public String getAliase();
 	
-	public KeroAccessManager getManager();
+	public KeroAccessAgent getAgent();
 }

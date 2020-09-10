@@ -2,7 +2,7 @@ package com.kero.security.lang.nodes;
 
 import java.util.Set;
 
-import com.kero.security.core.KeroAccessManager;
+import com.kero.security.core.KeroAccessAgent;
 import com.kero.security.core.property.Property;
 import com.kero.security.core.role.Role;
 import com.kero.security.core.rules.AccessRuleImpl;
@@ -20,7 +20,7 @@ public class AccessRuleNode extends KsdlNodeBase {
 		this.accessible = accessible;
 	}
 	
-	public void interpret(KeroAccessManager manager, Property property) {
+	public void interpret(KeroAccessAgent manager, Property property) {
 		
 		if(roleNames.isEmpty()) return;
 		
@@ -36,7 +36,7 @@ public class AccessRuleNode extends KsdlNodeBase {
 			
 		}
 		
-		public void interpret(KeroAccessManager manager, Property property) {
+		public void interpret(KeroAccessAgent manager, Property property) {
 			
 		}
 	}

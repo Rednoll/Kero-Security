@@ -41,7 +41,7 @@ public class PropertiesConfigurator {
 	
 	public PropertiesConfigurator grantFor(String... roleNames) {
 		
-		Set<Role> roles = schemeConf.getManager().getOrCreateRole(roleNames);
+		Set<Role> roles = schemeConf.getAgent().getOrCreateRole(roleNames);
 		
 		setAccessible(roles, true);
 		
@@ -50,7 +50,7 @@ public class PropertiesConfigurator {
 	
 	public PropertiesConfigurator denyFor(String... roleNames) {
 		
-		Set<Role> roles = schemeConf.getManager().getOrCreateRole(roleNames);
+		Set<Role> roles = schemeConf.getAgent().getOrCreateRole(roleNames);
 		
 		setAccessible(roles, false);
 		

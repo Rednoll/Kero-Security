@@ -1,13 +1,13 @@
 package com.kero.security.core.annotations;
 
-import com.kero.security.core.KeroAccessManager;
+import com.kero.security.core.KeroAccessAgent;
 
 public abstract class SchemeAnnotationInterpreterBase<A> implements SchemeAnnotationInterpreter<A> {
 
-	protected KeroAccessManager manager;
+	protected KeroAccessAgent agent;
 	
-	public SchemeAnnotationInterpreterBase(KeroAccessManager manager) {
+	public SchemeAnnotationInterpreterBase(KeroAccessAgent agent) {
 		
-		this.manager = manager;
+		this.agent = agent;
 	}
 }

@@ -2,7 +2,7 @@ package com.kero.security.lang.nodes;
 
 import java.util.Map;
 
-import com.kero.security.core.KeroAccessManager;
+import com.kero.security.core.KeroAccessAgent;
 import com.kero.security.core.property.Property;
 import com.kero.security.core.role.Role;
 
@@ -15,7 +15,7 @@ public class PropagationMetaline extends PropertyMetalineBase {
 		this.propagationMap = propagationMap;
 	}
 	
-	public void interpret(KeroAccessManager manager, Property property) {
+	public void interpret(KeroAccessAgent manager, Property property) {
 		
 		propagationMap.forEach((fromName, toName)-> {
 		

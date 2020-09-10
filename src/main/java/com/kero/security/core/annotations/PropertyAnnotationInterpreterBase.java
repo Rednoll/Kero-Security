@@ -1,13 +1,13 @@
 package com.kero.security.core.annotations;
 
-import com.kero.security.core.KeroAccessManager;
+import com.kero.security.core.KeroAccessAgent;
 
 public abstract class PropertyAnnotationInterpreterBase<A> implements PropertyAnnotationInterpreter<A> {
 
-	protected KeroAccessManager manager;
+	protected KeroAccessAgent agent;
 	
-	public PropertyAnnotationInterpreterBase(KeroAccessManager manager) {
+	public PropertyAnnotationInterpreterBase(KeroAccessAgent agent) {
 		
-		this.manager = manager;
+		this.agent = agent;
 	}
 }

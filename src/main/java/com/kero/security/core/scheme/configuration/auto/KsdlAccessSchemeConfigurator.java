@@ -1,6 +1,6 @@
 package com.kero.security.core.scheme.configuration.auto;
 
-import com.kero.security.core.KeroAccessManager;
+import com.kero.security.core.KeroAccessAgent;
 import com.kero.security.core.scheme.AccessScheme;
 import com.kero.security.lang.collections.RootNodeList;
 import com.kero.security.lang.collections.SchemeNodeMap;
@@ -11,8 +11,8 @@ public class KsdlAccessSchemeConfigurator extends AccessSchemeAutoConfiguratorBa
 
 	protected KsdlProvider provider;
 	
-	public KsdlAccessSchemeConfigurator(KeroAccessManager manager, KsdlProvider provider) {
-		super(manager);
+	public KsdlAccessSchemeConfigurator(KeroAccessAgent agent, KsdlProvider provider) {
+		super(agent);
 	
 		this.provider = provider;
 	}

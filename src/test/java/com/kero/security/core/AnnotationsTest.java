@@ -11,7 +11,7 @@ public class AnnotationsTest {
 	@Test
 	public void test() {
 		
-		KeroAccessManager manager = new KeroAccessManagerImpl();
+		KeroAccessAgent manager = new KeroAccessAgentImpl();
 		
 		TestAnnotatedObject obj = manager.protect(new TestAnnotatedObject("test_default_text"), "FRIEND");
 	

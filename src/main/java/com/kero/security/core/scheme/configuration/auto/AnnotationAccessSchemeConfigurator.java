@@ -9,7 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import com.kero.security.core.KeroAccessManager;
+import com.kero.security.core.KeroAccessAgent;
 import com.kero.security.core.annotations.PropertyAnnotationInterpreter;
 import com.kero.security.core.annotations.SchemeAnnotationInterpreter;
 import com.kero.security.core.interceptor.annotations.AddDenyInterceptor;
@@ -39,24 +39,24 @@ public class AnnotationAccessSchemeConfigurator extends AccessSchemeAutoConfigur
 	private Map<Class, SchemeAnnotationInterpreter> schemeInterpreters = new HashMap<>();
 	private Map<Class, PropertyAnnotationInterpreter> propertyInterpreters = new HashMap<>();
 	
-	public AnnotationAccessSchemeConfigurator(KeroAccessManager manager) {
-		super(manager);
+	public AnnotationAccessSchemeConfigurator(KeroAccessAgent agent) {
+		super(agent);
 		
-		schemeInterpreters.put(DisableInheritProperties.class, new DisableInheritPropertiesInterpreter(this.manager));
-		schemeInterpreters.put(EnableInheritProperties.class, new EnableInheritPropertiesInterpreter(this.manager));
+		schemeInterpreters.put(DisableInheritProperties.class, new DisableInheritPropertiesInterpreter(this.agent));
+		schemeInterpreters.put(EnableInheritProperties.class, new EnableInheritPropertiesInterpreter(this.agent));
 	
-		propertyInterpreters.put(AddDenyInterceptor.class, new AddDenyInterceptorInterpreter(this.manager));
-		propertyInterpreters.put(DenyWithInterceptor.class, new DenyWithInterceptorInterpreter(this.manager));
-		propertyInterpreters.put(PropagateRole.class, new PropagateRoleInterpreter(this.manager));
-		propertyInterpreters.put(DenyFor.class, new DenyForInterpreter(this.manager));
-		propertyInterpreters.put(GrantFor.class, new GrantForInterpreter(this.manager));
+		propertyInterpreters.put(AddDenyInterceptor.class, new AddDenyInterceptorInterpreter(this.agent));
+		propertyInterpreters.put(DenyWithInterceptor.class, new DenyWithInterceptorInterpreter(this.agent));
+		propertyInterpreters.put(PropagateRole.class, new PropagateRoleInterpreter(this.agent));
+		propertyInterpreters.put(DenyFor.class, new DenyForInterpreter(this.agent));
+		propertyInterpreters.put(GrantFor.class, new GrantForInterpreter(this.agent));
 		
-		DefaultDenyInterpreter defaultDenyInterpreter = new DefaultDenyInterpreter(this.manager);
+		DefaultDenyInterpreter defaultDenyInterpreter = new DefaultDenyInterpreter(this.agent);
 		
 		schemeInterpreters.put(DefaultDeny.class, defaultDenyInterpreter);
 		propertyInterpreters.put(DefaultDeny.class, defaultDenyInterpreter);
 		
-		DefaultGrantInterpreter defaultGrantInterpreter = new DefaultGrantInterpreter(this.manager);
+		DefaultGrantInterpreter defaultGrantInterpreter = new DefaultGrantInterpreter(this.agent);
 		
 		schemeInterpreters.put(DefaultGrant.class, defaultGrantInterpreter);
 		propertyInterpreters.put(DefaultGrant.class, defaultGrantInterpreter);
@@ -65,11 +65,11 @@ public class AnnotationAccessSchemeConfigurator extends AccessSchemeAutoConfigur
 	@Override
 	public void configure(AccessScheme scheme) {
 	
-		if(!scheme.getManager().equals(this.manager)) throw new RuntimeException("Scheme from another manager! Can't be configured by this configurator.");
+		if(!scheme.getAgent().equals(this.agent)) throw new RuntimeException("Scheme from another agent! Can't be configured by this configurator.");
 		
 		Class<?> type = scheme.getTypeClass();
 		
-		AccessSchemeConfigurator schemeConfigurator = new AccessSchemeConfigurator(this.manager, scheme);
+		AccessSchemeConfigurator schemeConfigurator = new AccessSchemeConfigurator(this.agent, scheme);
 		
 		for(Annotation annotation : type.getDeclaredAnnotations()) {
 		
@@ -86,7 +86,7 @@ public class AnnotationAccessSchemeConfigurator extends AccessSchemeAutoConfigur
 		
 		for(Field field : fields) {
 			
-			String name = manager.extractName(field.getName());
+			String name = agent.extractName(field.getName());
 			
 			Annotation[] annotations = field.getDeclaredAnnotations();
 		
@@ -103,7 +103,7 @@ public class AnnotationAccessSchemeConfigurator extends AccessSchemeAutoConfigur
 		
 		for(Method method : methods) {
 			
-			String name = manager.extractName(method.getName());
+			String name = agent.extractName(method.getName());
 			
 			Annotation[] annotations = method.getDeclaredAnnotations();
 			

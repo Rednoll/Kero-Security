@@ -24,7 +24,7 @@ public class PreparedAccessConfigurationImpl implements PreparedAccessConfigurat
 	
 	public Object process(Object original, Method method, Object[] args) {
 		
-		String name = type.getManager().extractName(method.getName());
+		String name = type.getAgent().extractName(method.getName());
 		
 		PreparedAction action = actions.get(name);
 		
