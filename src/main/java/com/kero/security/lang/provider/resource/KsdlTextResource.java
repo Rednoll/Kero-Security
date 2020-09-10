@@ -1,4 +1,4 @@
-package com.kero.security.lang.source.resource;
+package com.kero.security.lang.provider.resource;
 
 public interface KsdlTextResource {
 

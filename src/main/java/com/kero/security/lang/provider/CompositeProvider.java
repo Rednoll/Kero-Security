@@ -1,20 +1,20 @@
-package com.kero.security.lang.source;
+package com.kero.security.lang.provider;
 
 import java.util.HashSet;
 import java.util.Set;
 
 import com.kero.security.lang.collections.RootNodeList;
 
-public class CompositeSource implements KsdlSource {
+public class CompositeProvider implements KsdlProvider {
 
-	private Set<KsdlSource> sources;
+	private Set<KsdlProvider> sources;
 	
-	public CompositeSource() {
+	public CompositeProvider() {
 		
 		this.sources = new HashSet<>();
 	}
 	
-	public CompositeSource(Set<KsdlSource> sources) {
+	public CompositeProvider(Set<KsdlProvider> sources) {
 		
 		this.sources = sources;
 	}
@@ -24,7 +24,7 @@ public class CompositeSource implements KsdlSource {
 		
 		RootNodeList result = new RootNodeList();
 		
-		for(KsdlSource source : sources) {
+		for(KsdlProvider source : sources) {
 		
 			result.addAll(source.getRoots());
 		}

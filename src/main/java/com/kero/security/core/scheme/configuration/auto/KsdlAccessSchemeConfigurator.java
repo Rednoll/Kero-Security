@@ -5,22 +5,22 @@ import com.kero.security.core.scheme.AccessScheme;
 import com.kero.security.lang.collections.RootNodeList;
 import com.kero.security.lang.collections.SchemeNodeMap;
 import com.kero.security.lang.nodes.SchemeNode;
-import com.kero.security.lang.source.KsdlSource;
+import com.kero.security.lang.provider.KsdlProvider;
 
 public class KsdlAccessSchemeConfigurator extends AccessSchemeAutoConfiguratorBase {
 
-	protected KsdlSource source;
+	protected KsdlProvider provider;
 	
-	public KsdlAccessSchemeConfigurator(KeroAccessManager manager, KsdlSource source) {
+	public KsdlAccessSchemeConfigurator(KeroAccessManager manager, KsdlProvider provider) {
 		super(manager);
 	
-		this.source = source;
+		this.provider = provider;
 	}
 
 	@Override
 	public void configure(AccessScheme scheme) {
 		
-		RootNodeList roots = source.getRoots();
+		RootNodeList roots = provider.getRoots();
 	
 		SchemeNodeMap schemeNodes = roots.getSchemeNodes();
 		
