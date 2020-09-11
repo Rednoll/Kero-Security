@@ -45,7 +45,7 @@ public class AccessSchemeConfigurator {
 		
 		for(String name : propertyNames) {
 			
-			name = agent.extractName(name);
+			name = agent.extractPropertyName(name);
 			
 			properties.add(this.scheme.getOrCreateLocalProperty(name));
 		}
@@ -61,7 +61,7 @@ public class AccessSchemeConfigurator {
 	
 	public SinglePropertyConfigurator property(String propertyName) {
 		
-		propertyName = agent.extractName(propertyName);
+		propertyName = agent.extractPropertyName(propertyName);
 		
 		return property(this.scheme.getOrCreateLocalProperty(propertyName));
 	}

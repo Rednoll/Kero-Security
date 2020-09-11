@@ -103,7 +103,7 @@ public class KeroAccessAgentImpl implements KeroAccessAgent {
 		
 		AccessScheme scheme = null;
 		
-		String aliase = rawType.getSimpleName();
+		String aliase = extractDefaultTypeAliase(rawType.getSimpleName());
 		
 		if(aliasesMap.containsKey(rawType)) {
 			
@@ -130,6 +130,17 @@ public class KeroAccessAgentImpl implements KeroAccessAgent {
 		
 		return scheme;
 	}
+	
+	@Override
+	public String extractDefaultTypeAliase(String rawName) {
+		
+		if(rawName.endsWith("Impl")) {
+			
+			rawName = rawName.substring(0, rawName.length() - "Impl".length());
+		}
+		
+		return rawName;
+	}
 
 	@Override
 	public <T> T protect(T object, Collection<Role> roles) {
@@ -150,7 +161,7 @@ public class KeroAccessAgentImpl implements KeroAccessAgent {
 		}
 	}
 	
-	public String extractName(String rawName) {
+	public String extractPropertyName(String rawName) {
 		
 		if(rawName.startsWith("get")) {
 			

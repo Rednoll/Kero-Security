@@ -85,7 +85,7 @@ public class AnnotationAccessSchemeConfigurator extends AccessSchemeAutoConfigur
 		
 		for(Field field : fields) {
 			
-			String name = agent.extractName(field.getName());
+			String name = agent.extractPropertyName(field.getName());
 			
 			Annotation[] annotations = field.getDeclaredAnnotations();
 		
@@ -102,7 +102,7 @@ public class AnnotationAccessSchemeConfigurator extends AccessSchemeAutoConfigur
 		
 		for(Method method : methods) {
 			
-			String name = agent.extractName(method.getName());
+			String name = agent.extractPropertyName(method.getName());
 			
 			Annotation[] annotations = method.getDeclaredAnnotations();
 			

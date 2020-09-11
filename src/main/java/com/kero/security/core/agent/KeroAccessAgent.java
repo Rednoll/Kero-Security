@@ -25,7 +25,8 @@ public interface KeroAccessAgent {
 
 	public AccessRule getDefaultRule();
 	
-	public String extractName(String rawName);
+	public String extractDefaultTypeAliase(String rawName);
+	public String extractPropertyName(String rawName);
 
 	public Role createRole(String name);
 	public Role getRole(String name);
