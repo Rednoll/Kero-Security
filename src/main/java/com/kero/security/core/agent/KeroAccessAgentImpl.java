@@ -103,7 +103,7 @@ public class KeroAccessAgentImpl implements KeroAccessAgent {
 		
 		AccessScheme scheme = null;
 		
-		String aliase = extractDefaultTypeAliase(rawType.getSimpleName());
+		String aliase = rawType.getSimpleName();
 		
 		if(aliasesMap.containsKey(rawType)) {
 			
@@ -129,17 +129,6 @@ public class KeroAccessAgentImpl implements KeroAccessAgent {
 		schemeStorage.add(scheme);
 		
 		return scheme;
-	}
-	
-	@Override
-	public String extractDefaultTypeAliase(String rawName) {
-		
-		if(rawName.endsWith("Impl")) {
-			
-			rawName = rawName.substring(0, rawName.length() - "Impl".length());
-		}
-		
-		return rawName;
 	}
 
 	@Override
