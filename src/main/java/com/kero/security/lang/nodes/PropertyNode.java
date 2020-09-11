@@ -2,7 +2,7 @@ package com.kero.security.lang.nodes;
 
 import java.util.List;
 
-import com.kero.security.core.KeroAccessAgent;
+import com.kero.security.core.agent.KeroAccessAgent;
 import com.kero.security.core.property.Property;
 import com.kero.security.core.scheme.AccessScheme;
 

@@ -18,8 +18,6 @@ public class TextualProvider extends KsdlProviderBase {
 	@Override
 	public RootNodeList getRoots() {
 		
-		System.out.println("Call getRoots");
-		
 		String text = resource.getRawText();
 		
 		TokenSequence tokens = KsdlLexer.getInstance().tokenize(text);

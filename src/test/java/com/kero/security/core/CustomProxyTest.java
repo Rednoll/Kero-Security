@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
+import com.kero.security.core.agent.KeroAccessAgent;
+import com.kero.security.core.agent.KeroAccessAgentImpl;
 import com.kero.security.core.config.PreparedAccessConfiguration;
 import com.kero.security.core.scheme.AccessProxy;
 

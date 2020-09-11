@@ -1,6 +1,6 @@
 package com.kero.security.lang.nodes;
 
-import com.kero.security.core.KeroAccessAgent;
+import com.kero.security.core.agent.KeroAccessAgent;
 import com.kero.security.core.property.Property;
 import com.kero.security.lang.nodes.metaline.MetalineNodeBase;
 

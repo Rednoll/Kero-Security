@@ -24,8 +24,6 @@ public class FileResource implements KsdlTextResource {
 	@Override
 	public String getRawText() {
 		
-		System.out.println("Call getRawText");
-		
 		StringBuilder builder = new StringBuilder();
 		 
 		collectText(this.file, builder);

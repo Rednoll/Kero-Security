@@ -2,7 +2,7 @@ package com.kero.security.core.interceptor.annotations;
 
 import java.util.Set;
 
-import com.kero.security.core.KeroAccessAgent;
+import com.kero.security.core.agent.KeroAccessAgent;
 import com.kero.security.core.annotations.PropertyAnnotationInterpreterBase;
 import com.kero.security.core.interceptor.DenyInterceptor;
 import com.kero.security.core.role.Role;

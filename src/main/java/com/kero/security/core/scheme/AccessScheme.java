@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.kero.security.core.DefaultRuleOwner;
-import com.kero.security.core.KeroAccessAgent;
+import com.kero.security.core.agent.KeroAccessAgent;
 import com.kero.security.core.property.Property;
 
 public interface AccessScheme extends DefaultRuleOwner {

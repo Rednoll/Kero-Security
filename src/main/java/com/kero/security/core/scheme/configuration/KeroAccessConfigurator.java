@@ -3,7 +3,7 @@ package com.kero.security.core.scheme.configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.kero.security.core.KeroAccessAgent;
+import com.kero.security.core.agent.KeroAccessAgent;
 
 public class KeroAccessConfigurator {
 

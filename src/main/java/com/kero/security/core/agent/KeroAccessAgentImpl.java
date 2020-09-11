@@ -1,4 +1,4 @@
-package com.kero.security.core;
+package com.kero.security.core.agent;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -26,7 +26,8 @@ public class KeroAccessAgentImpl implements KeroAccessAgent {
 	
 	protected RoleStorage roleStorage = RoleStorage.create();
 	protected AccessSchemeStorage schemeStorage = AccessSchemeStorage.create();
-	
+	protected KeroAccessConfigurator configurator = new KeroAccessConfigurator(this);
+		
 	protected AccessRule defaultRule = AccessRuleImpl.GRANT_ALL;
 	
 	protected ClassLoader proxiesClassLoader = ClassLoader.getSystemClassLoader();
@@ -34,9 +35,7 @@ public class KeroAccessAgentImpl implements KeroAccessAgent {
 	protected Set<Class> ignoreList = new HashSet<>();
 
 	protected Map<Class, String> aliasesMap = new HashMap<>();
-	
-	protected KeroAccessConfigurator configurator = new KeroAccessConfigurator(this);
-	
+
 	protected Set<AccessSchemeAutoConfigurator> autoConfigurators = new HashSet<>();
 	
 	public KeroAccessAgentImpl() {

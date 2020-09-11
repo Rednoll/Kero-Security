@@ -9,7 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import com.kero.security.core.KeroAccessAgent;
+import com.kero.security.core.agent.KeroAccessAgent;
 import com.kero.security.core.annotations.PropertyAnnotationInterpreter;
 import com.kero.security.core.annotations.SchemeAnnotationInterpreter;
 import com.kero.security.core.interceptor.annotations.AddDenyInterceptor;
@@ -40,23 +40,22 @@ public class AnnotationAccessSchemeConfigurator extends AccessSchemeAutoConfigur
 	private Map<Class, PropertyAnnotationInterpreter> propertyInterpreters = new HashMap<>();
 	
 	public AnnotationAccessSchemeConfigurator(KeroAccessAgent agent) {
-		super(agent);
 		
-		schemeInterpreters.put(DisableInheritProperties.class, new DisableInheritPropertiesInterpreter(this.agent));
-		schemeInterpreters.put(EnableInheritProperties.class, new EnableInheritPropertiesInterpreter(this.agent));
+		schemeInterpreters.put(DisableInheritProperties.class, new DisableInheritPropertiesInterpreter(agent));
+		schemeInterpreters.put(EnableInheritProperties.class, new EnableInheritPropertiesInterpreter(agent));
 	
-		propertyInterpreters.put(AddDenyInterceptor.class, new AddDenyInterceptorInterpreter(this.agent));
-		propertyInterpreters.put(DenyWithInterceptor.class, new DenyWithInterceptorInterpreter(this.agent));
-		propertyInterpreters.put(PropagateRole.class, new PropagateRoleInterpreter(this.agent));
-		propertyInterpreters.put(DenyFor.class, new DenyForInterpreter(this.agent));
-		propertyInterpreters.put(GrantFor.class, new GrantForInterpreter(this.agent));
+		propertyInterpreters.put(AddDenyInterceptor.class, new AddDenyInterceptorInterpreter(agent));
+		propertyInterpreters.put(DenyWithInterceptor.class, new DenyWithInterceptorInterpreter(agent));
+		propertyInterpreters.put(PropagateRole.class, new PropagateRoleInterpreter(agent));
+		propertyInterpreters.put(DenyFor.class, new DenyForInterpreter(agent));
+		propertyInterpreters.put(GrantFor.class, new GrantForInterpreter(agent));
 		
-		DefaultDenyInterpreter defaultDenyInterpreter = new DefaultDenyInterpreter(this.agent);
+		DefaultDenyInterpreter defaultDenyInterpreter = new DefaultDenyInterpreter(agent);
 		
 		schemeInterpreters.put(DefaultDeny.class, defaultDenyInterpreter);
 		propertyInterpreters.put(DefaultDeny.class, defaultDenyInterpreter);
 		
-		DefaultGrantInterpreter defaultGrantInterpreter = new DefaultGrantInterpreter(this.agent);
+		DefaultGrantInterpreter defaultGrantInterpreter = new DefaultGrantInterpreter(agent);
 		
 		schemeInterpreters.put(DefaultGrant.class, defaultGrantInterpreter);
 		propertyInterpreters.put(DefaultGrant.class, defaultGrantInterpreter);
@@ -64,12 +63,12 @@ public class AnnotationAccessSchemeConfigurator extends AccessSchemeAutoConfigur
 	
 	@Override
 	public void configure(AccessScheme scheme) {
-	
-		if(!scheme.getAgent().equals(this.agent)) throw new RuntimeException("Scheme from another agent! Can't be configured by this configurator.");
+
+		KeroAccessAgent agent = scheme.getAgent();
 		
 		Class<?> type = scheme.getTypeClass();
 		
-		AccessSchemeConfigurator schemeConfigurator = new AccessSchemeConfigurator(this.agent, scheme);
+		AccessSchemeConfigurator schemeConfigurator = new AccessSchemeConfigurator(agent, scheme);
 		
 		for(Annotation annotation : type.getDeclaredAnnotations()) {
 		

@@ -3,7 +3,7 @@ package com.kero.security.core.scheme.configuration;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.kero.security.core.KeroAccessAgent;
+import com.kero.security.core.agent.KeroAccessAgent;
 import com.kero.security.core.property.Property;
 import com.kero.security.core.rules.AccessRule;
 import com.kero.security.core.rules.AccessRuleImpl;

@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.function.Function;
 
-import com.kero.security.core.KeroAccessAgent;
+import com.kero.security.core.agent.KeroAccessAgent;
 import com.kero.security.core.interceptor.DenyInterceptor;
 import com.kero.security.core.interceptor.DenyInterceptorImpl;
 import com.kero.security.core.property.Property;
