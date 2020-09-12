@@ -2,6 +2,9 @@ package com.kero.security.lang.nodes;
 
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.kero.security.core.agent.KeroAccessAgent;
 import com.kero.security.core.property.Property;
 import com.kero.security.core.role.Role;
@@ -9,6 +12,8 @@ import com.kero.security.core.rules.AccessRuleImpl;
 
 public class AccessRuleNode extends KsdlNodeBase {
 
+	private static Logger LOGGER = LoggerFactory.getLogger("KeroSecurity");
+	
 	public static final AccessRuleNode EMPTY = new Empty();
 	
 	private Set<String> roleNames;
@@ -25,6 +30,8 @@ public class AccessRuleNode extends KsdlNodeBase {
 		if(roleNames.isEmpty()) return;
 		
 		Set<Role> roles = manager.getOrCreateRole(roleNames);
+		
+		LOGGER.debug("Interpret access rule node to: "+property.getName()+" Accessible: "+this.accessible+" Roles: "+roles);
 		
 		property.addRule(new AccessRuleImpl(roles, this.accessible));
 	}
