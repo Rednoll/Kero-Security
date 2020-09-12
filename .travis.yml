@@ -3,5 +3,5 @@ jdk:
   - openjdk8
 
 script:
-    - git update-index --chmod=+x gradlew
-    - ./gradlew build
+  - git update-index --chmod=+x gradlew
+  - ./gradlew build
