@@ -2,16 +2,11 @@ package com.kero.security.lang.nodes;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.kero.security.core.agent.KeroAccessAgent;
 import com.kero.security.core.scheme.AccessScheme;
 
 public class SchemeNode extends KsdlNodeBase implements KsdlRootNode {
 
-	private static Logger LOGGER = LoggerFactory.getLogger("KeroSecurity");
-	
 	public static final SchemeNode EMPTY = new Empty();
 	
 	private String typeAliase;
@@ -35,9 +30,7 @@ public class SchemeNode extends KsdlNodeBase implements KsdlRootNode {
 	}
 	
 	public void interpret(AccessScheme scheme) {
-		
-		LOGGER.debug("Interpret scheme node to: "+scheme.getTypeClass().getCanonicalName());
-		
+
 		defaultRule.interpret(scheme.getAgent(), scheme);
 		
 		properties.forEach((prop)-> prop.interpret(scheme));

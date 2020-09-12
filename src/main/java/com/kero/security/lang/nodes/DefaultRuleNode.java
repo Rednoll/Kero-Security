@@ -19,13 +19,19 @@ public enum DefaultRuleNode implements KsdlNode {
 		
 		if(accessible == null) {
 
+			System.out.println("OK NULL");
+			
 			target.setDefaultRule(null);
 		}
 		else if(accessible) {
 			
+			System.out.println("OK GRANT_ALL");
+			
 			target.setDefaultRule(AccessRule.GRANT_ALL);
 		}
 		else {
+			
+			System.out.println("OK DENY_ALL");
 			
 			target.setDefaultRule(AccessRule.DENY_ALL);
 		}
