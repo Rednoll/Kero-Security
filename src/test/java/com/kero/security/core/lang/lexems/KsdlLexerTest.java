@@ -11,6 +11,7 @@ import com.kero.security.core.TestObject;
 import com.kero.security.core.agent.KeroAccessAgent;
 import com.kero.security.core.agent.KeroAccessAgentImpl;
 import com.kero.security.core.exception.AccessException;
+import com.kero.security.core.rules.AccessRule;
 import com.kero.security.core.scheme.configuration.auto.KsdlAccessSchemeConfigurator;
 import com.kero.security.lang.provider.TextualProvider;
 import com.kero.security.lang.provider.resource.FileResource;
@@ -23,6 +24,10 @@ public class KsdlLexerTest {
 		KeroAccessAgent agent = new KeroAccessAgentImpl();
 			agent.addConfigurator(new KsdlAccessSchemeConfigurator(new TextualProvider(new FileResource(new File("test schemes")))));
 		
+		AccessRule defaultRule = agent.getOrCreateScheme(TestObject.class).getOrCreateLocalProperty("text").getDefaultRule();
+		
+		System.out.println("defaultRule: "+defaultRule);
+			
 		TestObject obj = agent.protect(new TestObject("test text"), "COMMON");
 		
 		assertThrows(AccessException.class, obj::getText);
