@@ -36,7 +36,7 @@ public class SchemeNode extends KsdlNodeBase implements KsdlRootNode {
 	
 	public void interpret(AccessScheme scheme) {
 		
-		LOGGER.debug("Interpret scheme node to: "+scheme.getClass().getCanonicalName());
+		LOGGER.debug("Interpret scheme node to: "+scheme.getTypeClass().getCanonicalName());
 		
 		defaultRule.interpret(scheme.getAgent(), scheme);
 		

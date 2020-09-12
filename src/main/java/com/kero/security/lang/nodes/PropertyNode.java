@@ -33,7 +33,7 @@ public class PropertyNode extends KsdlNodeBase {
 
 	public void interpret(AccessScheme scheme) {
 		
-		LOGGER.debug("Interpret property node "+name+" to: "+scheme.getClass());
+		LOGGER.debug("Interpret property node "+name+" to: "+scheme.getTypeClass().getCanonicalName());
 		
 		KeroAccessAgent manager = scheme.getAgent();
 		
