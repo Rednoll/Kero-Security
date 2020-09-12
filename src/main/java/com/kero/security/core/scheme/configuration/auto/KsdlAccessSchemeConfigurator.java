@@ -1,6 +1,5 @@
 package com.kero.security.core.scheme.configuration.auto;
 
-import com.kero.security.core.agent.KeroAccessAgent;
 import com.kero.security.core.scheme.AccessScheme;
 import com.kero.security.lang.collections.RootNodeList;
 import com.kero.security.lang.collections.SchemeNodeMap;
