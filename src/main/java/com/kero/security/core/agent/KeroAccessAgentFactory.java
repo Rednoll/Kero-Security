@@ -1,6 +1,5 @@
-package com.kero.security.core.agent.factory;
+package com.kero.security.core.agent;
 
-import com.kero.security.core.agent.KeroAccessAgent;
 import com.kero.security.core.agent.configuration.KeroAccessAgentConfigurator;
 
 public interface KeroAccessAgentFactory {

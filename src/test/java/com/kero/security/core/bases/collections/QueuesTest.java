@@ -12,12 +12,12 @@ import org.junit.jupiter.api.Test;
 
 import com.kero.security.core.TestObject;
 import com.kero.security.core.agent.KeroAccessAgent;
-import com.kero.security.core.agent.KeroAccessAgentImpl;
+import com.kero.security.core.agent.KeroAccessAgentFactoryImpl;
 import com.kero.security.core.exception.AccessException;
 
 public class QueuesTest {
 
-	private KeroAccessAgent manager = new KeroAccessAgentImpl();
+	private KeroAccessAgent manager = new KeroAccessAgentFactoryImpl().create();
 	
 	@BeforeEach
 	public void init() {

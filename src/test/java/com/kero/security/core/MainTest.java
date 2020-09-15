@@ -6,15 +6,14 @@ import java.util.TreeMap;
 import org.junit.jupiter.api.Test;
 
 import com.kero.security.core.agent.KeroAccessAgent;
-import com.kero.security.core.agent.KeroAccessAgentImpl;
-import com.kero.security.core.role.annotations.PropagateRole;
+import com.kero.security.core.agent.KeroAccessAgentFactoryImpl;
 
 public class MainTest {
 
 	@Test
 	public void test() {
 
-		KeroAccessAgent agent = new KeroAccessAgentImpl();
+		KeroAccessAgent agent = new KeroAccessAgentFactoryImpl().create();
 
 		agent.getConfigurator()
 			.scheme(TestInterface.class)

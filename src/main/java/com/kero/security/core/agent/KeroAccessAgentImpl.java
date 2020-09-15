@@ -38,7 +38,7 @@ public class KeroAccessAgentImpl implements KeroAccessAgent {
 
 	protected Set<AccessSchemeAutoConfigurator> autoConfigurators = new HashSet<>();
 	
-	public KeroAccessAgentImpl() {
+	KeroAccessAgentImpl() {
 		
 		ignoreType(String.class);
 		

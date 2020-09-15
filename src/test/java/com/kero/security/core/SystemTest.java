@@ -7,7 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.kero.security.core.agent.KeroAccessAgent;
-import com.kero.security.core.agent.KeroAccessAgentImpl;
+import com.kero.security.core.agent.KeroAccessAgentFactoryImpl;
 import com.kero.security.core.exception.AccessException;
 
 public class SystemTest {
@@ -17,7 +17,7 @@ public class SystemTest {
 	@BeforeEach
 	public void init() {
 		
-		this.agent = new KeroAccessAgentImpl();
+		this.agent = new KeroAccessAgentFactoryImpl().create();
 	}
 	
 	@Test

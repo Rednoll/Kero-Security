@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import com.kero.security.core.TestObject;
 import com.kero.security.core.agent.KeroAccessAgent;
-import com.kero.security.core.agent.KeroAccessAgentImpl;
+import com.kero.security.core.agent.KeroAccessAgentFactoryImpl;
 import com.kero.security.core.exception.AccessException;
 import com.kero.security.core.rules.AccessRule;
 import com.kero.security.core.scheme.configuration.auto.KsdlAccessSchemeConfigurator;
@@ -21,7 +21,7 @@ public class KsdlLexerTest {
 	@Test
 	public void test() throws IOException, InterruptedException {
 		
-		KeroAccessAgent agent = new KeroAccessAgentImpl();
+		KeroAccessAgent agent = new KeroAccessAgentFactoryImpl().create();
 			agent.addConfigurator(new KsdlAccessSchemeConfigurator(new TextualProvider(new FileResource(new File("test schemes")))));
 		
 		AccessRule defaultRule = agent.getOrCreateScheme(TestObject.class).getOrCreateLocalProperty("text").getDefaultRule();

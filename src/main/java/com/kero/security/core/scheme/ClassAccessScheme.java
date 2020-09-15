@@ -157,22 +157,14 @@ public class ClassAccessScheme extends AccessSchemeBase implements InvocationHan
 			}
 			else {
 				
-				AccessRule defaultRule = findDefaultRule();
+				AccessRule defaultRule = determineDefaultRule();
 				
-				if(defaultRule != null) {
-					
-					preparedActions.put(propertyName, defaultRule.prepare(this, roles));
-					return;
-				}
-				else {
-					
-					preparedActions.put(propertyName, this.agent.getDefaultRule().prepare(this, roles));
-					return;
-				}
+				preparedActions.put(propertyName, defaultRule.prepare(this, roles));
+				return;
 			}
 		});
 		
-		PreparedAction defaultTypeAction = findDefaultRule().prepare(this, roles);
+		PreparedAction defaultTypeAction = determineDefaultRule().prepare(this, roles);
 		
 		return new PreparedAccessConfigurationImpl(this, preparedActions, defaultTypeAction);
 	}
@@ -224,7 +216,7 @@ public class ClassAccessScheme extends AccessSchemeBase implements InvocationHan
 		return result;
 	}
 	
-	private AccessRule findDefaultRule() {
+	private AccessRule determineDefaultRule() {
 		
 		if(this.hasDefaultRule()) return this.getDefaultRule();
 		

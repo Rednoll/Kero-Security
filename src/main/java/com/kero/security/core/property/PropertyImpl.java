@@ -89,7 +89,7 @@ public class PropertyImpl implements Property {
 	@Override
 	public void addRule(AccessRule rule) {
 		
-		this.rules.add(rule);
+		this.rules.add(0, rule);
 	}
 	
 	@Override
