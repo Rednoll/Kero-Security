@@ -17,7 +17,6 @@ public class DenyInterceptorImpl extends DenyInterceptorBase {
 		
 		this.function = function;
 	}
-
 	
 	@Override
 	public Object intercept(Object obj) {

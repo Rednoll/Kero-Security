@@ -3,7 +3,7 @@ package com.kero.security.core;
 import org.junit.jupiter.api.Test;
 
 import com.kero.security.core.agent.KeroAccessAgent;
-import com.kero.security.core.agent.KeroAccessAgentImpl;
+import com.kero.security.core.agent.KeroAccessAgentFactoryImpl;
 import com.kero.security.core.interceptor.DenyInterceptorBase;
 import com.kero.security.core.interceptor.annotations.DenyWithInterceptor;
 import com.kero.security.core.rules.annotations.DefaultGrant;
@@ -13,9 +13,9 @@ public class AnnotationsTest {
 	@Test
 	public void test() {
 		
-		KeroAccessAgent manager = new KeroAccessAgentImpl();
+		KeroAccessAgent agent = new KeroAccessAgentFactoryImpl().create();
 		
-		TestAnnotatedObject obj = manager.protect(new TestAnnotatedObject("test_default_text"), "FRIEND");
+		TestAnnotatedObject obj = agent.protect(new TestAnnotatedObject("test_default_text"), "FRIEND");
 	
 		System.out.println("obj: "+obj.getText());
 	}

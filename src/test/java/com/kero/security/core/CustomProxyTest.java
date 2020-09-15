@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
 import com.kero.security.core.agent.KeroAccessAgent;
-import com.kero.security.core.agent.KeroAccessAgentImpl;
+import com.kero.security.core.agent.KeroAccessAgentFactoryImpl;
 import com.kero.security.core.config.PreparedAccessConfiguration;
 import com.kero.security.core.scheme.AccessProxy;
 
@@ -14,16 +14,16 @@ public class CustomProxyTest {
 	@Test
 	public void customProxy() {
 		
-		KeroAccessAgent manager = new KeroAccessAgentImpl();
+		KeroAccessAgent agent = new KeroAccessAgentFactoryImpl().create();
 		
-		manager.getConfigurator()
+		agent.getConfigurator()
 			.scheme(TestObject.class)
 				.defaultDeny()
 				.proxy(TestObjectProxy.class)
 				.property("text")
 					.grantFor("OWNER");
 		
-		TestObject obj = manager.protect(new TestObject("test text!"), "OWNER");
+		TestObject obj = agent.protect(new TestObject("test text!"), "OWNER");
 	
 		assertEquals(obj.getText(), "test text!");
 	}

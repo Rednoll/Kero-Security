@@ -1,10 +1,8 @@
-package com.kero.security.core.agent.factory;
+package com.kero.security.core.agent;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import com.kero.security.core.agent.KeroAccessAgent;
-import com.kero.security.core.agent.KeroAccessAgentImpl;
 import com.kero.security.core.agent.configuration.KeroAccessAgentConfigurator;
 
 public class KeroAccessAgentFactoryImpl implements KeroAccessAgentFactory {
