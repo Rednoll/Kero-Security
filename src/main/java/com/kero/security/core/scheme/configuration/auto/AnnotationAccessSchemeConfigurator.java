@@ -16,10 +16,10 @@ import com.kero.security.core.interceptor.annotations.AddDenyInterceptor;
 import com.kero.security.core.interceptor.annotations.AddDenyInterceptorInterpreter;
 import com.kero.security.core.interceptor.annotations.DenyWithInterceptor;
 import com.kero.security.core.interceptor.annotations.DenyWithInterceptorInterpreter;
-import com.kero.security.core.property.annotations.DisableInheritProperties;
-import com.kero.security.core.property.annotations.DisableInheritPropertiesInterpreter;
-import com.kero.security.core.property.annotations.EnableInheritProperties;
-import com.kero.security.core.property.annotations.EnableInheritPropertiesInterpreter;
+import com.kero.security.core.property.annotations.DisableInherit;
+import com.kero.security.core.property.annotations.DisableInheritInterpreter;
+import com.kero.security.core.property.annotations.EnableInherit;
+import com.kero.security.core.property.annotations.EnableInheritInterpreter;
 import com.kero.security.core.role.annotations.PropagateRole;
 import com.kero.security.core.role.annotations.PropagateRoleInterpreter;
 import com.kero.security.core.rules.annotations.DefaultDeny;
@@ -41,8 +41,8 @@ public class AnnotationAccessSchemeConfigurator extends AccessSchemeAutoConfigur
 	
 	public AnnotationAccessSchemeConfigurator(KeroAccessAgent agent) {
 		
-		schemeInterpreters.put(DisableInheritProperties.class, new DisableInheritPropertiesInterpreter(agent));
-		schemeInterpreters.put(EnableInheritProperties.class, new EnableInheritPropertiesInterpreter(agent));
+		schemeInterpreters.put(DisableInherit.class, new DisableInheritInterpreter(agent));
+		schemeInterpreters.put(EnableInherit.class, new EnableInheritInterpreter(agent));
 	
 		propertyInterpreters.put(AddDenyInterceptor.class, new AddDenyInterceptorInterpreter(agent));
 		propertyInterpreters.put(DenyWithInterceptor.class, new DenyWithInterceptorInterpreter(agent));

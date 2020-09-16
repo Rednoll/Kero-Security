@@ -23,6 +23,7 @@ public enum DefaultRuleToken implements KsdlToken {
 	
 	@Override
 	public String toString() {
+		
 		return "DefaultRuleToken [defaultAccessible=" + defaultAccessible + "]";
 	}
 

@@ -4,15 +4,15 @@ import com.kero.security.core.agent.KeroAccessAgent;
 import com.kero.security.core.annotations.SchemeAnnotationInterpreterBase;
 import com.kero.security.core.scheme.configuration.AccessSchemeConfigurator;
 
-public class EnableInheritPropertiesInterpreter extends SchemeAnnotationInterpreterBase<DisableInheritProperties> {
+public class EnableInheritInterpreter extends SchemeAnnotationInterpreterBase<DisableInherit> {
 
-	public EnableInheritPropertiesInterpreter(KeroAccessAgent agent) {
+	public EnableInheritInterpreter(KeroAccessAgent agent) {
 		super(agent);
 	
 	}
 
 	@Override
-	public void interpret(AccessSchemeConfigurator configurator, DisableInheritProperties annotation) {
+	public void interpret(AccessSchemeConfigurator configurator, DisableInherit annotation) {
 	
 		configurator.enableInherit();
 	}
