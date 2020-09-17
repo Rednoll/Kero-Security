@@ -23,7 +23,7 @@ public class SystemTest {
 	@Test
 	public void getProperty() {
 		
-		agent.getConfigurator()
+		agent.getKeroAccessConfigurator()
 			.scheme(TestObject.class)
 				.defaultDeny()
 				.properties("text")
@@ -37,7 +37,7 @@ public class SystemTest {
 	@Test
 	public void getProperty_DefaultOverrideBySpecifiedRule() {
 		
-		agent.getConfigurator()
+		agent.getKeroAccessConfigurator()
 			.scheme(TestObject.class)
 				.defaultDeny()
 				.properties("text")
@@ -52,14 +52,14 @@ public class SystemTest {
 	@Test
 	public void getProperty_DeepScanSuperclass() {
 		
-		agent.getConfigurator()
+		agent.getKeroAccessConfigurator()
 			.scheme(TestObject.class)
 				.defaultDeny()
 				.properties("text")
 					.defaultDeny()
 					.grantFor("OWNER");
 
-		agent.getConfigurator()
+		agent.getKeroAccessConfigurator()
 			.scheme(TestObject2.class);
 		
 		TestObject2 obj = agent.protect(new TestObject2("test12"), "OWNER");
@@ -70,14 +70,14 @@ public class SystemTest {
 	@Test
 	public void getProperty_RulesInheritance() {
 		
-		agent.getConfigurator()
+		agent.getKeroAccessConfigurator()
 			.scheme(TestObject.class)
 				.defaultDeny()
 				.properties("text")
 					.defaultDeny()
 					.grantFor("OWNER");
 
-		agent.getConfigurator()
+		agent.getKeroAccessConfigurator()
 			.scheme(TestObject2.class)
 				.defaultDeny()
 				.properties("text")
@@ -92,14 +92,14 @@ public class SystemTest {
 	@Test
 	public void getProperty_DeepScanSuperclassInterface() {
 		
-		agent.getConfigurator()
+		agent.getKeroAccessConfigurator()
 			.scheme(TestInterface.class)
 				.defaultDeny()
 				.properties("text")
 					.defaultDeny()
 					.grantFor("OWNER");
 
-		agent.getConfigurator()
+		agent.getKeroAccessConfigurator()
 			.scheme(TestObject2.class);
 		
 		TestObject2 obj = agent.protect(new TestObject2("test12"), "OWNER");
@@ -110,13 +110,13 @@ public class SystemTest {
 	@Test
 	public void getProperty_DeepScanSuperclass_RulesOverride() {
 		
-		agent.getConfigurator()
+		agent.getKeroAccessConfigurator()
 			.scheme(TestObject.class)
 				.defaultDeny()
 				.properties("text")
 					.grantFor("OWNER");
 
-		agent.getConfigurator()
+		agent.getKeroAccessConfigurator()
 			.scheme(TestObject2.class)
 				.defaultDeny()
 				.properties("text")
@@ -131,7 +131,7 @@ public class SystemTest {
 	@Test
 	public void getProperty_UnsuitableRole() {
 		
-		agent.getConfigurator()
+		agent.getKeroAccessConfigurator()
 			.scheme(TestObject.class)
 				.defaultDeny()
 				.properties("text")
@@ -145,7 +145,7 @@ public class SystemTest {
 	@Test
 	public void getProperty_DefaultDeny_TypeLevel() {
 	
-		agent.getConfigurator()
+		agent.getKeroAccessConfigurator()
 			.scheme(TestObject.class)
 				.defaultDeny();
 
@@ -157,7 +157,7 @@ public class SystemTest {
 	@Test
 	public void getProperty_DefaultGrant_TypeLevel() {
 		
-		agent.getConfigurator()
+		agent.getKeroAccessConfigurator()
 			.scheme(TestObject.class)
 				.defaultGrant();
 
@@ -169,7 +169,7 @@ public class SystemTest {
 	@Test
 	public void getProperty_DefaultDeny_PropertyLevel() {
 	
-		agent.getConfigurator()
+		agent.getKeroAccessConfigurator()
 			.scheme(TestObject.class)
 				.defaultDeny()
 				.properties("text")
@@ -183,7 +183,7 @@ public class SystemTest {
 	@Test
 	public void getProperty_DefaultGrant_PropertyLevel() {
 	
-		agent.getConfigurator()
+		agent.getKeroAccessConfigurator()
 			.scheme(TestObject.class)
 				.defaultDeny()
 				.properties("text")
@@ -197,7 +197,7 @@ public class SystemTest {
 	@Test
 	public void getProperty_DefaultDeny_PropertyLevel_TypeLevel_Overriding() {
 	
-		agent.getConfigurator()
+		agent.getKeroAccessConfigurator()
 			.scheme(TestObject.class)
 				.defaultGrant()
 				.properties("text")
@@ -211,7 +211,7 @@ public class SystemTest {
 	@Test
 	public void getProperty_DefaultGrant_PropertyLevel_TypeLevel_Overriding() {
 	
-		agent.getConfigurator()
+		agent.getKeroAccessConfigurator()
 			.scheme(TestObject.class)
 				.defaultDeny()
 				.properties("text")
@@ -225,7 +225,7 @@ public class SystemTest {
 	@Test
 	public void getProperty_AcessibleStacking() {
 	
-		agent.getConfigurator()
+		agent.getKeroAccessConfigurator()
 			.scheme(TestObject.class)
 				.defaultDeny()
 				.properties("text")
@@ -244,7 +244,7 @@ public class SystemTest {
 	@Test
 	public void getProperty_DenyInterceptor() {
 	
-		agent.getConfigurator()
+		agent.getKeroAccessConfigurator()
 			.scheme(TestObject.class)
 				.defaultDeny()
 				.property("text")
@@ -261,7 +261,7 @@ public class SystemTest {
 	@Test
 	public void getProperty_DenyInterceptor_CorrectChoise() {
 		
-		agent.getConfigurator()
+		agent.getKeroAccessConfigurator()
 			.scheme(TestObject.class)
 				.defaultDeny()
 				.property("text")
@@ -282,7 +282,7 @@ public class SystemTest {
 	@Test
 	public void getProperty_DenyInterceptor_CorrectPriority() {
 	
-		agent.getConfigurator()
+		agent.getKeroAccessConfigurator()
 			.scheme(TestObject.class)
 				.defaultDeny()
 				.property("text")
@@ -315,7 +315,7 @@ public class SystemTest {
 	@Test
 	public void getProperty_InterceptorInheritance() {
 		
-		agent.getConfigurator()
+		agent.getKeroAccessConfigurator()
 			.scheme(TestObject.class)
 				.defaultDeny()
 				.property("text")
@@ -325,7 +325,7 @@ public class SystemTest {
 						return ((TestObject) obj).getText() + "_1";
 					}, "OWNER");
 		
-		agent.getConfigurator()
+		agent.getKeroAccessConfigurator()
 			.scheme(TestObject2.class)
 				.property("text")
 				.denyFor("OWNER");
@@ -338,13 +338,13 @@ public class SystemTest {
 	@Test
 	public void getProperty_InheritDisable() {
 		
-		agent.getConfigurator()
+		agent.getKeroAccessConfigurator()
 			.scheme(TestObject.class)
 				.defaultDeny()
 				.property("text")
 					.grantFor("OWNER");
 		
-		agent.getConfigurator()
+		agent.getKeroAccessConfigurator()
 			.scheme(TestObject2.class)
 				.defaultDeny()
 				.disableInherit();

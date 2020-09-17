@@ -2,7 +2,7 @@ package com.kero.security.core.rules.annotations;
 
 import com.kero.security.core.agent.KeroAccessAgent;
 import com.kero.security.core.annotations.PropertyAnnotationInterpreterBase;
-import com.kero.security.core.scheme.configuration.SinglePropertyConfigurator;
+import com.kero.security.core.property.configurator.SinglePropertyConfigurator;
 
 public class GrantForInterpreter extends PropertyAnnotationInterpreterBase<GrantFor> {
 

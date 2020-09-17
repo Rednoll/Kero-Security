@@ -5,19 +5,19 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.kero.security.core.configurator.KeroAccessConfigurator;
 import com.kero.security.core.role.Role;
 import com.kero.security.core.role.storage.RoleStorage;
 import com.kero.security.core.rules.AccessRule;
 import com.kero.security.core.scheme.AccessScheme;
-import com.kero.security.core.scheme.configuration.KeroAccessConfigurator;
-import com.kero.security.core.scheme.configuration.auto.AccessSchemeAutoConfigurator;
+import com.kero.security.core.scheme.configurator.AccessSchemeConfigurator;
 import com.kero.security.core.scheme.storage.AccessSchemeStorage;
 
 public interface KeroAccessAgent {
 	
 	public void ignoreType(Class<?> type);
 
-	public void addConfigurator(AccessSchemeAutoConfigurator configurator);
+	public void addConfigurator(AccessSchemeConfigurator configurator);
 	
 	public ClassLoader getClassLoader();
 	
@@ -55,5 +55,5 @@ public interface KeroAccessAgent {
 
 	public AccessSchemeStorage getSchemeStorage();
 	public RoleStorage getRoleStorage();
-	public KeroAccessConfigurator getConfigurator();
+	public KeroAccessConfigurator getKeroAccessConfigurator();
 }

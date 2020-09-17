@@ -23,7 +23,7 @@ public class SetsTest {
 	@BeforeEach
 	public void init() {
 		
-		manager.getConfigurator()
+		manager.getKeroAccessConfigurator()
 			.scheme(TestObject.class)
 				.defaultGrant()
 				.property("text")

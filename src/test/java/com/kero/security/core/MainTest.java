@@ -15,7 +15,7 @@ public class MainTest {
 
 		KeroAccessAgent agent = new KeroAccessAgentFactoryImpl().create();
 
-		agent.getConfigurator()
+		agent.getKeroAccessConfigurator()
 			.scheme(TestInterface.class)
 				.property("text")
 					.denyWithInterceptor((obj)-> {
@@ -23,14 +23,14 @@ public class MainTest {
 						return "You not have access!";
 					}, "FRIEND");
 		
-		agent.getConfigurator()
+		agent.getKeroAccessConfigurator()
 			.scheme(TestObject.class)
 				.defaultDeny()
 				.property("text")
 					.denyFor("FRIEND")
 					.grantFor("OWNER");
 
-		agent.getConfigurator()
+		agent.getKeroAccessConfigurator()
 			.scheme(TestObjectDeep.class)
 				.defaultDeny()
 				.property("testObject")

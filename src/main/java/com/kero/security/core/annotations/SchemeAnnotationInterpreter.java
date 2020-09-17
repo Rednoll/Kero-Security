@@ -1,8 +1,8 @@
 package com.kero.security.core.annotations;
 
-import com.kero.security.core.scheme.configuration.AccessSchemeConfigurator;
+import com.kero.security.core.scheme.configurator.CodeAccessSchemeConfigurator;
 
 public interface SchemeAnnotationInterpreter<A> {
 
-	public void interpret(AccessSchemeConfigurator configurator, A annotation);
+	public void interpret(CodeAccessSchemeConfigurator configurator, A annotation);
 }

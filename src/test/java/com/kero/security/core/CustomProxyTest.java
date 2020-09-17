@@ -16,7 +16,7 @@ public class CustomProxyTest {
 		
 		KeroAccessAgent agent = new KeroAccessAgentFactoryImpl().create();
 		
-		agent.getConfigurator()
+		agent.getKeroAccessConfigurator()
 			.scheme(TestObject.class)
 				.defaultDeny()
 				.proxy(TestObjectProxy.class)

@@ -12,7 +12,7 @@ import com.kero.security.core.agent.KeroAccessAgent;
 import com.kero.security.core.agent.KeroAccessAgentFactoryImpl;
 import com.kero.security.core.exception.AccessException;
 import com.kero.security.core.rules.AccessRule;
-import com.kero.security.core.scheme.configuration.auto.KsdlAccessSchemeConfigurator;
+import com.kero.security.core.scheme.configurator.KsdlAccessSchemeConfigurator;
 import com.kero.security.lang.provider.TextualProvider;
 import com.kero.security.lang.provider.resource.FileResource;
 

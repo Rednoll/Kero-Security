@@ -3,8 +3,8 @@ package com.kero.security.core.rules.annotations;
 import com.kero.security.core.agent.KeroAccessAgent;
 import com.kero.security.core.annotations.PropertyAnnotationInterpreterBase;
 import com.kero.security.core.annotations.SchemeAnnotationInterpreter;
-import com.kero.security.core.scheme.configuration.AccessSchemeConfigurator;
-import com.kero.security.core.scheme.configuration.SinglePropertyConfigurator;
+import com.kero.security.core.property.configurator.SinglePropertyConfigurator;
+import com.kero.security.core.scheme.configurator.CodeAccessSchemeConfigurator;
 
 public class DefaultDenyInterpreter extends PropertyAnnotationInterpreterBase<DefaultDeny> implements SchemeAnnotationInterpreter<DefaultDeny> {
 
@@ -20,7 +20,7 @@ public class DefaultDenyInterpreter extends PropertyAnnotationInterpreterBase<De
 	}
 
 	@Override
-	public void interpret(AccessSchemeConfigurator configurator, DefaultDeny annotation) {
+	public void interpret(CodeAccessSchemeConfigurator configurator, DefaultDeny annotation) {
 		
 		configurator.defaultDeny();
 	}

@@ -5,8 +5,8 @@ import java.util.Set;
 import com.kero.security.core.agent.KeroAccessAgent;
 import com.kero.security.core.annotations.PropertyAnnotationInterpreterBase;
 import com.kero.security.core.interceptor.DenyInterceptor;
+import com.kero.security.core.property.configurator.SinglePropertyConfigurator;
 import com.kero.security.core.role.Role;
-import com.kero.security.core.scheme.configuration.SinglePropertyConfigurator;
 
 public class AddDenyInterceptorInterpreter extends PropertyAnnotationInterpreterBase<AddDenyInterceptor> {
 	

@@ -9,6 +9,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.kero.security.core.configurator.KeroAccessConfigurator;
 import com.kero.security.core.role.Role;
 import com.kero.security.core.role.storage.RoleStorage;
 import com.kero.security.core.rules.AccessRule;
@@ -16,8 +17,7 @@ import com.kero.security.core.rules.AccessRuleImpl;
 import com.kero.security.core.scheme.AccessScheme;
 import com.kero.security.core.scheme.ClassAccessScheme;
 import com.kero.security.core.scheme.InterfaceAccessScheme;
-import com.kero.security.core.scheme.configuration.KeroAccessConfigurator;
-import com.kero.security.core.scheme.configuration.auto.AccessSchemeAutoConfigurator;
+import com.kero.security.core.scheme.configurator.AccessSchemeConfigurator;
 import com.kero.security.core.scheme.storage.AccessSchemeStorage;
 
 public class KeroAccessAgentImpl implements KeroAccessAgent {
@@ -36,7 +36,7 @@ public class KeroAccessAgentImpl implements KeroAccessAgent {
 
 	protected Map<Class, String> aliasesMap = new HashMap<>();
 
-	protected Set<AccessSchemeAutoConfigurator> autoConfigurators = new HashSet<>();
+	protected Set<AccessSchemeConfigurator> autoConfigurators = new HashSet<>();
 	
 	KeroAccessAgentImpl() {
 		
@@ -61,7 +61,7 @@ public class KeroAccessAgentImpl implements KeroAccessAgent {
 		ignoreType(boolean.class);
 	}
 	
-	public void addConfigurator(AccessSchemeAutoConfigurator configurator) {
+	public void addConfigurator(AccessSchemeConfigurator configurator) {
 		
 		this.autoConfigurators.add(configurator);
 	}
@@ -121,7 +121,7 @@ public class KeroAccessAgentImpl implements KeroAccessAgent {
 			scheme = new ClassAccessScheme(this, aliase, rawType);
 		}
 		
-		for(AccessSchemeAutoConfigurator ac : autoConfigurators) {
+		for(AccessSchemeConfigurator ac : autoConfigurators) {
 			
 			ac.configure(scheme);
 		}
@@ -175,7 +175,7 @@ public class KeroAccessAgentImpl implements KeroAccessAgent {
 	}
 	
 	@Override
-	public KeroAccessConfigurator getConfigurator() {
+	public KeroAccessConfigurator getKeroAccessConfigurator() {
 		
 		return this.configurator;
 	}
