@@ -8,7 +8,7 @@ import com.kero.security.core.scheme.configurator.CodeAccessSchemeConfigurator;
 
 public class KeroAccessConfigurator {
 
-	protected static Logger LOGGER = LoggerFactory.getLogger("KeroSecurity");
+	protected static Logger LOGGER = LoggerFactory.getLogger("Kero-Security");
 	
 	private KeroAccessAgent agent;
 	

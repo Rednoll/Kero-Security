@@ -22,7 +22,7 @@ import com.kero.security.core.scheme.storage.AccessSchemeStorage;
 
 public class KeroAccessAgentImpl implements KeroAccessAgent {
 	
-	protected static Logger LOGGER = LoggerFactory.getLogger("KeroSecurity");
+	protected static Logger LOGGER = LoggerFactory.getLogger("Kero-Security");
 	
 	protected RoleStorage roleStorage = RoleStorage.create();
 	protected AccessSchemeStorage schemeStorage = AccessSchemeStorage.create();

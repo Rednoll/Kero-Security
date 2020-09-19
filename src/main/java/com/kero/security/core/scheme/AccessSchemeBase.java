@@ -15,7 +15,7 @@ import com.kero.security.core.rules.AccessRule;
 
 public abstract class AccessSchemeBase implements AccessScheme {
 
-	protected static Logger LOGGER = LoggerFactory.getLogger("KeroSecurity");
+	protected static Logger LOGGER = LoggerFactory.getLogger("Kero-Security");
 	
 	protected Class<?> type;
 	protected String aliase;

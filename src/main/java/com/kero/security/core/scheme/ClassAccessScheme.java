@@ -32,7 +32,7 @@ import com.kero.security.core.utils.ByteBuddyClassUtils;
 
 public class ClassAccessScheme extends AccessSchemeBase implements InvocationHandler {
 
-	private static Logger LOGGER = LoggerFactory.getLogger("KeroSecurity");
+	private static Logger LOGGER = LoggerFactory.getLogger("Kero-Security");
 	
 	private ProxyAgent proxyAgent = null;
 	
