@@ -24,6 +24,11 @@ public class SinglePropertyConfigurator {
 		this.property = property;
 	}
 	
+	public CodeAccessSchemeConfigurator cd() {
+		
+		return schemeConf;
+	}
+	
 	public SinglePropertyConfigurator propagateRole(String from, String to) {
 		
 		KeroAccessAgent agent = schemeConf.getAgent();

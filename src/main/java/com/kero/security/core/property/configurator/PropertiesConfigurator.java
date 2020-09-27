@@ -20,6 +20,11 @@ public class PropertiesConfigurator {
 		this.properties = properties;
 	}
 	
+	public CodeAccessSchemeConfigurator cd() {
+		
+		return schemeConf;
+	}
+	
 	public PropertiesConfigurator defaultGrant() {
 		
 		return defaultRule(AccessRuleImpl.GRANT_ALL);
