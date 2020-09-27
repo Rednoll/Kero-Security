@@ -78,17 +78,17 @@ public class ClassAccessScheme extends AccessSchemeBase implements InvocationHan
 	
 	public <T> T protect(T object, Collection<Role> roles) throws Exception {
 		
+		if(this.proxyAgent == null) {
+			
+			initProxy();
+		}
+		
 		PreparedAccessConfiguration config = configsCache.get(roles);
 		
 		if(config == null) {
 	
 			config = prepareAccessConfiguration(roles);
 			configsCache.put(Collections.unmodifiableSet(new HashSet<>(roles)), config);
-		}
-		
-		if(this.proxyAgent == null) {
-			
-			initProxy();
 		}
 		
 		return (T) this.proxyAgent.wrap(object, config);
