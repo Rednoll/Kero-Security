@@ -1,6 +1,7 @@
 plugins {
 
 	id 'java-library'
+	id 'jacoco'
 }
 
 group = 'com.kero'
@@ -31,4 +32,21 @@ dependencies {
 test {
 
 	useJUnitPlatform()
+	finalizedBy jacocoTestReport
+}
+
+jacoco {
+
+    toolVersion = "0.8.5"
+    reportsDir = file("$buildDir/customJacocoReportDir")
+}
+
+jacocoTestReport {
+
+    dependsOn test
+	
+	reports {
+	
+        xml.enabled true
+    }
 }
