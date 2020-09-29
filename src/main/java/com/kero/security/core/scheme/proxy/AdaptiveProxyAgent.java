@@ -26,8 +26,8 @@ public class AdaptiveProxyAgent extends ProxyAgentBaseCached {
 	@Override
 	protected Class<? extends AccessProxy> createProxyClass() throws Exception {
 
-		List<Class<?>> interfaces = collectProxyInterfaces();
 		Class<?> superType = determineProxySuperclass();
+		List<Class<?>> interfaces = collectProxyInterfaces(superType);
 		
 		return (Class<? extends AccessProxy>) new ByteBuddy()
 			.subclass(superType)
@@ -46,21 +46,21 @@ public class AdaptiveProxyAgent extends ProxyAgentBaseCached {
 			.getLoaded();
 	}
 	
-	private List<Class<?>> collectProxyInterfaces() {
+	private List<Class<?>> collectProxyInterfaces(Class<?> superClazz) {
 		
 		List<Class<?>> interfaces = new ArrayList<>();
 			interfaces.add(AccessProxy.class);
 		
-			Class<?> interfacesClass = this.scheme.getTypeClass();
+			Class<?> currentClass = this.scheme.getTypeClass();
 			
-			while(interfacesClass != Object.class) {
+			while(currentClass != superClazz) {
 				
-				for(Class<?> inter : interfacesClass.getInterfaces()) {
+				for(Class<?> inter : currentClass.getInterfaces()) {
 					
 					interfaces.add(inter);
 				}
 				
-				interfacesClass = interfacesClass.getSuperclass();
+				currentClass = currentClass.getSuperclass();
 			}
 		
 		return interfaces;

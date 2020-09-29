@@ -113,21 +113,18 @@ public class ClassAccessScheme extends AccessSchemeBase implements InvocationHan
 		
 		properties.forEach((property)-> {
 			
-			String propertyName = property.getName();
-			
-			Collection<Role> propogatedRoles = property.propagateRoles(roles);
-			
 			Set<Role> significantRoles = new HashSet<>(roles);
 			
+			String propertyName = property.getName();
 			List<AccessRule> rules = property.getRules();
-			 
+			
 			for(AccessRule rule : rules) {
  
 				if(!rule.manage(significantRoles)) continue;
 				
 				if(rule.accessible(significantRoles)) {
 
-					preparedActions.put(propertyName, new PreparedGrantRule(this, propogatedRoles));
+					preparedActions.put(propertyName, new PreparedGrantRule(this, property.propagateRoles(roles)));
 					return;
 				}
 				else if(rule.isDisallower()) {
