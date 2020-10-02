@@ -1,545 +1,0 @@
-Š2020-09-30 20:14:01 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.AnnotationsTest.TestAnnotatedObject
-|2020-09-30 20:14:01 DEBUG [Kero-Security] - Building proxy for: com.kero.security.core.AnnotationsTest.TestAnnotatedObject
-™2020-09-30 20:14:01 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.AnnotationsTest.TestAnnotatedObject roles: [FRIEND]
-‘2020-09-30 20:14:01 DEBUG [Kero-Security] - Creating access scheme for interface: com.kero.security.core.AnnotationsTest.TestAnnotatedInterface
-obj: test_default_text
-q2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject
-\2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating property: text for scheme: TestObject
-`2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for class: java.util.Vector
-R2020-09-30 20:14:03 DEBUG [Kero-Security] - Building proxy for: java.util.Vector
-n2020-09-30 20:14:03 DEBUG [Kero-Security] - Prepare access configuration for java.util.Vector roles: [OWNER]
-b2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for interface: java.util.List
-h2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for interface: java.util.Collection
-f2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Iterable
-j2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for interface: java.util.RandomAccess
-g2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Cloneable
-h2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for interface: java.io.Serializable
-f2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for class: java.util.AbstractList
-l2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for class: java.util.AbstractCollection
-c2020-09-30 20:14:03 DEBUG [Kero-Security] - Building proxy for: com.kero.security.core.TestObject
-2020-09-30 20:14:03 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [OWNER]
-x2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for interface: com.kero.security.core.TestInterface
-h2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Comparable
-m2020-09-30 20:14:03 DEBUG [Kero-Security] - Prepare access configuration for java.util.Vector roles: [NONE]
-~2020-09-30 20:14:03 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [NONE]
-o2020-09-30 20:14:03 DEBUG [Kero-Security] - Prepare access configuration for java.util.Vector roles: [FRIEND]
-€2020-09-30 20:14:03 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [FRIEND]
-q2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject
-\2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating property: text for scheme: TestObject
-c2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for class: java.util.ArrayList
-U2020-09-30 20:14:03 DEBUG [Kero-Security] - Building proxy for: java.util.ArrayList
-q2020-09-30 20:14:03 DEBUG [Kero-Security] - Prepare access configuration for java.util.ArrayList roles: [OWNER]
-b2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for interface: java.util.List
-h2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for interface: java.util.Collection
-f2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Iterable
-j2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for interface: java.util.RandomAccess
-g2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Cloneable
-h2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for interface: java.io.Serializable
-f2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for class: java.util.AbstractList
-l2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for class: java.util.AbstractCollection
-c2020-09-30 20:14:03 DEBUG [Kero-Security] - Building proxy for: com.kero.security.core.TestObject
-2020-09-30 20:14:03 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [OWNER]
-x2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for interface: com.kero.security.core.TestInterface
-h2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Comparable
-p2020-09-30 20:14:03 DEBUG [Kero-Security] - Prepare access configuration for java.util.ArrayList roles: [NONE]
-~2020-09-30 20:14:03 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [NONE]
-r2020-09-30 20:14:03 DEBUG [Kero-Security] - Prepare access configuration for java.util.ArrayList roles: [FRIEND]
-€2020-09-30 20:14:03 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [FRIEND]
-q2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject
-\2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating property: text for scheme: TestObject
-d2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for class: java.util.LinkedList
-V2020-09-30 20:14:03 DEBUG [Kero-Security] - Building proxy for: java.util.LinkedList
-r2020-09-30 20:14:03 DEBUG [Kero-Security] - Prepare access configuration for java.util.LinkedList roles: [OWNER]
-b2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for interface: java.util.List
-h2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for interface: java.util.Collection
-f2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Iterable
-c2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for interface: java.util.Deque
-c2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for interface: java.util.Queue
-g2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Cloneable
-h2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for interface: java.io.Serializable
-p2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for class: java.util.AbstractSequentialList
-f2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for class: java.util.AbstractList
-l2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for class: java.util.AbstractCollection
-c2020-09-30 20:14:03 DEBUG [Kero-Security] - Building proxy for: com.kero.security.core.TestObject
-2020-09-30 20:14:03 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [OWNER]
-x2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for interface: com.kero.security.core.TestInterface
-h2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Comparable
-q2020-09-30 20:14:03 DEBUG [Kero-Security] - Prepare access configuration for java.util.LinkedList roles: [NONE]
-~2020-09-30 20:14:03 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [NONE]
-s2020-09-30 20:14:03 DEBUG [Kero-Security] - Prepare access configuration for java.util.LinkedList roles: [FRIEND]
-€2020-09-30 20:14:03 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [FRIEND]
-q2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject
-\2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating property: text for scheme: TestObject
-c2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for class: java.util.Hashtable
-U2020-09-30 20:14:03 DEBUG [Kero-Security] - Building proxy for: java.util.Hashtable
-q2020-09-30 20:14:03 DEBUG [Kero-Security] - Prepare access configuration for java.util.Hashtable roles: [OWNER]
-a2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for interface: java.util.Map
-g2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Cloneable
-h2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for interface: java.io.Serializable
-d2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for class: java.util.Dictionary
-u2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for class: java.util.Collections.SynchronizedSet
-g2020-09-30 20:14:03 DEBUG [Kero-Security] - Building proxy for: java.util.Collections.SynchronizedSet
-ƒ2020-09-30 20:14:03 DEBUG [Kero-Security] - Prepare access configuration for java.util.Collections.SynchronizedSet roles: [OWNER]
-a2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for interface: java.util.Set
-h2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for interface: java.util.Collection
-f2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Iterable
-|2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for class: java.util.Collections.SynchronizedCollection
-n2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for class: java.util.Hashtable.Enumerator
-`2020-09-30 20:14:03 DEBUG [Kero-Security] - Building proxy for: java.util.Hashtable.Enumerator
-|2020-09-30 20:14:03 DEBUG [Kero-Security] - Prepare access configuration for java.util.Hashtable.Enumerator roles: [OWNER]
-i2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for interface: java.util.Enumeration
-f2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for interface: java.util.Iterator
-i2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for class: java.util.Hashtable.Entry
-[2020-09-30 20:14:03 DEBUG [Kero-Security] - Building proxy for: java.util.Hashtable.Entry
-w2020-09-30 20:14:03 DEBUG [Kero-Security] - Prepare access configuration for java.util.Hashtable.Entry roles: [OWNER]
-g2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for interface: java.util.Map.Entry
-c2020-09-30 20:14:03 DEBUG [Kero-Security] - Building proxy for: com.kero.security.core.TestObject
-2020-09-30 20:14:03 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [OWNER]
-x2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for interface: com.kero.security.core.TestInterface
-h2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Comparable
-p2020-09-30 20:14:03 DEBUG [Kero-Security] - Prepare access configuration for java.util.Hashtable roles: [NONE]
-‚2020-09-30 20:14:03 DEBUG [Kero-Security] - Prepare access configuration for java.util.Collections.SynchronizedSet roles: [NONE]
-{2020-09-30 20:14:03 DEBUG [Kero-Security] - Prepare access configuration for java.util.Hashtable.Enumerator roles: [NONE]
-v2020-09-30 20:14:03 DEBUG [Kero-Security] - Prepare access configuration for java.util.Hashtable.Entry roles: [NONE]
-~2020-09-30 20:14:03 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [NONE]
-r2020-09-30 20:14:03 DEBUG [Kero-Security] - Prepare access configuration for java.util.Hashtable roles: [FRIEND]
-„2020-09-30 20:14:03 DEBUG [Kero-Security] - Prepare access configuration for java.util.Collections.SynchronizedSet roles: [FRIEND]
-}2020-09-30 20:14:03 DEBUG [Kero-Security] - Prepare access configuration for java.util.Hashtable.Enumerator roles: [FRIEND]
-x2020-09-30 20:14:03 DEBUG [Kero-Security] - Prepare access configuration for java.util.Hashtable.Entry roles: [FRIEND]
-€2020-09-30 20:14:03 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [FRIEND]
-	q2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject
-	\2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating property: text for scheme: TestObject
-	a2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for class: java.util.TreeMap
-	S2020-09-30 20:14:03 DEBUG [Kero-Security] - Building proxy for: java.util.TreeMap
-	o2020-09-30 20:14:03 DEBUG [Kero-Security] - Prepare access configuration for java.util.TreeMap roles: [OWNER]
-	j2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for interface: java.util.NavigableMap
-	g2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for interface: java.util.SortedMap
-	a2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for interface: java.util.Map
-	g2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Cloneable
-	h2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for interface: java.io.Serializable
-	e2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for class: java.util.AbstractMap
-	j2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for class: java.util.TreeMap.EntrySet
-	\2020-09-30 20:14:03 DEBUG [Kero-Security] - Building proxy for: java.util.TreeMap.EntrySet
-	x2020-09-30 20:14:03 DEBUG [Kero-Security] - Prepare access configuration for java.util.TreeMap.EntrySet roles: [OWNER]
-	e2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for class: java.util.AbstractSet
-	a2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for interface: java.util.Set
-	h2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for interface: java.util.Collection
-	f2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Iterable
-	l2020-09-30 20:14:03 DEBUG [Kero-Security] - Creating access scheme for class: java.util.AbstractCollection
-	o2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: java.util.TreeMap.EntryIterator
-	a2020-09-30 20:14:04 DEBUG [Kero-Security] - Building proxy for: java.util.TreeMap.EntryIterator
-	}2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for java.util.TreeMap.EntryIterator roles: [OWNER]
-	v2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: java.util.TreeMap.PrivateEntryIterator
-	f2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.util.Iterator
-	g2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: java.util.TreeMap.Entry
-	Y2020-09-30 20:14:04 DEBUG [Kero-Security] - Building proxy for: java.util.TreeMap.Entry
-	u2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for java.util.TreeMap.Entry roles: [OWNER]
-	g2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.util.Map.Entry
-	c2020-09-30 20:14:04 DEBUG [Kero-Security] - Building proxy for: com.kero.security.core.TestObject
-	2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [OWNER]
-	x2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: com.kero.security.core.TestInterface
-	h2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Comparable
-	n2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for java.util.TreeMap roles: [NONE]
-	w2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for java.util.TreeMap.EntrySet roles: [NONE]
-	|2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for java.util.TreeMap.EntryIterator roles: [NONE]
-	t2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for java.util.TreeMap.Entry roles: [NONE]
-	~2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [NONE]
-	p2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for java.util.TreeMap roles: [FRIEND]
-	y2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for java.util.TreeMap.EntrySet roles: [FRIEND]
-	~2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for java.util.TreeMap.EntryIterator roles: [FRIEND]
-	v2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for java.util.TreeMap.Entry roles: [FRIEND]
-	€2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [FRIEND]
-
-q2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject
-
-\2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating property: text for scheme: TestObject
-
-g2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: java.util.LinkedHashMap
-
-Y2020-09-30 20:14:04 DEBUG [Kero-Security] - Building proxy for: java.util.LinkedHashMap
-
-u2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for java.util.LinkedHashMap roles: [OWNER]
-
-a2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.util.Map
-
-a2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: java.util.HashMap
-
-g2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Cloneable
-
-h2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.io.Serializable
-
-e2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: java.util.AbstractMap
-
-v2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: java.util.LinkedHashMap.LinkedEntrySet
-
-h2020-09-30 20:14:04 DEBUG [Kero-Security] - Building proxy for: java.util.LinkedHashMap.LinkedEntrySet
-
-„2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for java.util.LinkedHashMap.LinkedEntrySet roles: [OWNER]
-
-e2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: java.util.AbstractSet
-
-a2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.util.Set
-
-h2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.util.Collection
-
-f2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Iterable
-
-l2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: java.util.AbstractCollection
-
-{2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: java.util.LinkedHashMap.LinkedEntryIterator
-
-m2020-09-30 20:14:04 DEBUG [Kero-Security] - Building proxy for: java.util.LinkedHashMap.LinkedEntryIterator
-
-‰2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for java.util.LinkedHashMap.LinkedEntryIterator roles: [OWNER]
-
-f2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.util.Iterator
-
-z2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: java.util.LinkedHashMap.LinkedHashIterator
-
-m2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: java.util.LinkedHashMap.Entry
-
-_2020-09-30 20:14:04 DEBUG [Kero-Security] - Building proxy for: java.util.LinkedHashMap.Entry
-
-{2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for java.util.LinkedHashMap.Entry roles: [OWNER]
-
-f2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: java.util.HashMap.Node
-
-g2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.util.Map.Entry
-
-c2020-09-30 20:14:04 DEBUG [Kero-Security] - Building proxy for: com.kero.security.core.TestObject
-
-2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [OWNER]
-
-x2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: com.kero.security.core.TestInterface
-
-h2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Comparable
-
-t2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for java.util.LinkedHashMap roles: [NONE]
-
-ƒ2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for java.util.LinkedHashMap.LinkedEntrySet roles: [NONE]
-
-ˆ2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for java.util.LinkedHashMap.LinkedEntryIterator roles: [NONE]
-
-z2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for java.util.LinkedHashMap.Entry roles: [NONE]
-
-~2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [NONE]
-
-v2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for java.util.LinkedHashMap roles: [FRIEND]
-
-…2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for java.util.LinkedHashMap.LinkedEntrySet roles: [FRIEND]
-
-Š2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for java.util.LinkedHashMap.LinkedEntryIterator roles: [FRIEND]
-
-|2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for java.util.LinkedHashMap.Entry roles: [FRIEND]
-
-€2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [FRIEND]
-q2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject
-\2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating property: text for scheme: TestObject
-a2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: java.util.HashMap
-S2020-09-30 20:14:04 DEBUG [Kero-Security] - Building proxy for: java.util.HashMap
-o2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for java.util.HashMap roles: [OWNER]
-a2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.util.Map
-g2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Cloneable
-h2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.io.Serializable
-e2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: java.util.AbstractMap
-j2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: java.util.HashMap.EntrySet
-\2020-09-30 20:14:04 DEBUG [Kero-Security] - Building proxy for: java.util.HashMap.EntrySet
-x2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for java.util.HashMap.EntrySet roles: [OWNER]
-e2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: java.util.AbstractSet
-a2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.util.Set
-h2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.util.Collection
-f2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Iterable
-l2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: java.util.AbstractCollection
-o2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: java.util.HashMap.EntryIterator
-a2020-09-30 20:14:04 DEBUG [Kero-Security] - Building proxy for: java.util.HashMap.EntryIterator
-}2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for java.util.HashMap.EntryIterator roles: [OWNER]
-f2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.util.Iterator
-n2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: java.util.HashMap.HashIterator
-f2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: java.util.HashMap.Node
-X2020-09-30 20:14:04 DEBUG [Kero-Security] - Building proxy for: java.util.HashMap.Node
-t2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for java.util.HashMap.Node roles: [OWNER]
-g2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.util.Map.Entry
-c2020-09-30 20:14:04 DEBUG [Kero-Security] - Building proxy for: com.kero.security.core.TestObject
-2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [OWNER]
-x2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: com.kero.security.core.TestInterface
-h2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Comparable
-n2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for java.util.HashMap roles: [NONE]
-w2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for java.util.HashMap.EntrySet roles: [NONE]
-|2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for java.util.HashMap.EntryIterator roles: [NONE]
-s2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for java.util.HashMap.Node roles: [NONE]
-~2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [NONE]
-p2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for java.util.HashMap roles: [FRIEND]
-y2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for java.util.HashMap.EntrySet roles: [FRIEND]
-~2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for java.util.HashMap.EntryIterator roles: [FRIEND]
-u2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for java.util.HashMap.Node roles: [FRIEND]
-€2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [FRIEND]
-q2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject
-\2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating property: text for scheme: TestObject
-g2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: java.util.PriorityQueue
-Y2020-09-30 20:14:04 DEBUG [Kero-Security] - Building proxy for: java.util.PriorityQueue
-u2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for java.util.PriorityQueue roles: [OWNER]
-h2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.io.Serializable
-g2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: java.util.AbstractQueue
-c2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.util.Queue
-h2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.util.Collection
-f2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Iterable
-l2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: java.util.AbstractCollection
-c2020-09-30 20:14:04 DEBUG [Kero-Security] - Building proxy for: com.kero.security.core.TestObject
-2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [OWNER]
-x2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: com.kero.security.core.TestInterface
-h2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Comparable
-t2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for java.util.PriorityQueue roles: [NONE]
-~2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [NONE]
-v2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for java.util.PriorityQueue roles: [FRIEND]
-€2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [FRIEND]
-q2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject
-\2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating property: text for scheme: TestObject
-d2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: java.util.LinkedList
-V2020-09-30 20:14:04 DEBUG [Kero-Security] - Building proxy for: java.util.LinkedList
-r2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for java.util.LinkedList roles: [OWNER]
-b2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.util.List
-h2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.util.Collection
-f2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Iterable
-c2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.util.Deque
-c2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.util.Queue
-g2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Cloneable
-h2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.io.Serializable
-p2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: java.util.AbstractSequentialList
-f2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: java.util.AbstractList
-l2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: java.util.AbstractCollection
-c2020-09-30 20:14:04 DEBUG [Kero-Security] - Building proxy for: com.kero.security.core.TestObject
-2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [OWNER]
-x2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: com.kero.security.core.TestInterface
-h2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Comparable
-q2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for java.util.LinkedList roles: [NONE]
-~2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [NONE]
-s2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for java.util.LinkedList roles: [FRIEND]
-€2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [FRIEND]
-q2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject
-\2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating property: text for scheme: TestObject
-a2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: java.util.TreeSet
-S2020-09-30 20:14:04 DEBUG [Kero-Security] - Building proxy for: java.util.TreeSet
-o2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for java.util.TreeSet roles: [OWNER]
-j2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.util.NavigableSet
-g2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.util.SortedSet
-a2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.util.Set
-h2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.util.Collection
-f2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Iterable
-g2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Cloneable
-h2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.io.Serializable
-e2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: java.util.AbstractSet
-l2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: java.util.AbstractCollection
-m2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: java.util.TreeMap.KeyIterator
-_2020-09-30 20:14:04 DEBUG [Kero-Security] - Building proxy for: java.util.TreeMap.KeyIterator
-{2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for java.util.TreeMap.KeyIterator roles: [OWNER]
-v2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: java.util.TreeMap.PrivateEntryIterator
-f2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.util.Iterator
-c2020-09-30 20:14:04 DEBUG [Kero-Security] - Building proxy for: com.kero.security.core.TestObject
-2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [OWNER]
-x2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: com.kero.security.core.TestInterface
-h2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Comparable
-n2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for java.util.TreeSet roles: [NONE]
-z2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for java.util.TreeMap.KeyIterator roles: [NONE]
-~2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [NONE]
-p2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for java.util.TreeSet roles: [FRIEND]
-|2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for java.util.TreeMap.KeyIterator roles: [FRIEND]
-€2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [FRIEND]
-q2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject
-\2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating property: text for scheme: TestObject
-a2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: java.util.HashSet
-S2020-09-30 20:14:04 DEBUG [Kero-Security] - Building proxy for: java.util.HashSet
-o2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for java.util.HashSet roles: [OWNER]
-a2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.util.Set
-h2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.util.Collection
-f2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Iterable
-g2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Cloneable
-h2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.io.Serializable
-e2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: java.util.AbstractSet
-l2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: java.util.AbstractCollection
-m2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: java.util.HashMap.KeyIterator
-_2020-09-30 20:14:04 DEBUG [Kero-Security] - Building proxy for: java.util.HashMap.KeyIterator
-{2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for java.util.HashMap.KeyIterator roles: [OWNER]
-f2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.util.Iterator
-n2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: java.util.HashMap.HashIterator
-c2020-09-30 20:14:04 DEBUG [Kero-Security] - Building proxy for: com.kero.security.core.TestObject
-2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [OWNER]
-x2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: com.kero.security.core.TestInterface
-h2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Comparable
-n2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for java.util.HashSet roles: [NONE]
-z2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for java.util.HashMap.KeyIterator roles: [NONE]
-~2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [NONE]
-p2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for java.util.HashSet roles: [FRIEND]
-|2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for java.util.HashMap.KeyIterator roles: [FRIEND]
-€2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [FRIEND]
-q2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject
-\2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating property: text for scheme: TestObject
-g2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: java.util.LinkedHashSet
-Y2020-09-30 20:14:04 DEBUG [Kero-Security] - Building proxy for: java.util.LinkedHashSet
-u2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for java.util.LinkedHashSet roles: [OWNER]
-a2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.util.Set
-h2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.util.Collection
-f2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Iterable
-g2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Cloneable
-h2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.io.Serializable
-a2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: java.util.HashSet
-e2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: java.util.AbstractSet
-l2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: java.util.AbstractCollection
-y2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: java.util.LinkedHashMap.LinkedKeyIterator
-k2020-09-30 20:14:04 DEBUG [Kero-Security] - Building proxy for: java.util.LinkedHashMap.LinkedKeyIterator
-‡2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for java.util.LinkedHashMap.LinkedKeyIterator roles: [OWNER]
-f2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.util.Iterator
-z2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: java.util.LinkedHashMap.LinkedHashIterator
-c2020-09-30 20:14:04 DEBUG [Kero-Security] - Building proxy for: com.kero.security.core.TestObject
-2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [OWNER]
-x2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: com.kero.security.core.TestInterface
-h2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Comparable
-t2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for java.util.LinkedHashSet roles: [NONE]
-†2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for java.util.LinkedHashMap.LinkedKeyIterator roles: [NONE]
-~2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [NONE]
-v2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for java.util.LinkedHashSet roles: [FRIEND]
-ˆ2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for java.util.LinkedHashMap.LinkedKeyIterator roles: [FRIEND]
-€2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [FRIEND]
-q2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject
-\2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating property: text for scheme: TestObject
-2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [OWNER]
-x2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: com.kero.security.core.TestInterface
-h2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Comparable
-q2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject
-\2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating property: text for scheme: TestObject
-9defaultRule: AccessRuleImpl [roles=[], accessible=true]
-c2020-09-30 20:14:04 DEBUG [Kero-Security] - Building proxy for: com.kero.security.core.TestObject
-€2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [COMMON]
-x2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: com.kero.security.core.TestInterface
-h2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Comparable
-x2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: com.kero.security.core.TestInterface
-_2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating property: text for scheme: TestInterface
-q2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject
-\2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating property: text for scheme: TestObject
-~2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.MainTest.TestObjectDeep
-f2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating property: testobject for scheme: TestObjectDeep
-p2020-09-30 20:14:04 DEBUG [Kero-Security] - Building proxy for: com.kero.security.core.MainTest.TestObjectDeep
-Œ2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.MainTest.TestObjectDeep roles: [OWNER]
-c2020-09-30 20:14:04 DEBUG [Kero-Security] - Building proxy for: com.kero.security.core.TestObject
-2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [OWNER]
-h2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Comparable
-text: test text!!
-q2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject
-\2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating property: text for scheme: TestObject
-c2020-09-30 20:14:04 DEBUG [Kero-Security] - Building proxy for: com.kero.security.core.TestObject
-2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [OWNER]
-x2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: com.kero.security.core.TestInterface
-h2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Comparable
-q2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject
-c2020-09-30 20:14:04 DEBUG [Kero-Security] - Building proxy for: com.kero.security.core.TestObject
-~2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [NONE]
-x2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: com.kero.security.core.TestInterface
-h2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Comparable
- x2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: com.kero.security.core.TestInterface
- _2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating property: text for scheme: TestInterface
- r2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject2
- d2020-09-30 20:14:04 DEBUG [Kero-Security] - Building proxy for: com.kero.security.core.TestObject2
- €2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject2 roles: [OWNER]
- q2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject
- h2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Comparable
-!q2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject
-!\2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating property: text for scheme: TestObject
-!c2020-09-30 20:14:04 DEBUG [Kero-Security] - Building proxy for: com.kero.security.core.TestObject
-!~2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [NONE]
-!x2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: com.kero.security.core.TestInterface
-!h2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Comparable
-"q2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject
-"\2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating property: text for scheme: TestObject
-"r2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject2
-"]2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating property: text for scheme: TestObject2
-"d2020-09-30 20:14:04 DEBUG [Kero-Security] - Building proxy for: com.kero.security.core.TestObject2
-"€2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject2 roles: [OWNER]
-"x2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: com.kero.security.core.TestInterface
-"h2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Comparable
-#q2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject
-#\2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating property: text for scheme: TestObject
-#c2020-09-30 20:14:05 DEBUG [Kero-Security] - Building proxy for: com.kero.security.core.TestObject
-#~2020-09-30 20:14:05 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [NONE]
-#x2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for interface: com.kero.security.core.TestInterface
-#h2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Comparable
-$q2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject
-$c2020-09-30 20:14:05 DEBUG [Kero-Security] - Building proxy for: com.kero.security.core.TestObject
-$~2020-09-30 20:14:05 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [NONE]
-$x2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for interface: com.kero.security.core.TestInterface
-$h2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Comparable
-%q2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject
-%\2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating property: text for scheme: TestObject
-%r2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject2
-%]2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating property: text for scheme: TestObject2
-%d2020-09-30 20:14:05 DEBUG [Kero-Security] - Building proxy for: com.kero.security.core.TestObject2
-%€2020-09-30 20:14:05 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject2 roles: [OWNER]
-%x2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for interface: com.kero.security.core.TestInterface
-%h2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Comparable
-&q2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject
-&\2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating property: text for scheme: TestObject
-&c2020-09-30 20:14:05 DEBUG [Kero-Security] - Building proxy for: com.kero.security.core.TestObject
-&2020-09-30 20:14:05 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [OWNER]
-&x2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for interface: com.kero.security.core.TestInterface
-&h2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Comparable
-'q2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject
-'\2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating property: text for scheme: TestObject
-'r2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject2
-']2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating property: text for scheme: TestObject2
-'d2020-09-30 20:14:05 DEBUG [Kero-Security] - Building proxy for: com.kero.security.core.TestObject2
-'€2020-09-30 20:14:05 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject2 roles: [OWNER]
-'x2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for interface: com.kero.security.core.TestInterface
-'h2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Comparable
-(q2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject
-(\2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating property: text for scheme: TestObject
-(c2020-09-30 20:14:05 DEBUG [Kero-Security] - Building proxy for: com.kero.security.core.TestObject
-(~2020-09-30 20:14:05 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [NONE]
-(x2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for interface: com.kero.security.core.TestInterface
-(h2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Comparable
-)q2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject
-)\2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating property: text for scheme: TestObject
-)c2020-09-30 20:14:05 DEBUG [Kero-Security] - Building proxy for: com.kero.security.core.TestObject
-)~2020-09-30 20:14:05 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [NONE]
-)x2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for interface: com.kero.security.core.TestInterface
-)h2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Comparable
-*q2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject
-*\2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating property: text for scheme: TestObject
-*c2020-09-30 20:14:05 DEBUG [Kero-Security] - Building proxy for: com.kero.security.core.TestObject
-*2020-09-30 20:14:05 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [ADMIN]
-*x2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for interface: com.kero.security.core.TestInterface
-*h2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Comparable
-+q2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject
-+\2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating property: text for scheme: TestObject
-+c2020-09-30 20:14:05 DEBUG [Kero-Security] - Building proxy for: com.kero.security.core.TestObject
-+2020-09-30 20:14:05 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [OWNER]
-+x2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for interface: com.kero.security.core.TestInterface
-+h2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Comparable
-,q2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject
-,\2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating property: text for scheme: TestObject
-,c2020-09-30 20:14:05 DEBUG [Kero-Security] - Building proxy for: com.kero.security.core.TestObject
-,2020-09-30 20:14:05 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [ADMIN]
-,x2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for interface: com.kero.security.core.TestInterface
-,h2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Comparable
--q2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject
--\2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating property: text for scheme: TestObject
--c2020-09-30 20:14:05 DEBUG [Kero-Security] - Building proxy for: com.kero.security.core.TestObject
--2020-09-30 20:14:05 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [OWNER]
--x2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for interface: com.kero.security.core.TestInterface
--h2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Comparable
--2020-09-30 20:14:05 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [ADMIN]
-.q2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject
-.\2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating property: text for scheme: TestObject
-.r2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject2
-.d2020-09-30 20:14:05 DEBUG [Kero-Security] - Building proxy for: com.kero.security.core.TestObject2
-.€2020-09-30 20:14:05 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject2 roles: [OWNER]
-/q2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject
-/\2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating property: text for scheme: TestObject
-/c2020-09-30 20:14:05 DEBUG [Kero-Security] - Building proxy for: com.kero.security.core.TestObject
-/~2020-09-30 20:14:05 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [NONE]
-/x2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for interface: com.kero.security.core.TestInterface
-/h2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Comparable
-0q2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject
-0\2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating property: text for scheme: TestObject
-0r2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject2
-0d2020-09-30 20:14:05 DEBUG [Kero-Security] - Building proxy for: com.kero.security.core.TestObject2
-0€2020-09-30 20:14:05 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject2 roles: [OWNER]
-0x2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for interface: com.kero.security.core.TestInterface
-0h2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Comparable
