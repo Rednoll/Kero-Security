@@ -23,6 +23,8 @@ import com.kero.security.core.property.annotations.EnableInheritInterpreter;
 import com.kero.security.core.property.configurator.SinglePropertyConfigurator;
 import com.kero.security.core.role.annotations.PropagateRole;
 import com.kero.security.core.role.annotations.PropagateRoleInterpreter;
+import com.kero.security.core.role.annotations.PropagateRoles;
+import com.kero.security.core.role.annotations.PropagateRolesInterpreter;
 import com.kero.security.core.rules.annotations.DefaultDeny;
 import com.kero.security.core.rules.annotations.DefaultDenyInterpreter;
 import com.kero.security.core.rules.annotations.DefaultGrant;
@@ -46,6 +48,7 @@ public class AnnotationAccessSchemeConfigurator extends AccessSchemeConfigurator
 		propertyInterpreters.put(AddDenyInterceptor.class, new AddDenyInterceptorInterpreter(agent));
 		propertyInterpreters.put(DenyWithInterceptor.class, new DenyWithInterceptorInterpreter(agent));
 		propertyInterpreters.put(PropagateRole.class, new PropagateRoleInterpreter(agent));
+		propertyInterpreters.put(PropagateRoles.class, new PropagateRolesInterpreter(agent));
 		propertyInterpreters.put(DenyFor.class, new DenyForInterpreter(agent));
 		propertyInterpreters.put(GrantFor.class, new GrantForInterpreter(agent));
 		
