@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.kero.security.core.lang.lexems.RoleLexemTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2020-09-30T17:14:04" hostname="DESKTOP-0M6QE3D" time="0.004">
+  <properties/>
+  <testcase name="test()" classname="com.kero.security.core.lang.lexems.RoleLexemTest" time="0.004"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

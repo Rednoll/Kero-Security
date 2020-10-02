@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.kero.security.core.MainTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2020-09-30T17:14:04" hostname="DESKTOP-0M6QE3D" time="0.02">
+  <properties/>
+  <testcase name="test()" classname="com.kero.security.core.MainTest" time="0.02"/>
+  <system-out><![CDATA[2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: com.kero.security.core.TestInterface
+2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating property: text for scheme: TestInterface
+2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject
+2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating property: text for scheme: TestObject
+2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.MainTest.TestObjectDeep
+2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating property: testobject for scheme: TestObjectDeep
+2020-09-30 20:14:04 DEBUG [Kero-Security] - Building proxy for: com.kero.security.core.MainTest.TestObjectDeep
+2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.MainTest.TestObjectDeep roles: [OWNER]
+2020-09-30 20:14:04 DEBUG [Kero-Security] - Building proxy for: com.kero.security.core.TestObject
+2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [OWNER]
+2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Comparable
+text: test text!!
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

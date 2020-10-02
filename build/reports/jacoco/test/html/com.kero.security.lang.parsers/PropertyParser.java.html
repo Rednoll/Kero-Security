@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PropertyParser.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Kero-Security</a> &gt; <a href="index.source.html" class="el_package">com.kero.security.lang.parsers</a> &gt; <span class="el_source">PropertyParser.java</span></div><h1>PropertyParser.java</h1><pre class="source lang-java linenums">package com.kero.security.lang.parsers;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import com.kero.security.lang.collections.TokenSequence;
+import com.kero.security.lang.nodes.AccessRuleNode;
+import com.kero.security.lang.nodes.DefaultRuleNode;
+import com.kero.security.lang.nodes.PropertyMetalineBase;
+import com.kero.security.lang.nodes.PropertyNode;
+import com.kero.security.lang.parsers.metaline.HasMetalines;
+import com.kero.security.lang.parsers.metaline.MetalineParser;
+import com.kero.security.lang.tokens.DefaultRuleToken;
+import com.kero.security.lang.tokens.NameToken;
+import com.kero.security.lang.tokens.RoleToken;
+
+public class PropertyParser extends KsdlNodeParserBase&lt;PropertyNode&gt; implements HasBlock&lt;RoleToken&gt;, HasMetalines&lt;PropertyMetalineBase&gt; {
+
+<span class="fc" id="L21">	private List&lt;MetalineParser&lt;? extends PropertyMetalineBase&gt;&gt; metalineParsers = new ArrayList&lt;&gt;();</span>
+	
+<span class="fc" id="L23">	public PropertyParser() {</span>
+	
+<span class="fc" id="L25">		metalineParsers.add(new PropagationParser());</span>
+<span class="fc" id="L26">	}</span>
+	
+	public PropertyNode parse(TokenSequence tokens) {
+		
+<span class="fc" id="L30">		NameToken nameToken = (NameToken) tokens.poll();</span>
+		
+<span class="fc" id="L32">		DefaultRuleToken defaultRuleToken = tokens.tryGetOrDefault(DefaultRuleToken.EMPTY);</span>
+		
+<span class="fc" id="L34">		Set&lt;String&gt; grantRoles = new HashSet&lt;&gt;();</span>
+<span class="fc" id="L35">		Set&lt;String&gt; denyRoles = new HashSet&lt;&gt;();</span>
+		
+<span class="fc" id="L37">		List&lt;RoleToken&gt; roles = this.parseBlock(tokens);</span>
+		
+<span class="fc bfc" id="L39" title="All 2 branches covered.">		for(RoleToken role : roles) {</span>
+			
+<span class="pc bpc" id="L41" title="1 of 2 branches missed.">			if(role.getAccessible()) {</span>
+				
+<span class="fc" id="L43">				grantRoles.add(role.getRoleName());</span>
+			}
+			else {
+				
+<span class="nc" id="L47">				denyRoles.add(role.getRoleName());</span>
+			}
+<span class="fc" id="L49">		}</span>
+		
+<span class="fc" id="L51">		List&lt;PropertyMetalineBase&gt; metalines = this.parseMetalines(tokens);</span>
+		
+<span class="fc" id="L53">		String name = nameToken.getRaw();</span>
+		
+<span class="fc" id="L55">		DefaultRuleNode defaultRule = defaultRuleToken.toNode();</span>
+		
+<span class="fc" id="L57">		AccessRuleNode grantRule = new AccessRuleNode(grantRoles, true);</span>
+<span class="fc" id="L58">		AccessRuleNode denyRule = new AccessRuleNode(denyRoles, false);</span>
+		
+<span class="fc" id="L60">		return new PropertyNode(name, defaultRule, grantRule, denyRule, metalines);</span>
+	}
+
+	@Override
+	public List&lt;MetalineParser&lt;? extends PropertyMetalineBase&gt;&gt; getMetalineParsers() {
+		
+<span class="fc" id="L66">		return metalineParsers;</span>
+	}
+	
+	@Override
+	public RoleToken parseBlockUnit(TokenSequence tokens) {
+		
+<span class="fc" id="L72">		return (RoleToken) tokens.poll();</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

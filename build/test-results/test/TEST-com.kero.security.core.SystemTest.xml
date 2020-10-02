@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.kero.security.core.SystemTest" tests="19" skipped="0" failures="0" errors="0" timestamp="2020-09-30T17:14:04" hostname="DESKTOP-0M6QE3D" time="0.278">
+  <properties/>
+  <testcase name="getProperty_DefaultOverrideBySpecifiedRule()" classname="com.kero.security.core.SystemTest" time="0.047"/>
+  <testcase name="getProperty_DefaultDeny_TypeLevel()" classname="com.kero.security.core.SystemTest" time="0.01"/>
+  <testcase name="getProperty_DeepScanSuperclassInterface()" classname="com.kero.security.core.SystemTest" time="0.01"/>
+  <testcase name="getProperty_UnsuitableRole()" classname="com.kero.security.core.SystemTest" time="0.009"/>
+  <testcase name="getProperty_DeepScanSuperclass_RulesOverride()" classname="com.kero.security.core.SystemTest" time="0.025"/>
+  <testcase name="getProperty_DefaultGrant_PropertyLevel()" classname="com.kero.security.core.SystemTest" time="0.013"/>
+  <testcase name="getProperty_DefaultGrant_TypeLevel()" classname="com.kero.security.core.SystemTest" time="0.008"/>
+  <testcase name="getProperty_InterceptorInheritance()" classname="com.kero.security.core.SystemTest" time="0.012"/>
+  <testcase name="getProperty_DenyInterceptor()" classname="com.kero.security.core.SystemTest" time="0.017"/>
+  <testcase name="getProperty_RulesInheritance()" classname="com.kero.security.core.SystemTest" time="0.008"/>
+  <testcase name="getProperty_DefaultDeny_PropertyLevel_TypeLevel_Overriding()" classname="com.kero.security.core.SystemTest" time="0.008"/>
+  <testcase name="getProperty_DefaultDeny_PropertyLevel()" classname="com.kero.security.core.SystemTest" time="0.01"/>
+  <testcase name="getProperty_DenyInterceptor_CorrectChoise()" classname="com.kero.security.core.SystemTest" time="0.009"/>
+  <testcase name="getProperty()" classname="com.kero.security.core.SystemTest" time="0.01"/>
+  <testcase name="getProperty_DenyInterceptor_CorrectPriority()" classname="com.kero.security.core.SystemTest" time="0.018"/>
+  <testcase name="getProperty_AcessibleStacking()" classname="com.kero.security.core.SystemTest" time="0.009"/>
+  <testcase name="getProperty_InheritDisable()" classname="com.kero.security.core.SystemTest" time="0.008"/>
+  <testcase name="getProperty_DefaultGrant_PropertyLevel_TypeLevel_Overriding()" classname="com.kero.security.core.SystemTest" time="0.008"/>
+  <testcase name="getProperty_DeepScanSuperclass()" classname="com.kero.security.core.SystemTest" time="0.015"/>
+  <system-out><![CDATA[2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject
+2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating property: text for scheme: TestObject
+2020-09-30 20:14:04 DEBUG [Kero-Security] - Building proxy for: com.kero.security.core.TestObject
+2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [OWNER]
+2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: com.kero.security.core.TestInterface
+2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Comparable
+2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject
+2020-09-30 20:14:04 DEBUG [Kero-Security] - Building proxy for: com.kero.security.core.TestObject
+2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [NONE]
+2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: com.kero.security.core.TestInterface
+2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Comparable
+2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: com.kero.security.core.TestInterface
+2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating property: text for scheme: TestInterface
+2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject2
+2020-09-30 20:14:04 DEBUG [Kero-Security] - Building proxy for: com.kero.security.core.TestObject2
+2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject2 roles: [OWNER]
+2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject
+2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Comparable
+2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject
+2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating property: text for scheme: TestObject
+2020-09-30 20:14:04 DEBUG [Kero-Security] - Building proxy for: com.kero.security.core.TestObject
+2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [NONE]
+2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: com.kero.security.core.TestInterface
+2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Comparable
+2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject
+2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating property: text for scheme: TestObject
+2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject2
+2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating property: text for scheme: TestObject2
+2020-09-30 20:14:04 DEBUG [Kero-Security] - Building proxy for: com.kero.security.core.TestObject2
+2020-09-30 20:14:04 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject2 roles: [OWNER]
+2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: com.kero.security.core.TestInterface
+2020-09-30 20:14:04 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Comparable
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating property: text for scheme: TestObject
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Building proxy for: com.kero.security.core.TestObject
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [NONE]
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for interface: com.kero.security.core.TestInterface
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Comparable
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Building proxy for: com.kero.security.core.TestObject
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [NONE]
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for interface: com.kero.security.core.TestInterface
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Comparable
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating property: text for scheme: TestObject
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject2
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating property: text for scheme: TestObject2
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Building proxy for: com.kero.security.core.TestObject2
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject2 roles: [OWNER]
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for interface: com.kero.security.core.TestInterface
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Comparable
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating property: text for scheme: TestObject
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Building proxy for: com.kero.security.core.TestObject
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [OWNER]
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for interface: com.kero.security.core.TestInterface
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Comparable
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating property: text for scheme: TestObject
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject2
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating property: text for scheme: TestObject2
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Building proxy for: com.kero.security.core.TestObject2
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject2 roles: [OWNER]
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for interface: com.kero.security.core.TestInterface
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Comparable
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating property: text for scheme: TestObject
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Building proxy for: com.kero.security.core.TestObject
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [NONE]
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for interface: com.kero.security.core.TestInterface
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Comparable
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating property: text for scheme: TestObject
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Building proxy for: com.kero.security.core.TestObject
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [NONE]
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for interface: com.kero.security.core.TestInterface
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Comparable
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating property: text for scheme: TestObject
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Building proxy for: com.kero.security.core.TestObject
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [ADMIN]
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for interface: com.kero.security.core.TestInterface
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Comparable
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating property: text for scheme: TestObject
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Building proxy for: com.kero.security.core.TestObject
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [OWNER]
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for interface: com.kero.security.core.TestInterface
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Comparable
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating property: text for scheme: TestObject
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Building proxy for: com.kero.security.core.TestObject
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [ADMIN]
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for interface: com.kero.security.core.TestInterface
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Comparable
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating property: text for scheme: TestObject
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Building proxy for: com.kero.security.core.TestObject
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [OWNER]
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for interface: com.kero.security.core.TestInterface
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Comparable
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [ADMIN]
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating property: text for scheme: TestObject
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject2
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Building proxy for: com.kero.security.core.TestObject2
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject2 roles: [OWNER]
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating property: text for scheme: TestObject
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Building proxy for: com.kero.security.core.TestObject
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject roles: [NONE]
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for interface: com.kero.security.core.TestInterface
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Comparable
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating property: text for scheme: TestObject
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for class: com.kero.security.core.TestObject2
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Building proxy for: com.kero.security.core.TestObject2
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Prepare access configuration for com.kero.security.core.TestObject2 roles: [OWNER]
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for interface: com.kero.security.core.TestInterface
+2020-09-30 20:14:05 DEBUG [Kero-Security] - Creating access scheme for interface: java.lang.Comparable
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

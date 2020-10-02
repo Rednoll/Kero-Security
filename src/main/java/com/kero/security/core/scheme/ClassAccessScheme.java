@@ -141,7 +141,7 @@ public class ClassAccessScheme extends AccessSchemeBase implements InvocationHan
 				return;
 			}
 			
-			if(significantRoles.isEmpty()) {
+			if(!roles.isEmpty() && significantRoles.isEmpty()) {
 			
 				preparedActions.put(propertyName, new PreparedDenyRule(this));
 				return;

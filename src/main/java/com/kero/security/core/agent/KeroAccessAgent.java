@@ -2,6 +2,7 @@ package com.kero.security.core.agent;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -39,6 +40,11 @@ public interface KeroAccessAgent {
 	public AccessScheme getSchemeByAlise(String aliase);
 	public AccessScheme getScheme(Class<?> rawType);
 
+	public default <T> T protect(T object) {
+		
+		return (T) protect(object, Collections.EMPTY_SET);
+	}
+	
 	public default <T> T protect(T object, String... roleNames) {
 		
 		Set<Role> roles = this.getOrCreateRole(roleNames);

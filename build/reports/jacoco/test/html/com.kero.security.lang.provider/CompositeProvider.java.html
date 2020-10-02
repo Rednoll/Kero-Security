@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CompositeProvider.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Kero-Security</a> &gt; <a href="index.source.html" class="el_package">com.kero.security.lang.provider</a> &gt; <span class="el_source">CompositeProvider.java</span></div><h1>CompositeProvider.java</h1><pre class="source lang-java linenums">package com.kero.security.lang.provider;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import com.kero.security.lang.collections.RootNodeList;
+
+public class CompositeProvider implements KsdlProvider {
+
+	private Set&lt;KsdlProvider&gt; sources;
+	
+<span class="nc" id="L12">	public CompositeProvider() {</span>
+		
+<span class="nc" id="L14">		this.sources = new HashSet&lt;&gt;();</span>
+<span class="nc" id="L15">	}</span>
+	
+<span class="nc" id="L17">	public CompositeProvider(Set&lt;KsdlProvider&gt; sources) {</span>
+		
+<span class="nc" id="L19">		this.sources = sources;</span>
+<span class="nc" id="L20">	}</span>
+	
+	@Override
+	public RootNodeList getRoots() {
+		
+<span class="nc" id="L25">		RootNodeList result = new RootNodeList();</span>
+		
+<span class="nc bnc" id="L27" title="All 2 branches missed.">		for(KsdlProvider source : sources) {</span>
+		
+<span class="nc" id="L29">			result.addAll(source.getRoots());</span>
+<span class="nc" id="L30">		}</span>
+		
+<span class="nc" id="L32">		return result;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

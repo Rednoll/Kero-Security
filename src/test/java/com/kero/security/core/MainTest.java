@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import com.kero.security.core.agent.KeroAccessAgent;
 import com.kero.security.core.agent.KeroAccessAgentFactoryImpl;
+import com.kero.security.core.configurator.KeroAccessConfigurator;
 
 public class MainTest {
 
@@ -15,6 +16,19 @@ public class MainTest {
 
 		KeroAccessAgent agent = new KeroAccessAgentFactoryImpl().create();
 
+		KeroAccessConfigurator configurator = agent.getKeroAccessConfigurator();
+		
+		configurator
+			.scheme(TestObject.class)
+				.defaultDeny()
+				.property("text")
+					.defaultGrant();
+		
+		TestObject prot = agent.protect(new TestObject("test text!"));
+		
+		prot.getText();
+		
+		/*
 		agent.getKeroAccessConfigurator()
 			.scheme(TestInterface.class)
 				.property("text")
@@ -37,52 +51,7 @@ public class MainTest {
 					.grantFor("OWNER");
 		
 		TestObjectDeep deep = agent.protect(new TestObjectDeep(new TestObject("test text!!")), "OWNER");
-		
-		System.out.println("text: "+deep.getTestObject().getText());
-		
-		//TEST IN IN
-		
-		/*
-		Set<Property> properties = protectedType.getProperties();
-		
-		for(Property property : properties) {
-			
-			AccessRule defaultRule = property.getDefaultRule();
-			
-			if(defaultRule != null) {
-				
-				StringBuilder builder = new StringBuilder();
-				
-				for(Role role : defaultRule.getRoles()) {
-					
-					builder.append(role.getName()+" ");
-				}
-				
-				System.out.println("property: \""+property.getName()+"\" default rule("+(defaultRule.isAllower() ? "allower" : "disallower")+"): ["+builder.toString().trim()+"]");
-			}
-			
-			List<AccessRule> propRules = property.getRules();
-			
-			for(AccessRule rule : propRules) {
-			
-				StringBuilder builder = new StringBuilder();
-				
-				for(Role role : rule.getRoles()) {
-					
-					builder.append(role.getName()+" ");
-				}
-				
-				System.out.println("property: \""+property.getName()+"\" rule("+(rule.isAllower() ? "allower" : "disallower")+"): ["+builder.toString().trim()+"]");
-			}
-		}
-		
-		for(int i = 0; i < 100000; i++) {
-			
-			manager.protect(new TestObject2("test12"), "COMMON", "OWNER").getText();
-		}
-		
-		System.out.println(manager.protect(new TestObject2("test12"), "FRIEND").getText());
-		*/
+		 */
 	}
 
 	public static class TestObjectDeep {

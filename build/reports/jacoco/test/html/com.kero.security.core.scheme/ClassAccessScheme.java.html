@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ClassAccessScheme.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Kero-Security</a> &gt; <a href="index.source.html" class="el_package">com.kero.security.core.scheme</a> &gt; <span class="el_source">ClassAccessScheme.java</span></div><h1>ClassAccessScheme.java</h1><pre class="source lang-java linenums">package com.kero.security.core.scheme;
+
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.kero.security.core.agent.KeroAccessAgent;
+import com.kero.security.core.config.PreparedAccessConfiguration;
+import com.kero.security.core.config.PreparedAccessConfigurationImpl;
+import com.kero.security.core.config.prepared.PreparedAction;
+import com.kero.security.core.config.prepared.PreparedDenyRule;
+import com.kero.security.core.config.prepared.PreparedGrantRule;
+import com.kero.security.core.interceptor.DenyInterceptor;
+import com.kero.security.core.property.Property;
+import com.kero.security.core.role.Role;
+import com.kero.security.core.rules.AccessRule;
+import com.kero.security.core.scheme.proxy.AdaptiveProxyAgent;
+import com.kero.security.core.scheme.proxy.CustomProxyAgent;
+import com.kero.security.core.scheme.proxy.ProxyAgent;
+import com.kero.security.core.scheme.proxy.SubclassProxyAgent;
+import com.kero.security.core.utils.ByteBuddyClassUtils;
+
+public class ClassAccessScheme extends AccessSchemeBase implements InvocationHandler {
+
+<span class="fc" id="L35">	private static Logger LOGGER = LoggerFactory.getLogger(&quot;Kero-Security&quot;);</span>
+	
+<span class="pc" id="L37">	private ProxyAgent proxyAgent = null;</span>
+	
+<span class="pc" id="L39">	private Map&lt;Set&lt;Role&gt;, PreparedAccessConfiguration&gt; configsCache = new HashMap&lt;&gt;();</span>
+	
+	public ClassAccessScheme() {
+<span class="nc" id="L42">		super();</span>
+	
+<span class="nc" id="L44">	}</span>
+	
+	public ClassAccessScheme(KeroAccessAgent agent, Class&lt;?&gt; type) {
+<span class="nc" id="L47">		super(agent, type);</span>
+		
+<span class="nc" id="L49">	}</span>
+	
+	public ClassAccessScheme(KeroAccessAgent agent, String aliase, Class&lt;?&gt; type) {
+<span class="fc" id="L52">		super(agent, aliase, type);</span>
+		
+<span class="fc" id="L54">	}</span>
+	
+	protected void initProxy() throws Exception {
+		
+<span class="pc bpc" id="L58" title="1 of 2 branches missed.">		if(this.proxyAgent != null) return;</span>
+		
+<span class="pc bpc" id="L60" title="1 of 2 branches missed.">		if(!Modifier.isAbstract(type.getModifiers())) {</span>
+			
+<span class="fc" id="L62">			LOGGER.debug(&quot;Building proxy for: &quot;+type.getCanonicalName());</span>
+		
+<span class="fc" id="L64">			this.proxyAgent = createProxyAgent();</span>
+		}
+<span class="fc" id="L66">	}</span>
+	
+	@Override
+	public Object invoke(Object rawProxy, Method method, Object[] args) throws Throwable {
+		
+<span class="fc" id="L71">		AccessProxy proxy = (AccessProxy) rawProxy;</span>
+		
+<span class="fc" id="L73">		Object original = proxy.getOriginal();</span>
+<span class="fc" id="L74">		PreparedAccessConfiguration pac = proxy.getConfiguration();</span>
+	
+<span class="fc" id="L76">		return pac.process(original, method, args);</span>
+	}
+	
+	public &lt;T&gt; T protect(T object, Collection&lt;Role&gt; roles) throws Exception {
+		
+<span class="fc bfc" id="L81" title="All 2 branches covered.">		if(this.proxyAgent == null) {</span>
+			
+<span class="fc" id="L83">			initProxy();</span>
+		}
+		
+<span class="fc" id="L86">		PreparedAccessConfiguration config = configsCache.get(roles);</span>
+		
+<span class="pc bpc" id="L88" title="1 of 2 branches missed.">		if(config == null) {</span>
+	
+<span class="fc" id="L90">			config = prepareAccessConfiguration(roles);</span>
+<span class="fc" id="L91">			configsCache.put(Collections.unmodifiableSet(new HashSet&lt;&gt;(roles)), config);</span>
+		}
+		
+<span class="fc" id="L94">		return (T) this.proxyAgent.wrap(object, config);</span>
+	}
+	
+	private PreparedAccessConfiguration prepareAccessConfiguration(Collection&lt;Role&gt; roles) {
+		
+<span class="fc" id="L99">		String rolesList = &quot;[&quot;;</span>
+		
+<span class="fc bfc" id="L101" title="All 2 branches covered.">		for(Role role : roles) {</span>
+			
+<span class="fc" id="L103">			rolesList += role.getName()+&quot; &quot;;</span>
+<span class="fc" id="L104">		}</span>
+		
+<span class="fc" id="L106">		rolesList = rolesList.trim()+&quot;]&quot;;</span>
+		
+<span class="fc" id="L108">		LOGGER.debug(&quot;Prepare access configuration for &quot;+type.getCanonicalName()+&quot; roles: &quot;+rolesList);</span>
+		
+<span class="fc" id="L110">		Map&lt;String, PreparedAction&gt; preparedActions = new HashMap&lt;&gt;();</span>
+
+<span class="fc" id="L112">		Set&lt;Property&gt; properties = getProperties();</span>
+		
+<span class="fc" id="L114">		properties.forEach((property)-&gt; {</span>
+			
+<span class="fc" id="L116">			Set&lt;Role&gt; significantRoles = new HashSet&lt;&gt;(roles);</span>
+			
+<span class="fc" id="L118">			String propertyName = property.getName();</span>
+<span class="fc" id="L119">			List&lt;AccessRule&gt; rules = property.getRules();</span>
+			
+<span class="fc bfc" id="L121" title="All 2 branches covered.">			for(AccessRule rule : rules) {</span>
+ 
+<span class="fc bfc" id="L123" title="All 2 branches covered.">				if(!rule.manage(significantRoles)) continue;</span>
+				
+<span class="fc bfc" id="L125" title="All 2 branches covered.">				if(rule.accessible(significantRoles)) {</span>
+
+<span class="fc" id="L127">					preparedActions.put(propertyName, new PreparedGrantRule(this, property.propagateRoles(roles)));</span>
+<span class="fc" id="L128">					return;</span>
+				}
+<span class="pc bpc" id="L130" title="1 of 2 branches missed.">				else if(rule.isDisallower()) {</span>
+ 
+<span class="fc" id="L132">					significantRoles.removeAll(rule.getRoles());</span>
+				}
+<span class="fc" id="L134">			}</span>
+			
+<span class="fc" id="L136">			DenyInterceptor interceptor = determineInterceptor(property, roles);</span>
+			
+<span class="fc bfc" id="L138" title="All 2 branches covered.">			if(interceptor != null) {</span>
+				
+<span class="fc" id="L140">				preparedActions.put(propertyName, interceptor.prepare(roles));</span>
+<span class="fc" id="L141">				return;</span>
+			}
+			
+<span class="fc bfc" id="L144" title="All 2 branches covered.">			if(significantRoles.isEmpty()) {</span>
+			
+<span class="fc" id="L146">				preparedActions.put(propertyName, new PreparedDenyRule(this));</span>
+<span class="fc" id="L147">				return;</span>
+			}
+
+<span class="fc bfc" id="L150" title="All 2 branches covered.">			if(property.hasDefaultRule()) {</span>
+			
+<span class="fc" id="L152">				preparedActions.put(propertyName, property.getDefaultRule().prepare(this, roles));</span>
+<span class="fc" id="L153">				return;</span>
+			}
+			else {
+				
+<span class="fc" id="L157">				AccessRule defaultRule = determineDefaultRule();</span>
+				
+<span class="fc" id="L159">				preparedActions.put(propertyName, defaultRule.prepare(this, roles));</span>
+<span class="fc" id="L160">				return;</span>
+			}
+		});
+		
+<span class="fc" id="L164">		PreparedAction defaultTypeAction = determineDefaultRule().prepare(this, roles);</span>
+		
+<span class="fc" id="L166">		return new PreparedAccessConfigurationImpl(this, preparedActions, defaultTypeAction);</span>
+	}
+	
+	private DenyInterceptor determineInterceptor(Property property, Collection&lt;Role&gt; roles) {
+	
+<span class="fc" id="L171">		int maxOverlap = 0;</span>
+<span class="fc" id="L172">		int minTrash = Integer.MAX_VALUE;</span>
+<span class="fc" id="L173">		DenyInterceptor result = null;</span>
+		
+<span class="fc bfc" id="L175" title="All 2 branches covered.">		for(DenyInterceptor interceptor : property.getInterceptors()) {</span>
+			
+<span class="fc" id="L177">			Set&lt;Role&gt; interceptorRoles = interceptor.getRoles();</span>
+			
+<span class="fc" id="L179">			int overlap = 0;</span>
+<span class="fc" id="L180">			int trash = 0;</span>
+			
+<span class="fc bfc" id="L182" title="All 2 branches covered.">			for(Role interceptorRole : interceptorRoles) {</span>
+				
+<span class="fc bfc" id="L184" title="All 2 branches covered.">				if(roles.contains(interceptorRole)) {</span>
+					
+<span class="fc" id="L186">					overlap++;</span>
+				}
+				else {
+					
+<span class="fc" id="L190">					trash++;</span>
+				}
+<span class="fc" id="L192">			}</span>
+			
+<span class="fc bfc" id="L194" title="All 2 branches covered.">			if(overlap &gt; maxOverlap) {</span>
+				
+<span class="fc" id="L196">				maxOverlap = overlap;</span>
+<span class="fc" id="L197">				minTrash = trash;</span>
+<span class="fc" id="L198">				result = interceptor;</span>
+			}
+<span class="fc bfc" id="L200" title="All 4 branches covered.">			else if(overlap == maxOverlap &amp;&amp; trash &lt; minTrash) {</span>
+				
+<span class="fc" id="L202">				maxOverlap = overlap;</span>
+<span class="fc" id="L203">				minTrash = trash;</span>
+<span class="fc" id="L204">				result = interceptor;</span>
+			}
+<span class="fc" id="L206">		}</span>
+	
+<span class="fc bfc" id="L208" title="All 2 branches covered.">		if(maxOverlap == 0) {</span>
+			
+<span class="fc" id="L210">			return property.getDefaultInterceptor();</span>
+		}
+		
+<span class="fc" id="L213">		return result;</span>
+	}
+	
+	private AccessRule determineDefaultRule() {
+		
+<span class="fc bfc" id="L218" title="All 2 branches covered.">		if(this.hasDefaultRule()) return this.getDefaultRule();</span>
+		
+<span class="pc bpc" id="L220" title="1 of 2 branches missed.">		if(this.inherit) {</span>
+			
+<span class="fc" id="L222">			Class&lt;?&gt; superClass = this.type.getSuperclass();</span>
+			
+<span class="fc bfc" id="L224" title="All 2 branches covered.">			while(superClass != Object.class) {</span>
+				
+<span class="pc bpc" id="L226" title="1 of 2 branches missed.">				if(agent.hasScheme(superClass)) {</span>
+					
+<span class="fc" id="L228">					AccessScheme scheme = agent.getScheme(superClass);</span>
+				
+<span class="fc bfc" id="L230" title="All 2 branches covered.">					if(scheme.hasDefaultRule()) {</span>
+						
+<span class="fc" id="L232">						return scheme.getDefaultRule();</span>
+					}
+				}
+				
+<span class="fc" id="L236">				superClass = superClass.getSuperclass();</span>
+			}
+		}
+		
+<span class="fc" id="L240">		return agent.getDefaultRule();</span>
+	}
+	
+	public void collectProperties(Map&lt;String, Property&gt; complexProperties) {
+		
+<span class="fc" id="L245">		collectLocalProperties(complexProperties);</span>
+		
+<span class="fc bfc" id="L247" title="All 2 branches covered.">		if(this.inherit) {</span>
+			
+<span class="fc" id="L249">			collectFromInterfaces(complexProperties);</span>
+<span class="fc" id="L250">			collectPropertiesFromSuperclass(complexProperties);</span>
+		}
+<span class="fc" id="L252">	}</span>
+	
+	protected void collectPropertiesFromSuperclass(Map&lt;String, Property&gt; complexProperties) {
+		
+<span class="fc" id="L256">		Class&lt;?&gt; superClass = type.getSuperclass();</span>
+		
+<span class="fc bfc" id="L258" title="All 2 branches covered.">		while(superClass != Object.class) {</span>
+			
+<span class="fc" id="L260">			AccessScheme supeclassScheme = agent.getOrCreateScheme(superClass);</span>
+
+<span class="fc" id="L262">			supeclassScheme.collectProperties(complexProperties);</span>
+
+<span class="fc" id="L264">			superClass = superClass.getSuperclass();</span>
+<span class="fc" id="L265">		}</span>
+<span class="fc" id="L266">	}</span>
+	
+	public void setProxyClass(Class&lt;? extends AccessProxy&gt; proxyClass) {
+		
+<span class="fc" id="L270">		this.proxyAgent = CustomProxyAgent.create(this, proxyClass);</span>
+<span class="fc" id="L271">	}</span>
+	
+	public ProxyAgent createProxyAgent() { 
+	
+<span class="fc" id="L275">		boolean accessible = ByteBuddyClassUtils.checkAccessible(this.type);</span>
+		
+<span class="fc bfc" id="L277" title="All 4 branches covered.">		if(!Modifier.isFinal(this.type.getModifiers()) &amp;&amp; accessible) {</span>
+			
+<span class="fc" id="L279">			return SubclassProxyAgent.create(this);</span>
+		}
+		else {
+			
+<span class="fc" id="L283">			return AdaptiveProxyAgent.create(this);</span>
+		}
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

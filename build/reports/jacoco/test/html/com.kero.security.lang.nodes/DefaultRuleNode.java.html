@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DefaultRuleNode.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Kero-Security</a> &gt; <a href="index.source.html" class="el_package">com.kero.security.lang.nodes</a> &gt; <span class="el_source">DefaultRuleNode.java</span></div><h1>DefaultRuleNode.java</h1><pre class="source lang-java linenums">package com.kero.security.lang.nodes;
+
+import com.kero.security.core.DefaultRuleOwner;
+import com.kero.security.core.agent.KeroAccessAgent;
+import com.kero.security.core.rules.AccessRule;
+
+<span class="fc" id="L7">public enum DefaultRuleNode implements KsdlNode {</span>
+	
+<span class="fc" id="L9">	EMPTY(null), GRANT(true), DENY(false);</span>
+
+	private Boolean accessible;
+		
+<span class="fc" id="L13">	private DefaultRuleNode(Boolean accessible) {</span>
+		
+<span class="fc" id="L15">		this.accessible = accessible;</span>
+<span class="fc" id="L16">	}</span>
+	
+	public void interpret(KeroAccessAgent manager, DefaultRuleOwner target) {
+		
+<span class="pc bpc" id="L20" title="1 of 2 branches missed.">		if(accessible == null) {</span>
+
+<span class="nc" id="L22">			target.setDefaultRule(null);</span>
+		}
+<span class="fc bfc" id="L24" title="All 2 branches covered.">		else if(accessible) {</span>
+			
+<span class="fc" id="L26">			target.setDefaultRule(AccessRule.GRANT_ALL);</span>
+		}
+		else {
+			
+<span class="fc" id="L30">			target.setDefaultRule(AccessRule.DENY_ALL);</span>
+		}
+<span class="fc" id="L32">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

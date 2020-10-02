@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>KsdlLexer.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Kero-Security</a> &gt; <a href="index.source.html" class="el_package">com.kero.security.lang</a> &gt; <span class="el_source">KsdlLexer.java</span></div><h1>KsdlLexer.java</h1><pre class="source lang-java linenums">package com.kero.security.lang;
+
+import java.util.LinkedList;
+import java.util.List;
+
+import com.kero.security.lang.collections.TokenSequence;
+import com.kero.security.lang.lexems.DefaultRuleLexem;
+import com.kero.security.lang.lexems.KeyWordLexem;
+import com.kero.security.lang.lexems.KsdlLexem;
+import com.kero.security.lang.lexems.NameLexem;
+import com.kero.security.lang.lexems.RoleLexem;
+import com.kero.security.lang.tokens.KeyWordToken;
+import com.kero.security.lang.tokens.KsdlToken;
+
+public class KsdlLexer {
+
+<span class="fc" id="L17">	private static final KsdlLexer INSTANCE = new KsdlLexer();</span>
+	
+<span class="fc" id="L19">	private List&lt;KeyWordLexem&gt; keyWords = new LinkedList&lt;&gt;();</span>
+<span class="fc" id="L20">	private List&lt;KsdlLexem&gt; lexems = new LinkedList&lt;&gt;();</span>
+	
+<span class="fc" id="L22">	private KsdlLexer() {</span>
+	
+<span class="fc bfc" id="L24" title="All 2 branches covered.">		for(KeyWordLexem word : KeyWordLexem.values()) {</span>
+			
+<span class="fc" id="L26">			keyWords.add(word);</span>
+		}
+		
+<span class="fc" id="L29">		lexems.add(new DefaultRuleLexem());</span>
+<span class="fc" id="L30">		lexems.add(new RoleLexem());</span>
+<span class="fc" id="L31">		lexems.add(new NameLexem());</span>
+<span class="fc" id="L32">	}</span>
+	
+	public TokenSequence tokenize(String data) {
+		
+<span class="fc" id="L36">		data = prepareRawText(data);</span>
+		
+<span class="fc" id="L38">		int findShortEnd = 0;</span>
+		
+<span class="fc" id="L40">		TokenSequence tokens = new TokenSequence();</span>
+
+<span class="fc" id="L42">		StringBuilder currentRawToken = new StringBuilder();</span>
+
+<span class="fc bfc" id="L44" title="All 2 branches covered.">		c2: for(char cursor : data.toCharArray()) {</span>
+			
+<span class="fc" id="L46">			checkLexem(tokens, currentRawToken, cursor);</span>
+
+<span class="fc bfc" id="L48" title="All 4 branches covered.">			if(cursor != ' ' &amp;&amp; cursor != '\n') {</span>
+			
+<span class="fc" id="L50">				currentRawToken.append(cursor);</span>
+			}
+			
+<span class="fc bfc" id="L53" title="All 2 branches covered.">			if(cursor == ':') {</span>
+				
+<span class="fc" id="L55">				findShortEnd++;</span>
+			}
+			
+<span class="fc bfc" id="L58" title="All 4 branches covered.">			if(cursor == '\n' &amp;&amp; findShortEnd &gt; 0) {</span>
+				
+<span class="fc" id="L60">				tokens.add(KeyWordToken.CLOSE_BLOCK);</span>
+<span class="fc" id="L61">				findShortEnd--;</span>
+			}
+		}
+		
+<span class="fc" id="L65">		checkLexem(tokens, currentRawToken, '\0');</span>
+		
+<span class="fc" id="L67">		return tokens;</span>
+	}
+
+	private String prepareRawText(String text) {
+		
+<span class="fc" id="L72">		text += &quot; &quot;;</span>
+<span class="fc" id="L73">		text = text.replaceAll(&quot;\\r\\n&quot;, &quot;\n&quot;);</span>
+<span class="fc" id="L74">		text = text.replaceAll(&quot;	&quot;, &quot; &quot;);</span>
+<span class="fc" id="L75">		text = text.replaceAll(&quot; +&quot;, &quot; &quot;);</span>
+		
+<span class="fc" id="L77">		return text;</span>
+	}
+	
+	private boolean checkLexem(List&lt;KsdlToken&gt; tokens, StringBuilder currentRawToken, char cursor) {
+		
+<span class="fc bfc" id="L82" title="All 2 branches covered.">		if(checkWord(tokens, currentRawToken, cursor)) return true;</span>
+		
+<span class="fc bfc" id="L84" title="All 2 branches covered.">		for(KsdlLexem lexem : lexems) {</span>
+			
+<span class="fc bfc" id="L86" title="All 4 branches covered.">			if(lexem.isMatch(currentRawToken) &amp;&amp; !lexem.isMatch(currentRawToken.toString()+cursor)) {</span>
+				
+<span class="fc" id="L88">				KsdlToken token = lexem.tokenize(currentRawToken.toString());</span>
+
+<span class="fc" id="L90">				tokens.add(token);</span>
+<span class="fc" id="L91">				currentRawToken.setLength(0);</span>
+				
+<span class="fc" id="L93">				return true;</span>
+			}
+<span class="fc" id="L95">		}</span>
+		
+<span class="fc" id="L97">		return false;</span>
+	}
+	
+	private boolean checkWord(List&lt;KsdlToken&gt; tokens, StringBuilder currentRawToken, char cursor) {
+		
+<span class="fc bfc" id="L102" title="All 2 branches covered.">		for(KeyWordLexem word : keyWords) {</span>
+			
+<span class="pc bpc" id="L104" title="1 of 8 branches missed.">			if(word.isMatch(currentRawToken) &amp;&amp; (!word.isRequireSpace() || (cursor == ' ' || cursor == '\n'))) {</span>
+				
+<span class="fc" id="L106">				KsdlToken token = word.tokenize(currentRawToken.toString());</span>
+
+<span class="fc" id="L108">				tokens.add(token);</span>
+<span class="fc" id="L109">				currentRawToken.setLength(0);</span>
+
+<span class="fc" id="L111">				return true;</span>
+			}			
+<span class="fc" id="L113">		}</span>
+		
+<span class="fc" id="L115">		return false;</span>
+	}
+	
+	public static KsdlLexer getInstance() {
+		
+<span class="fc" id="L120">		return INSTANCE;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
