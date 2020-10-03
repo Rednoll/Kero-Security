@@ -90,24 +90,6 @@ public class SystemTest {
 	}
 	
 	@Test
-	public void getProperty_DeepScanSuperclassInterface() {
-		
-		agent.getKeroAccessConfigurator()
-			.scheme(TestInterface.class)
-				.defaultDeny()
-				.properties("text")
-					.defaultDeny()
-					.grantFor("OWNER");
-
-		agent.getKeroAccessConfigurator()
-			.scheme(TestObject2.class);
-		
-		TestObject2 obj = agent.protect(new TestObject2("test12"), "OWNER");
-		
-		assertEquals(obj.getText(), "test12");
-	}
-	
-	@Test
 	public void getProperty_DeepScanSuperclass_RulesOverride() {
 		
 		agent.getKeroAccessConfigurator()

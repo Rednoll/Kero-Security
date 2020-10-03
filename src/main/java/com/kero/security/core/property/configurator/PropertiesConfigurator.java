@@ -3,10 +3,10 @@ package com.kero.security.core.property.configurator;
 import java.util.List;
 import java.util.Set;
 
+import com.kero.security.core.property.Access;
 import com.kero.security.core.property.Property;
 import com.kero.security.core.role.Role;
-import com.kero.security.core.rules.AccessRule;
-import com.kero.security.core.rules.AccessRuleImpl;
+import com.kero.security.core.rules.def.DefaultAccessRule;
 import com.kero.security.core.scheme.configurator.CodeAccessSchemeConfigurator;
 
 public class PropertiesConfigurator {
@@ -27,19 +27,19 @@ public class PropertiesConfigurator {
 	
 	public PropertiesConfigurator defaultGrant() {
 		
-		return defaultRule(AccessRuleImpl.GRANT_ALL);
+		return defaultAccess(Access.GRANT);
 	}
 	
 	public PropertiesConfigurator defaultDeny() {
 		
-		return defaultRule(AccessRuleImpl.DENY_ALL);
+		return defaultAccess(Access.DENY);
 	}
 	
-	public PropertiesConfigurator defaultRule(AccessRule rule) {
+	public PropertiesConfigurator defaultAccess(Access access) {
 		
 		for(Property property : properties) {
 			
-			new SinglePropertyConfigurator(this.schemeConf, property).defaultRule(rule);
+			new SinglePropertyConfigurator(this.schemeConf, property).defaultAccess(access);
 		}
 		
 		return this;
@@ -49,8 +49,11 @@ public class PropertiesConfigurator {
 		
 		Set<Role> roles = schemeConf.getAgent().getOrCreateRole(roleNames);
 		
-		setAccessible(roles, true);
-		
+		for(Property property : properties) {
+			
+			new SinglePropertyConfigurator(schemeConf, property).grantFor(roles);
+		}
+
 		return this;
 	}
 	
@@ -58,16 +61,9 @@ public class PropertiesConfigurator {
 		
 		Set<Role> roles = schemeConf.getAgent().getOrCreateRole(roleNames);
 		
-		setAccessible(roles, false);
-		
-		return this;
-	}
-	
-	public PropertiesConfigurator setAccessible(Set<Role> roles, boolean accessible) {
-		
 		for(Property property : properties) {
 			
-			new SinglePropertyConfigurator(schemeConf, property).setAccessible(roles, accessible);
+			new SinglePropertyConfigurator(schemeConf, property).denyFor(roles);
 		}
 		
 		return this;

@@ -10,13 +10,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.kero.security.core.configurator.KeroAccessConfigurator;
+import com.kero.security.core.property.Access;
 import com.kero.security.core.role.Role;
 import com.kero.security.core.role.storage.RoleStorage;
-import com.kero.security.core.rules.AccessRule;
-import com.kero.security.core.rules.AccessRuleImpl;
+import com.kero.security.core.rules.def.DefaultAccessRule;
 import com.kero.security.core.scheme.AccessScheme;
 import com.kero.security.core.scheme.ClassAccessScheme;
-import com.kero.security.core.scheme.InterfaceAccessScheme;
 import com.kero.security.core.scheme.configurator.AccessSchemeConfigurator;
 import com.kero.security.core.scheme.storage.AccessSchemeStorage;
 
@@ -28,7 +27,7 @@ public class KeroAccessAgentImpl implements KeroAccessAgent {
 	protected AccessSchemeStorage schemeStorage = AccessSchemeStorage.create();
 	protected KeroAccessConfigurator configurator = new KeroAccessConfigurator(this);
 		
-	protected AccessRule defaultRule = AccessRuleImpl.GRANT_ALL;
+	protected Access defaultAccess = Access.GRANT;
 	
 	protected ClassLoader proxiesClassLoader = ClassLoader.getSystemClassLoader();
 	
@@ -85,7 +84,7 @@ public class KeroAccessAgentImpl implements KeroAccessAgent {
 	@Override
 	public AccessScheme getScheme(Class<?> rawType) {
 		
-		return schemeStorage.get(rawType);
+		return schemeStorage.getOrDefault(rawType, AccessScheme.EMPTY);
 	}
 	
 	@Override
@@ -101,6 +100,10 @@ public class KeroAccessAgentImpl implements KeroAccessAgent {
 	
 	public AccessScheme createScheme(Class<?> rawType) {
 		
+		if(rawType == null) return AccessScheme.EMPTY;
+		
+		if(rawType.isInterface()) throw new RuntimeException("Can't create scheme for interface!");
+		
 		AccessScheme scheme = null;
 		
 		String aliase = rawType.getSimpleName();
@@ -109,17 +112,9 @@ public class KeroAccessAgentImpl implements KeroAccessAgent {
 			
 			aliase = aliasesMap.get(rawType);
 		}
-		
-		if(rawType.isInterface()) {
-			
-			LOGGER.debug("Creating access scheme for interface: "+rawType.getCanonicalName());
-			scheme = new InterfaceAccessScheme(this, aliase, rawType);
-		}
-		else {
-			
-			LOGGER.debug("Creating access scheme for class: "+rawType.getCanonicalName());
-			scheme = new ClassAccessScheme(this, aliase, rawType);
-		}
+
+		LOGGER.debug("Creating access scheme for class: "+rawType.getCanonicalName());
+		scheme = new ClassAccessScheme(this, aliase, rawType);
 		
 		for(AccessSchemeConfigurator ac : autoConfigurators) {
 			
@@ -163,9 +158,9 @@ public class KeroAccessAgentImpl implements KeroAccessAgent {
 	}
 	
 	@Override
-	public AccessRule getDefaultRule() {
+	public Access getDefaultAccess() {
 		
-		return this.defaultRule;
+		return this.defaultAccess;
 	}
 
 	@Override

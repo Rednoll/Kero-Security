@@ -6,10 +6,12 @@ import java.util.List;
 import java.util.Set;
 
 import com.kero.security.lang.collections.TokenSequence;
-import com.kero.security.lang.nodes.AccessRuleNode;
 import com.kero.security.lang.nodes.DefaultRuleNode;
+import com.kero.security.lang.nodes.DenyAccessRuleNode;
+import com.kero.security.lang.nodes.GrantAccessRuleNode;
 import com.kero.security.lang.nodes.PropertyMetalineBase;
 import com.kero.security.lang.nodes.PropertyNode;
+import com.kero.security.lang.nodes.RoleBasedAccessRuleNode;
 import com.kero.security.lang.parsers.metaline.HasMetalines;
 import com.kero.security.lang.parsers.metaline.MetalineParser;
 import com.kero.security.lang.tokens.DefaultRuleToken;
@@ -54,8 +56,8 @@ public class PropertyParser extends KsdlNodeParserBase<PropertyNode> implements 
 		
 		DefaultRuleNode defaultRule = defaultRuleToken.toNode();
 		
-		AccessRuleNode grantRule = new AccessRuleNode(grantRoles, true);
-		AccessRuleNode denyRule = new AccessRuleNode(denyRoles, false);
+		GrantAccessRuleNode grantRule = new GrantAccessRuleNode(grantRoles);
+		DenyAccessRuleNode denyRule = new DenyAccessRuleNode(denyRoles);
 		
 		return new PropertyNode(name, defaultRule, grantRule, denyRule, metalines);
 	}

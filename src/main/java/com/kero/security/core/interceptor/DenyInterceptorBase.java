@@ -25,7 +25,7 @@ public abstract class DenyInterceptorBase implements DenyInterceptor {
 	@Override
 	public PreparedInterceptor prepare(Collection<Role> roles) {
 		
-		if(manage(roles) || this.roles.isEmpty()) {
+		if(manageAny(roles) || this.roles.isEmpty()) {
 		
 			return new PreparedInterceptor(this.scheme, this::intercept);
 		}
@@ -42,7 +42,7 @@ public abstract class DenyInterceptorBase implements DenyInterceptor {
 		}
 	}
 
-	private boolean manage(Collection<Role> roles) {
+	private boolean manageAny(Collection<Role> roles) {
 		
 		return !Collections.disjoint(this.roles, roles);
 	}

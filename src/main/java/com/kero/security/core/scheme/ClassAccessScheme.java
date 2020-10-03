@@ -7,7 +7,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -20,37 +19,50 @@ import com.kero.security.core.config.PreparedAccessConfigurationImpl;
 import com.kero.security.core.config.prepared.PreparedAction;
 import com.kero.security.core.config.prepared.PreparedDenyRule;
 import com.kero.security.core.config.prepared.PreparedGrantRule;
-import com.kero.security.core.interceptor.DenyInterceptor;
+import com.kero.security.core.property.Access;
 import com.kero.security.core.property.Property;
 import com.kero.security.core.role.Role;
-import com.kero.security.core.rules.AccessRule;
 import com.kero.security.core.scheme.proxy.AdaptiveProxyAgent;
 import com.kero.security.core.scheme.proxy.CustomProxyAgent;
 import com.kero.security.core.scheme.proxy.ProxyAgent;
 import com.kero.security.core.scheme.proxy.SubclassProxyAgent;
 import com.kero.security.core.utils.ByteBuddyClassUtils;
 
-public class ClassAccessScheme extends AccessSchemeBase implements InvocationHandler {
+public class ClassAccessScheme implements AccessScheme, InvocationHandler {
 
-	private static Logger LOGGER = LoggerFactory.getLogger("Kero-Security");
+	protected static Logger LOGGER = LoggerFactory.getLogger("Kero-Security");
 	
-	private ProxyAgent proxyAgent = null;
+	protected Class<?> type;
+	protected String aliase;
 	
-	private Map<Set<Role>, PreparedAccessConfiguration> configsCache = new HashMap<>();
+	protected Access defaultAccess = Access.UNKNOWN;
+	
+	protected Map<String, Property> localProperties = new HashMap<>();
+	
+	protected KeroAccessAgent agent;
+	
+	protected boolean inherit = true;
+	
+	protected ProxyAgent proxyAgent = null;
+	
+	protected Map<Set<Role>, PreparedAccessConfiguration> configsCache = new HashMap<>();
 	
 	public ClassAccessScheme() {
-		super();
 	
 	}
 	
 	public ClassAccessScheme(KeroAccessAgent agent, Class<?> type) {
-		super(agent, type);
 		
+		this.agent = agent;
+		this.type = type;
+		this.aliase = type.getSimpleName();
 	}
 	
 	public ClassAccessScheme(KeroAccessAgent agent, String aliase, Class<?> type) {
-		super(agent, aliase, type);
 		
+		this.agent = agent;
+		this.aliase = aliase;
+		this.type = type;
 	}
 	
 	protected void initProxy() throws Exception {
@@ -112,110 +124,62 @@ public class ClassAccessScheme extends AccessSchemeBase implements InvocationHan
 		Set<Property> properties = getProperties();
 		
 		properties.forEach((property)-> {
-			
-			Set<Role> significantRoles = new HashSet<>(roles);
-			
-			String propertyName = property.getName();
-			List<AccessRule> rules = property.getRules();
-			
-			for(AccessRule rule : rules) {
- 
-				if(!rule.manage(significantRoles)) continue;
-				
-				if(rule.accessible(significantRoles)) {
 
-					preparedActions.put(propertyName, new PreparedGrantRule(this, property.propagateRoles(roles)));
-					return;
-				}
-				else if(rule.isDisallower()) {
- 
-					significantRoles.removeAll(rule.getRoles());
-				}
-			}
-			
-			DenyInterceptor interceptor = determineInterceptor(property, roles);
-			
-			if(interceptor != null) {
-				
-				preparedActions.put(propertyName, interceptor.prepare(roles));
-				return;
-			}
-			
-			if(!roles.isEmpty() && significantRoles.isEmpty()) {
-			
-				preparedActions.put(propertyName, new PreparedDenyRule(this));
-				return;
-			}
-
-			if(property.hasDefaultRule()) {
-			
-				preparedActions.put(propertyName, property.getDefaultRule().prepare(this, roles));
-				return;
-			}
-			else {
-				
-				AccessRule defaultRule = determineDefaultRule();
-				
-				preparedActions.put(propertyName, defaultRule.prepare(this, roles));
-				return;
-			}
+			preparedActions.put(property.getName(), property.prepare(roles));
 		});
 		
-		PreparedAction defaultTypeAction = determineDefaultRule().prepare(this, roles);
+		Access defaultAccess = determineDefaultAccess();
 		
-		return new PreparedAccessConfigurationImpl(this, preparedActions, defaultTypeAction);
-	}
-	
-	private DenyInterceptor determineInterceptor(Property property, Collection<Role> roles) {
-	
-		int maxOverlap = 0;
-		int minTrash = Integer.MAX_VALUE;
-		DenyInterceptor result = null;
+		PreparedAction defaultAction = null;
 		
-		for(DenyInterceptor interceptor : property.getInterceptors()) {
+		if(defaultAccess == Access.GRANT) {
 			
-			Set<Role> interceptorRoles = interceptor.getRoles();
-			
-			int overlap = 0;
-			int trash = 0;
-			
-			for(Role interceptorRole : interceptorRoles) {
-				
-				if(roles.contains(interceptorRole)) {
-					
-					overlap++;
-				}
-				else {
-					
-					trash++;
-				}
-			}
-			
-			if(overlap > maxOverlap) {
-				
-				maxOverlap = overlap;
-				minTrash = trash;
-				result = interceptor;
-			}
-			else if(overlap == maxOverlap && trash < minTrash) {
-				
-				maxOverlap = overlap;
-				minTrash = trash;
-				result = interceptor;
-			}
+			defaultAction = new PreparedGrantRule(this, roles);
 		}
-	
-		if(maxOverlap == 0) {
+		else if(defaultAccess == Access.DENY){
 			
-			return property.getDefaultInterceptor();
+			defaultAction = new PreparedDenyRule(this);
+		}
+		else if(defaultAccess == Access.UNKNOWN){
+			
+			throw new RuntimeException("Can't prepare default access for : "+this+". Your Kero-Security configuration is bad, if you see this exception.");
 		}
 		
-		return result;
+		return new PreparedAccessConfigurationImpl(this, preparedActions, defaultAction);
 	}
 	
-	private AccessRule determineDefaultRule() {
+	public Set<Property> getProperties() {
+	
+		Map<String, Property> props = new HashMap<>();
 		
-		if(this.hasDefaultRule()) return this.getDefaultRule();
+		for(Property prop : getLocalProperties()) {
+			
+			props.put(prop.getName(), prop);
+		}
+		
+		AccessScheme parent = getParent();
+		
+		while(parent != AccessScheme.EMPTY) {
+			
+			for(Property prop : parent.getLocalProperties()) {
+				
+				String name = prop.getName();
+				
+				if(!props.containsKey(name)) {
+					
+					props.put(prop.getName(), createLocalProperty(name));
+				}
+			}
+			
+			parent = parent.getParent();
+		}
+		
+		return new HashSet<>(props.values());
+	}
+	
+	public Access determineDefaultAccess() {
+		
+		if(this.hasDefaultAccess()) return this.getDefaultAccess();
 		
 		if(this.inherit) {
 			
@@ -227,9 +191,9 @@ public class ClassAccessScheme extends AccessSchemeBase implements InvocationHan
 					
 					AccessScheme scheme = agent.getScheme(superClass);
 				
-					if(scheme.hasDefaultRule()) {
+					if(scheme.hasDefaultAccess()) {
 						
-						return scheme.getDefaultRule();
+						return scheme.getDefaultAccess();
 					}
 				}
 				
@@ -237,34 +201,9 @@ public class ClassAccessScheme extends AccessSchemeBase implements InvocationHan
 			}
 		}
 		
-		return agent.getDefaultRule();
+		return agent.getDefaultAccess();
 	}
-	
-	public void collectProperties(Map<String, Property> complexProperties) {
-		
-		collectLocalProperties(complexProperties);
-		
-		if(this.inherit) {
-			
-			collectFromInterfaces(complexProperties);
-			collectPropertiesFromSuperclass(complexProperties);
-		}
-	}
-	
-	protected void collectPropertiesFromSuperclass(Map<String, Property> complexProperties) {
-		
-		Class<?> superClass = type.getSuperclass();
-		
-		while(superClass != Object.class) {
-			
-			AccessScheme supeclassScheme = agent.getOrCreateScheme(superClass);
 
-			supeclassScheme.collectProperties(complexProperties);
-
-			superClass = superClass.getSuperclass();
-		}
-	}
-	
 	public void setProxyClass(Class<? extends AccessProxy> proxyClass) {
 		
 		this.proxyAgent = CustomProxyAgent.create(this, proxyClass);
@@ -282,5 +221,83 @@ public class ClassAccessScheme extends AccessSchemeBase implements InvocationHan
 			
 			return AdaptiveProxyAgent.create(this);
 		}
+	}
+	
+	@Override
+	public Property createLocalProperty(String name) {
+		
+		LOGGER.debug("Creating property: "+name+" for scheme: "+this.getTypeClass().getSimpleName());
+		
+		Property prop = new Property(this, name);
+		
+		localProperties.put(name, prop);
+		
+		return prop;
+	}
+
+	@Override
+	public boolean hasLocalProperty(String name) {
+		
+		return localProperties.containsKey(name);
+	}
+
+	@Override
+	public Property getLocalProperty(String name) {
+		
+		return localProperties.get(name);
+	}
+
+	@Override
+	public Set<Property> getLocalProperties() {
+		
+		return new HashSet<>(localProperties.values());
+	}
+
+	@Override
+	public void setDefaultAccess(Access access) {
+	
+		this.defaultAccess = access;
+	}
+
+	@Override
+	public boolean hasDefaultAccess() {
+	
+		return this.defaultAccess != Access.UNKNOWN;
+	}
+
+	@Override
+	public Access getDefaultAccess() {
+		
+		return this.defaultAccess;
+	}
+
+	@Override
+	public Class<?> getTypeClass() {
+		
+		return this.type;
+	}
+	
+	@Override
+	public KeroAccessAgent getAgent() {
+		
+		return this.agent;
+	}
+	
+	@Override
+	public String getAliase() {
+		
+		return this.aliase;
+	}
+	
+	@Override
+	public void setInherit(boolean i) {
+		
+		this.inherit = i;
+	}
+	
+	@Override
+	public boolean isInherit() {
+		
+		return this.inherit;
 	}
 }

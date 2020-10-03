@@ -1,6 +1,6 @@
 package com.kero.security.core;
 
-public class TestObject implements TestInterface, Comparable<TestObject> {
+public class TestObject implements Comparable<TestObject> {
 	
 	private String text;
 	

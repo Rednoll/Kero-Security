@@ -11,12 +11,12 @@ public class PropertyNode extends KsdlNodeBase {
 	private String name;
 	private DefaultRuleNode defaultRule;
 	
-	private AccessRuleNode grantRule;
-	private AccessRuleNode denyRule;
+	private GrantAccessRuleNode grantRule;
+	private DenyAccessRuleNode denyRule;
 	
 	private List<PropertyMetalineBase> metalines;
 	
-	public PropertyNode(String name, DefaultRuleNode defaultRule, AccessRuleNode grantRule, AccessRuleNode denyRule, List<PropertyMetalineBase> metalines) {
+	public PropertyNode(String name, DefaultRuleNode defaultRule, GrantAccessRuleNode grantRule, DenyAccessRuleNode denyRule, List<PropertyMetalineBase> metalines) {
 		
 		this.name = name;
 		this.defaultRule = defaultRule;

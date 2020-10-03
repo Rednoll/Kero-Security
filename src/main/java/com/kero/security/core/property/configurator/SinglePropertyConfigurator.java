@@ -1,5 +1,6 @@
 package com.kero.security.core.property.configurator;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
 import java.util.function.Function;
@@ -7,10 +8,9 @@ import java.util.function.Function;
 import com.kero.security.core.agent.KeroAccessAgent;
 import com.kero.security.core.interceptor.DenyInterceptor;
 import com.kero.security.core.interceptor.DenyInterceptorImpl;
+import com.kero.security.core.property.Access;
 import com.kero.security.core.property.Property;
 import com.kero.security.core.role.Role;
-import com.kero.security.core.rules.AccessRule;
-import com.kero.security.core.rules.AccessRuleImpl;
 import com.kero.security.core.scheme.configurator.CodeAccessSchemeConfigurator;
 
 public class SinglePropertyConfigurator {
@@ -40,17 +40,17 @@ public class SinglePropertyConfigurator {
 	
 	public SinglePropertyConfigurator defaultGrant() {
 		
-		return defaultRule(AccessRuleImpl.GRANT_ALL);
+		return defaultAccess(Access.GRANT);
 	}
 	
 	public SinglePropertyConfigurator defaultDeny() {
 		
-		return defaultRule(AccessRuleImpl.DENY_ALL);
+		return defaultAccess(Access.DENY);
 	}
 	
-	public SinglePropertyConfigurator defaultRule(AccessRule rule) {
+	public SinglePropertyConfigurator defaultAccess(Access role) {
 
-		property.setDefaultRule(rule);
+		property.setDefaultAccess(role);
 		
 		return this;
 	}
@@ -59,7 +59,12 @@ public class SinglePropertyConfigurator {
 		
 		Set<Role> roles = schemeConf.getAgent().getOrCreateRole(roleNames);
 		
-		setAccessible(roles, true);
+		return grantFor(roles);
+	}
+	
+	public SinglePropertyConfigurator grantFor(Collection<Role> roles) {
+		
+		property.grantRoles(roles);
 		
 		return this;
 	}
@@ -68,16 +73,12 @@ public class SinglePropertyConfigurator {
 		
 		Set<Role> roles = schemeConf.getAgent().getOrCreateRole(roleNames);
 		
-		setAccessible(roles, false);
-		
-		return this;
+		return denyFor(roles);
 	}
 	
-	public SinglePropertyConfigurator setAccessible(Set<Role> roles, boolean accessible) {
+	public SinglePropertyConfigurator denyFor(Collection<Role> roles) {
 		
-		if(roles.isEmpty()) return this;
-	
-		property.addRule(new AccessRuleImpl(roles, accessible));
+		property.denyRoles(roles);
 		
 		return this;
 	}
@@ -103,7 +104,7 @@ public class SinglePropertyConfigurator {
 		}
 		else {
 			
-			property.addRule(new AccessRuleImpl(interceptor.getRoles(), false));
+			property.denyRoles(interceptor.getRoles());
 			return addDenyInterceptor(interceptor);
 		}
 	}

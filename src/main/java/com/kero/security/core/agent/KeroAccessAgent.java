@@ -7,9 +7,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.kero.security.core.configurator.KeroAccessConfigurator;
+import com.kero.security.core.property.Access;
 import com.kero.security.core.role.Role;
 import com.kero.security.core.role.storage.RoleStorage;
-import com.kero.security.core.rules.AccessRule;
 import com.kero.security.core.scheme.AccessScheme;
 import com.kero.security.core.scheme.configurator.AccessSchemeConfigurator;
 import com.kero.security.core.scheme.storage.AccessSchemeStorage;
@@ -24,7 +24,7 @@ public interface KeroAccessAgent {
 	
 	public void setTypeAliase(String aliase, Class<?> type);
 
-	public AccessRule getDefaultRule();
+	public Access getDefaultAccess();
 	
 	public String extractPropertyName(String rawName);
 

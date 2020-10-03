@@ -4,11 +4,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.kero.security.core.agent.KeroAccessAgent;
+import com.kero.security.core.property.Access;
 import com.kero.security.core.property.Property;
 import com.kero.security.core.property.configurator.PropertiesConfigurator;
 import com.kero.security.core.property.configurator.SinglePropertyConfigurator;
-import com.kero.security.core.rules.AccessRule;
-import com.kero.security.core.rules.AccessRuleImpl;
 import com.kero.security.core.scheme.AccessProxy;
 import com.kero.security.core.scheme.AccessScheme;
 import com.kero.security.core.scheme.ClassAccessScheme;
@@ -26,17 +25,17 @@ public class CodeAccessSchemeConfigurator {
 	
 	public CodeAccessSchemeConfigurator defaultGrant() {
 		
-		return defaultRule(AccessRuleImpl.GRANT_ALL);
+		return defaultRule(Access.GRANT);
 	}
 	
 	public CodeAccessSchemeConfigurator defaultDeny() {
 		
-		return defaultRule(AccessRuleImpl.DENY_ALL);
+		return defaultRule(Access.DENY);
 	}
 	
-	public CodeAccessSchemeConfigurator defaultRule(AccessRule rule) {
+	public CodeAccessSchemeConfigurator defaultRule(Access access) {
 		
-		scheme.setDefaultRule(rule);
+		scheme.setDefaultAccess(access);
 	
 		return this;
 	}
