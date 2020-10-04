@@ -1,4 +1,4 @@
-package com.kero.security.core.rules.annotations;
+package com.kero.security.core.access.annotations;
 
 import com.kero.security.core.agent.KeroAccessAgent;
 import com.kero.security.core.annotations.PropertyAnnotationInterpreterBase;

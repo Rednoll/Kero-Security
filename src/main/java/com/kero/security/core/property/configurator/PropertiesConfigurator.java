@@ -3,10 +3,9 @@ package com.kero.security.core.property.configurator;
 import java.util.List;
 import java.util.Set;
 
-import com.kero.security.core.property.Access;
+import com.kero.security.core.access.annotations.Access;
 import com.kero.security.core.property.Property;
 import com.kero.security.core.role.Role;
-import com.kero.security.core.rules.def.DefaultAccessRule;
 import com.kero.security.core.scheme.configurator.CodeAccessSchemeConfigurator;
 
 public class PropertiesConfigurator {

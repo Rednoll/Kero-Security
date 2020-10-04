@@ -5,10 +5,10 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.function.Function;
 
+import com.kero.security.core.access.annotations.Access;
 import com.kero.security.core.agent.KeroAccessAgent;
 import com.kero.security.core.interceptor.DenyInterceptor;
 import com.kero.security.core.interceptor.DenyInterceptorImpl;
-import com.kero.security.core.property.Access;
 import com.kero.security.core.property.Property;
 import com.kero.security.core.role.Role;
 import com.kero.security.core.scheme.configurator.CodeAccessSchemeConfigurator;

@@ -335,4 +335,27 @@ public class SystemTest {
 		
 		assertThrows(AccessException.class, obj::getText);
 	}
+	
+	@Test
+	public void getProperty_DeepInheritDisable() {
+		
+		agent.getKeroAccessConfigurator()
+			.scheme(TestObject.class)
+				.defaultDeny()
+				.property("text")
+					.grantFor("OWNER");
+		
+		agent.getKeroAccessConfigurator()
+			.scheme(TestObject2.class)
+				.defaultDeny()
+				.disableInherit();
+		
+		agent.getKeroAccessConfigurator()
+			.scheme(TestObject3.class)
+				.defaultDeny();
+		
+		TestObject2 obj = agent.protect(new TestObject3("test12"), "OWNER");
+		
+		assertThrows(AccessException.class, obj::getText);
+	}
 }

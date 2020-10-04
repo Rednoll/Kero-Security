@@ -17,9 +17,9 @@ public abstract class ProxyAgentBase implements ProxyAgent {
 	
 	protected abstract Class<? extends AccessProxy> getProxyClass();
 	
-	public Object wrap(Object obj, PreparedAccessConfiguration config) throws Exception {
+	public <T> T wrap(T obj, PreparedAccessConfiguration config) throws Exception {
 	
-		Constructor constructor = null;
+		Constructor<?> constructor = null;
 		
 		try {
 			
@@ -30,6 +30,6 @@ public abstract class ProxyAgentBase implements ProxyAgent {
 			constructor = this.getProxyClass().getConstructor(Object.class, PreparedAccessConfiguration.class);
 		}
 		
-		return constructor.newInstance(obj, config);
+		return (T) constructor.newInstance(obj, config);
 	}
 }

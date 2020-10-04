@@ -4,8 +4,10 @@ import java.util.HashMap;
 
 import com.kero.security.core.scheme.AccessScheme;
 
-public class AccessSchemeStorageImpl extends HashMap<Class, AccessScheme> implements AccessSchemeStorage {
+public class AccessSchemeStorageImpl extends HashMap<Class<?>, AccessScheme> implements AccessSchemeStorage {
 	
+	private static final long serialVersionUID = 1L;
+
 	@Override
 	public void add(AccessScheme scheme) {
 	

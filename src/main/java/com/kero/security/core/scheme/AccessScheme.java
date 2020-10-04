@@ -1,14 +1,12 @@
 package com.kero.security.core.scheme;
 
 import java.util.Collections;
-import java.util.Map;
 import java.util.Set;
 
 import com.kero.security.core.DefaultAccessOwner;
+import com.kero.security.core.access.annotations.Access;
 import com.kero.security.core.agent.KeroAccessAgent;
-import com.kero.security.core.property.Access;
 import com.kero.security.core.property.Property;
-import com.kero.security.core.rules.def.DefaultAccessRule;
 
 public interface AccessScheme extends DefaultAccessOwner {
 
@@ -40,11 +38,27 @@ public interface AccessScheme extends DefaultAccessOwner {
 	
 	public KeroAccessAgent getAgent();
 	
+	public Set<Property> collectProperties();
+	
 	public default AccessScheme getParent() {
 		
 		Class<?> superClass = this.getTypeClass().getSuperclass();
 	
 		return getAgent().getOrCreateScheme(superClass);
+	}
+	
+	public default Property getParentProperty(String name) {
+		
+		AccessScheme parent = this.getParent();
+	
+		if(parent.hasLocalProperty(name)) {
+			
+			return parent.getLocalProperty(name);
+		}
+		else {
+			
+			return parent.getParentProperty(name);
+		}
 	}
 	
 	public Access determineDefaultAccess();
@@ -98,7 +112,7 @@ public interface AccessScheme extends DefaultAccessOwner {
 		@Override
 		public Set<Property> getLocalProperties() {
 			
-			return Collections.EMPTY_SET;
+			return Collections.emptySet();
 		}
 
 		@Override
@@ -123,6 +137,24 @@ public interface AccessScheme extends DefaultAccessOwner {
 		public Access determineDefaultAccess() {
 			
 			return Access.UNKNOWN;
+		}
+		
+		@Override
+		public Property getParentProperty(String name) {
+			
+			return Property.EMPTY;
+		}
+		
+		@Override
+		public AccessScheme getParent() {
+			
+			return this;
+		}
+
+		@Override
+		public Set<Property> collectProperties() {
+			
+			return Collections.emptySet();
 		}
 	}
 }

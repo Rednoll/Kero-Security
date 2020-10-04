@@ -11,7 +11,7 @@ public interface HasBlock<U> {
 
 	public default List<U> parseBlock(TokenSequence tokens) {
 		
-		if(tokens.peek() != KeyWordToken.OPEN_BLOCK) return Collections.EMPTY_LIST;
+		if(tokens.peek() != KeyWordToken.OPEN_BLOCK) return Collections.emptyList();
 		
 		tokens.poll(); // OPEN_BLOCK
 		

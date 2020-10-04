@@ -1,4 +1,4 @@
-package com.kero.security.core.rules.annotations;
+package com.kero.security.core.access.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -9,6 +9,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import com.kero.security.core.access.annotations.DefaultDeny;
+import com.kero.security.core.access.annotations.DefaultDenyInterpreter;
+import com.kero.security.core.access.annotations.DefaultGrant;
+import com.kero.security.core.access.annotations.DefaultGrantInterpreter;
+import com.kero.security.core.access.annotations.DenyFor;
+import com.kero.security.core.access.annotations.DenyForInterpreter;
+import com.kero.security.core.access.annotations.GrantFor;
+import com.kero.security.core.access.annotations.GrantForInterpreter;
 import com.kero.security.core.agent.KeroAccessAgent;
 import com.kero.security.core.annotations.PropertyAnnotationInterpreter;
 import com.kero.security.core.annotations.SchemeAnnotationInterpreter;
@@ -25,14 +33,6 @@ import com.kero.security.core.role.annotations.PropagateRole;
 import com.kero.security.core.role.annotations.PropagateRoleInterpreter;
 import com.kero.security.core.role.annotations.PropagateRoles;
 import com.kero.security.core.role.annotations.PropagateRolesInterpreter;
-import com.kero.security.core.rules.annotations.DefaultDeny;
-import com.kero.security.core.rules.annotations.DefaultDenyInterpreter;
-import com.kero.security.core.rules.annotations.DefaultGrant;
-import com.kero.security.core.rules.annotations.DefaultGrantInterpreter;
-import com.kero.security.core.rules.annotations.DenyFor;
-import com.kero.security.core.rules.annotations.DenyForInterpreter;
-import com.kero.security.core.rules.annotations.GrantFor;
-import com.kero.security.core.rules.annotations.GrantForInterpreter;
 import com.kero.security.core.scheme.AccessScheme;
 
 public class AnnotationAccessSchemeConfigurator extends AccessSchemeConfiguratorBase {

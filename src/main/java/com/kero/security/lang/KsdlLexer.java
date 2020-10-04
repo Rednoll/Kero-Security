@@ -17,7 +17,7 @@ public class KsdlLexer {
 	private static final KsdlLexer INSTANCE = new KsdlLexer();
 	
 	private List<KeyWordLexem> keyWords = new LinkedList<>();
-	private List<KsdlLexem> lexems = new LinkedList<>();
+	private List<KsdlLexem<?>> lexems = new LinkedList<>();
 	
 	private KsdlLexer() {
 	
@@ -41,7 +41,7 @@ public class KsdlLexer {
 
 		StringBuilder currentRawToken = new StringBuilder();
 
-		c2: for(char cursor : data.toCharArray()) {
+		for(char cursor : data.toCharArray()) {
 			
 			checkLexem(tokens, currentRawToken, cursor);
 
@@ -81,7 +81,7 @@ public class KsdlLexer {
 		
 		if(checkWord(tokens, currentRawToken, cursor)) return true;
 		
-		for(KsdlLexem lexem : lexems) {
+		for(KsdlLexem<?> lexem : lexems) {
 			
 			if(lexem.isMatch(currentRawToken) && !lexem.isMatch(currentRawToken.toString()+cursor)) {
 				

@@ -13,13 +13,13 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.kero.security.core.access.annotations.Access;
 import com.kero.security.core.agent.KeroAccessAgent;
 import com.kero.security.core.config.PreparedAccessConfiguration;
 import com.kero.security.core.config.PreparedAccessConfigurationImpl;
 import com.kero.security.core.config.prepared.PreparedAction;
 import com.kero.security.core.config.prepared.PreparedDenyRule;
 import com.kero.security.core.config.prepared.PreparedGrantRule;
-import com.kero.security.core.property.Access;
 import com.kero.security.core.property.Property;
 import com.kero.security.core.role.Role;
 import com.kero.security.core.scheme.proxy.AdaptiveProxyAgent;
@@ -52,6 +52,7 @@ public class ClassAccessScheme implements AccessScheme, InvocationHandler {
 	}
 	
 	public ClassAccessScheme(KeroAccessAgent agent, Class<?> type) {
+		this();
 		
 		this.agent = agent;
 		this.type = type;
@@ -59,10 +60,9 @@ public class ClassAccessScheme implements AccessScheme, InvocationHandler {
 	}
 	
 	public ClassAccessScheme(KeroAccessAgent agent, String aliase, Class<?> type) {
+		this(agent, type);
 		
-		this.agent = agent;
 		this.aliase = aliase;
-		this.type = type;
 	}
 	
 	protected void initProxy() throws Exception {
@@ -121,7 +121,7 @@ public class ClassAccessScheme implements AccessScheme, InvocationHandler {
 		
 		Map<String, PreparedAction> preparedActions = new HashMap<>();
 
-		Set<Property> properties = getProperties();
+		Set<Property> properties = collectProperties();
 		
 		properties.forEach((property)-> {
 
@@ -136,11 +136,11 @@ public class ClassAccessScheme implements AccessScheme, InvocationHandler {
 			
 			defaultAction = new PreparedGrantRule(this, roles);
 		}
-		else if(defaultAccess == Access.DENY){
+		else if(defaultAccess == Access.DENY) {
 			
 			defaultAction = new PreparedDenyRule(this);
 		}
-		else if(defaultAccess == Access.UNKNOWN){
+		else if(defaultAccess == Access.UNKNOWN) {
 			
 			throw new RuntimeException("Can't prepare default access for : "+this+". Your Kero-Security configuration is bad, if you see this exception.");
 		}
@@ -148,7 +148,7 @@ public class ClassAccessScheme implements AccessScheme, InvocationHandler {
 		return new PreparedAccessConfigurationImpl(this, preparedActions, defaultAction);
 	}
 	
-	public Set<Property> getProperties() {
+	public Set<Property> collectProperties() {
 	
 		Map<String, Property> props = new HashMap<>();
 		
@@ -157,21 +157,11 @@ public class ClassAccessScheme implements AccessScheme, InvocationHandler {
 			props.put(prop.getName(), prop);
 		}
 		
-		AccessScheme parent = getParent();
-		
-		while(parent != AccessScheme.EMPTY) {
+		if(this.isInherit()) {
 			
-			for(Property prop : parent.getLocalProperties()) {
-				
-				String name = prop.getName();
-				
-				if(!props.containsKey(name)) {
-					
-					props.put(prop.getName(), createLocalProperty(name));
-				}
-			}
+			Set<Property> parentProps = this.getParent().collectProperties();
 			
-			parent = parent.getParent();
+			parentProps.forEach(prop -> props.putIfAbsent(prop.getName(), prop));
 		}
 		
 		return new HashSet<>(props.values());
@@ -179,29 +169,23 @@ public class ClassAccessScheme implements AccessScheme, InvocationHandler {
 	
 	public Access determineDefaultAccess() {
 		
-		if(this.hasDefaultAccess()) return this.getDefaultAccess();
+		Access access = findDefaultAccess();
 		
-		if(this.inherit) {
+		if(access == Access.UNKNOWN) {
 			
-			Class<?> superClass = this.type.getSuperclass();
-			
-			while(superClass != Object.class) {
-				
-				if(agent.hasScheme(superClass)) {
-					
-					AccessScheme scheme = agent.getScheme(superClass);
-				
-					if(scheme.hasDefaultAccess()) {
-						
-						return scheme.getDefaultAccess();
-					}
-				}
-				
-				superClass = superClass.getSuperclass();
-			}
+			access = agent.getDefaultAccess();
 		}
 		
-		return agent.getDefaultAccess();
+		return access;
+	}
+	
+	protected Access findDefaultAccess() {
+		
+		if(this.hasDefaultAccess()) return this.getDefaultAccess();
+		
+		if(!this.inherit) return Access.UNKNOWN;
+		
+		return getParent().determineDefaultAccess();
 	}
 
 	public void setProxyClass(Class<? extends AccessProxy> proxyClass) {
@@ -246,7 +230,7 @@ public class ClassAccessScheme implements AccessScheme, InvocationHandler {
 		
 		return localProperties.get(name);
 	}
-
+	
 	@Override
 	public Set<Property> getLocalProperties() {
 		

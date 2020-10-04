@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.kero.security.core.DefaultAccessOwner;
+import com.kero.security.core.access.annotations.Access;
 import com.kero.security.core.config.prepared.PreparedAction;
 import com.kero.security.core.config.prepared.PreparedDenyRule;
 import com.kero.security.core.config.prepared.PreparedGrantRule;
@@ -19,8 +20,8 @@ import com.kero.security.core.role.Role;
 import com.kero.security.core.scheme.AccessScheme;
 
 public class Property implements DefaultAccessOwner {
-
-	public static Property EMPTY = new Empty();
+	
+	public static final Property EMPTY = new Empty();
 	
 	private String name;
 	
@@ -105,26 +106,25 @@ public class Property implements DefaultAccessOwner {
 		}
 	}
 	
-	private Access determineDefaultAccess() {
+	protected Access determineDefaultAccess() {
+		
+		Access defaultAccess = findDefaultAccess();
+	
+		if(defaultAccess == Access.UNKNOWN) {
+			
+			defaultAccess = this.scheme.determineDefaultAccess();
+		}
+		
+		return defaultAccess;
+	}
+	
+	protected Access findDefaultAccess() {
 		
 		if(hasDefaultAccess()) return getDefaultAccess();
 
-		if(this.scheme.isInherit()) {
+		if(!this.scheme.isInherit()) return Access.UNKNOWN;
 		
-			Property parent = this.getParent();
-			
-			while(parent != Property.EMPTY) {
-				
-				if(parent.hasDefaultAccess()) {
-					
-					return parent.getDefaultAccess();
-				}
-				
-				parent = parent.getParent();
-			}
-		}
-		
-		return scheme.determineDefaultAccess();
+		return getParent().findDefaultAccess();
 	}
 	
 	private DenyInterceptor determineInterceptor(Collection<Role> roles) {
@@ -133,19 +133,7 @@ public class Property implements DefaultAccessOwner {
 		int minTrash = Integer.MAX_VALUE;
 		DenyInterceptor result = null;
 		
-		List<DenyInterceptor> interceptors = new ArrayList<>(this.interceptors);
-		
-		if(this.scheme.isInherit()) {
-			
-			Property parent = this.getParent();
-			
-			while(parent != Property.EMPTY) {
-				
-				interceptors.addAll(parent.getInterceptors());
-				
-				parent = parent.getParent();
-			}
-		}
+		List<DenyInterceptor> interceptors = collectInterceptors();
 		
 		for(DenyInterceptor interceptor : interceptors) {
 			
@@ -181,31 +169,32 @@ public class Property implements DefaultAccessOwner {
 		}
 	
 		if(maxOverlap == 0) {
-			
-			if(hasDefaultInterceptor()) {
-				
-				return getDefaultInterceptor();
-			}
-			
-			if(this.scheme.isInherit()) {
-				
-				Property parent = this.getParent();
-				
-				while(parent != Property.EMPTY) {
-					
-					if(parent.hasDefaultInterceptor()) {
-						
-						return parent.getDefaultInterceptor();
-					}
-					
-					parent = parent.getParent();
-				}
-			}
-			
-			return null;
+
+			return findDefaultInterceptor();
 		}
 		
 		return result;
+	}
+	
+	public List<DenyInterceptor> collectInterceptors() {
+	
+		List<DenyInterceptor> interceptors = new ArrayList<>(this.interceptors);
+		
+		if(this.scheme.isInherit()) {
+			
+			interceptors.addAll(this.getParent().collectInterceptors());
+		}
+		
+		return interceptors;
+	}
+	
+	public DenyInterceptor findDefaultInterceptor() {
+		
+		if(hasDefaultInterceptor()) return getDefaultInterceptor();
+		
+		if(!this.scheme.isInherit()) return null;
+		
+		return this.getParent().findDefaultInterceptor();
 	}
 	
 	public Role propagateRole(Role role) {
@@ -337,26 +326,32 @@ public class Property implements DefaultAccessOwner {
 
 	public Property getParent() {
 		
-		AccessScheme parentScheme = this.scheme.getParent();
-		
-		while(parentScheme != AccessScheme.EMPTY) {
-			
-			if(parentScheme.hasLocalProperty(this.name)) {
-				
-				return parentScheme.getLocalProperty(this.name);
-			}
-			
-			parentScheme = parentScheme.getParent();
-		}
-	
-		return Property.EMPTY;
+		return this.scheme.getParentProperty(this.name);
 	}
 	
-	private static class Empty extends Property {
+	public static class Empty extends Property {
 
 		private Empty() {
-			super(null, null);
+			super(AccessScheme.EMPTY, null);
+			
+		}
 		
+		@Override
+		protected Access determineDefaultAccess() {
+			
+			return Access.UNKNOWN;
+		}
+		
+		@Override
+		public List<DenyInterceptor> collectInterceptors() {
+			
+			return Collections.emptyList();
+		}
+		
+		@Override
+		public DenyInterceptor findDefaultInterceptor() {
+			
+			return null;
 		}
 		
 		@Override
@@ -381,9 +376,7 @@ public class Property implements DefaultAccessOwner {
 		}
 
 		@Override
-		public void addRolePropagation(Role from, Role to) {
-			
-		}
+		public void addRolePropagation(Role from, Role to) {}
 
 		@Override
 		public Set<Role> propagateRoles(Collection<Role> roles) {
@@ -397,7 +390,7 @@ public class Property implements DefaultAccessOwner {
 		@Override
 		public Set<Role> getGrantRoles() {
 			
-			return Collections.EMPTY_SET;
+			return Collections.emptySet();
 		}
 
 		@Override
@@ -406,7 +399,7 @@ public class Property implements DefaultAccessOwner {
 		@Override
 		public Set<Role> getDenyRoles() {
 			
-			return Collections.EMPTY_SET;
+			return Collections.emptySet();
 		}
 
 		@Override
@@ -430,7 +423,7 @@ public class Property implements DefaultAccessOwner {
 		@Override
 		public List<DenyInterceptor> getInterceptors() {
 			
-			return Collections.EMPTY_LIST;
+			return Collections.emptyList();
 		}
 
 		@Override
@@ -460,7 +453,7 @@ public class Property implements DefaultAccessOwner {
 		@Override
 		public Property getParent() {
 			
-			return Property.EMPTY;
+			return this;
 		}
 	}
 }

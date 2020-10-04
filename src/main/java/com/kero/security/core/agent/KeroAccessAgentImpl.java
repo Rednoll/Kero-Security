@@ -9,11 +9,10 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.kero.security.core.access.annotations.Access;
 import com.kero.security.core.configurator.KeroAccessConfigurator;
-import com.kero.security.core.property.Access;
 import com.kero.security.core.role.Role;
 import com.kero.security.core.role.storage.RoleStorage;
-import com.kero.security.core.rules.def.DefaultAccessRule;
 import com.kero.security.core.scheme.AccessScheme;
 import com.kero.security.core.scheme.ClassAccessScheme;
 import com.kero.security.core.scheme.configurator.AccessSchemeConfigurator;

@@ -1,4 +1,4 @@
-package com.kero.security.core.rules.annotations;
+package com.kero.security.core.access.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,6 +7,6 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD, ElementType.METHOD, ElementType.TYPE})
-public @interface DefaultDeny {
+public @interface DefaultGrant {
 
 }

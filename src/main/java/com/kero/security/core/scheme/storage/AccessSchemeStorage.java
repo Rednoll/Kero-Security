@@ -4,7 +4,7 @@ import java.util.Map;
 
 import com.kero.security.core.scheme.AccessScheme;
 
-public interface AccessSchemeStorage extends Map<Class, AccessScheme> {
+public interface AccessSchemeStorage extends Map<Class<?>, AccessScheme> {
 
 	public void add(AccessScheme scheme);
 	
