@@ -269,6 +269,12 @@ public class ClassAccessScheme implements AccessScheme, InvocationHandler {
 	}
 	
 	@Override
+	public void setAliase(String aliase) {
+		
+		this.aliase = aliase;
+	}
+	
+	@Override
 	public String getAliase() {
 		
 		return this.aliase;
