@@ -20,6 +20,7 @@ import com.kero.security.core.config.PreparedAccessConfigurationImpl;
 import com.kero.security.core.config.prepared.PreparedAction;
 import com.kero.security.core.config.prepared.PreparedDenyRule;
 import com.kero.security.core.config.prepared.PreparedGrantRule;
+import com.kero.security.core.property.LocalProperty;
 import com.kero.security.core.property.Property;
 import com.kero.security.core.role.Role;
 import com.kero.security.core.scheme.proxy.AdaptiveProxyAgent;
@@ -212,7 +213,7 @@ public class ClassAccessScheme implements AccessScheme, InvocationHandler {
 		
 		LOGGER.debug("Creating property: "+name+" for scheme: "+this.getTypeClass().getSimpleName());
 		
-		Property prop = new Property(this, name);
+		Property prop = new LocalProperty(this, name);
 		
 		localProperties.put(name, prop);
 		
