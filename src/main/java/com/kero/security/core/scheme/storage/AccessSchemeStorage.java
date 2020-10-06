@@ -10,7 +10,7 @@ public interface AccessSchemeStorage extends Map<Class<?>, AccessScheme> {
 	
 	public boolean has(Class<?> rawType);
 	
-	public AccessScheme getByAliase(String aliase);
+	public AccessScheme getByName(String name);
 	
 	public static AccessSchemeStorage create() {
 		

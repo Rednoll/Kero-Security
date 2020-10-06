@@ -16,7 +16,11 @@ import com.kero.security.core.role.storage.RoleStorage;
 import com.kero.security.core.scheme.AccessScheme;
 import com.kero.security.core.scheme.ClassAccessScheme;
 import com.kero.security.core.scheme.configurator.AccessSchemeConfigurator;
+import com.kero.security.core.scheme.definition.ClassAccessSchemeDefinition;
+import com.kero.security.core.scheme.definition.configurator.AccessSchemeDefinitionConfigurator;
 import com.kero.security.core.scheme.storage.AccessSchemeStorage;
+import com.kero.security.core.scheme.strategy.AccessSchemeNamingStrategy;
+import com.kero.security.core.scheme.strategy.DefaultAccessSchemeNamingStrategy;
 
 public class KeroAccessAgentImpl implements KeroAccessAgent {
 	
@@ -32,9 +36,12 @@ public class KeroAccessAgentImpl implements KeroAccessAgent {
 	
 	protected Set<Class> ignoreList = new HashSet<>();
 
-	protected Map<Class, String> aliasesMap = new HashMap<>();
+	protected Map<Class, String> namesMap = new HashMap<>();
 
-	protected Set<AccessSchemeConfigurator> autoConfigurators = new HashSet<>();
+	protected Set<AccessSchemeConfigurator> configurators = new HashSet<>();
+	protected Set<AccessSchemeDefinitionConfigurator> definitionConfigurators = new HashSet<>();
+	
+	protected AccessSchemeNamingStrategy schemeNamingStrategy = new DefaultAccessSchemeNamingStrategy();
 	
 	KeroAccessAgentImpl() {
 		
@@ -61,12 +68,17 @@ public class KeroAccessAgentImpl implements KeroAccessAgent {
 	
 	public void addConfigurator(AccessSchemeConfigurator configurator) {
 		
-		this.autoConfigurators.add(configurator);
+		this.configurators.add(configurator);
 	}
 	
-	public void setTypeAliase(String aliase, Class<?> type) {
+	public void addDefinitionConfigurator(AccessSchemeDefinitionConfigurator configurator) {
 		
-		this.aliasesMap.put(type, aliase);
+		this.definitionConfigurators.add(configurator);
+	}
+	
+	public void setTypeName(String name, Class<?> type) {
+		
+		this.namesMap.put(type, name);
 	}
 	
 	public void ignoreType(Class<?> type) {
@@ -87,9 +99,9 @@ public class KeroAccessAgentImpl implements KeroAccessAgent {
 	}
 	
 	@Override
-	public AccessScheme getSchemeByAlise(String aliase) {
+	public AccessScheme getSchemeByName(String name) {
 		
-		return schemeStorage.getByAliase(aliase);
+		return schemeStorage.getByName(name);
 	}
 
 	public AccessScheme getOrCreateScheme(Class<?> rawType){
@@ -99,26 +111,31 @@ public class KeroAccessAgentImpl implements KeroAccessAgent {
 	
 	public AccessScheme createScheme(Class<?> rawType) {
 		
-		if(rawType == null) return AccessScheme.EMPTY;
-		
+		if(rawType == null) return AccessScheme.EMPTY;	
 		if(rawType.isInterface()) throw new RuntimeException("Can't create scheme for interface!");
 		
-		AccessScheme scheme = null;
+		String name = schemeNamingStrategy.getName(rawType);
 		
-		String aliase = rawType.getSimpleName();
+			if(namesMap.containsKey(rawType)) {
+				
+				name = namesMap.get(rawType);
+			}
 		
-		if(aliasesMap.containsKey(rawType)) {
+		ClassAccessSchemeDefinition definition = new ClassAccessSchemeDefinition(this, name, rawType);
 			
-			aliase = aliasesMap.get(rawType);
-		}
-
+			for(AccessSchemeDefinitionConfigurator configurator : definitionConfigurators) {
+				
+				configurator.configure(definition);
+			}
+		
 		LOGGER.debug("Creating access scheme for class: "+rawType.getCanonicalName());
-		scheme = new ClassAccessScheme(this, aliase, rawType);
 		
-		for(AccessSchemeConfigurator ac : autoConfigurators) {
-			
-			ac.configure(scheme);
-		}
+		AccessScheme scheme = definition.createScheme();
+
+			for(AccessSchemeConfigurator configurator : configurators) {
+				
+				configurator.configure(scheme);
+			}
 		
 		schemeStorage.add(scheme);
 		

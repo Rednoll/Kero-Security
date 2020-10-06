@@ -24,7 +24,7 @@ public class SchemeNode extends KsdlNodeBase implements KsdlRootNode {
 	
 	public void interpret(KeroAccessAgent manager) {
 		
-		AccessScheme scheme = manager.getSchemeByAlise(this.typeAliase);
+		AccessScheme scheme = manager.getSchemeByName(this.typeAliase);
 	
 		this.interpret(scheme);
 	}

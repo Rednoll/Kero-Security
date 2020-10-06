@@ -34,7 +34,7 @@ public class ClassAccessScheme implements AccessScheme, InvocationHandler {
 	protected static Logger LOGGER = LoggerFactory.getLogger("Kero-Security");
 	
 	protected Class<?> type;
-	protected String aliase;
+	protected String name;
 	
 	protected Access defaultAccess = Access.UNKNOWN;
 	
@@ -57,13 +57,13 @@ public class ClassAccessScheme implements AccessScheme, InvocationHandler {
 		
 		this.agent = agent;
 		this.type = type;
-		this.aliase = type.getSimpleName();
+		this.name = type.getSimpleName();
 	}
 	
-	public ClassAccessScheme(KeroAccessAgent agent, String aliase, Class<?> type) {
+	public ClassAccessScheme(KeroAccessAgent agent, String name, Class<?> type) {
 		this(agent, type);
 		
-		this.aliase = aliase;
+		this.name = name;
 	}
 	
 	protected void initProxy() throws Exception {
@@ -269,15 +269,9 @@ public class ClassAccessScheme implements AccessScheme, InvocationHandler {
 	}
 	
 	@Override
-	public void setAliase(String aliase) {
+	public String getName() {
 		
-		this.aliase = aliase;
-	}
-	
-	@Override
-	public String getAliase() {
-		
-		return this.aliase;
+		return this.name;
 	}
 	
 	@Override

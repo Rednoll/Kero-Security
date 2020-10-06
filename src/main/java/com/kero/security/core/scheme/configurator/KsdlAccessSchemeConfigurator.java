@@ -22,7 +22,7 @@ public class KsdlAccessSchemeConfigurator extends AccessSchemeConfiguratorBase {
 	
 		SchemeNodeMap schemeNodes = roots.getSchemeNodes();
 		
-		SchemeNode schemeNode = schemeNodes.getOrDefault(scheme.getAliase(), SchemeNode.EMPTY);
+		SchemeNode schemeNode = schemeNodes.getOrDefault(scheme.getName(), SchemeNode.EMPTY);
 
 		schemeNode.interpret(scheme);
 	}

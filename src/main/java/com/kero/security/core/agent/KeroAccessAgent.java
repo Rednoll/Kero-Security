@@ -12,6 +12,7 @@ import com.kero.security.core.role.Role;
 import com.kero.security.core.role.storage.RoleStorage;
 import com.kero.security.core.scheme.AccessScheme;
 import com.kero.security.core.scheme.configurator.AccessSchemeConfigurator;
+import com.kero.security.core.scheme.definition.configurator.AccessSchemeDefinitionConfigurator;
 import com.kero.security.core.scheme.storage.AccessSchemeStorage;
 
 public interface KeroAccessAgent {
@@ -19,10 +20,11 @@ public interface KeroAccessAgent {
 	public void ignoreType(Class<?> type);
 
 	public void addConfigurator(AccessSchemeConfigurator configurator);
+	public void addDefinitionConfigurator(AccessSchemeDefinitionConfigurator definitionConfigurator);
 	
 	public ClassLoader getClassLoader();
 	
-	public void setTypeAliase(String aliase, Class<?> type);
+	public void setTypeName(String name, Class<?> type);
 
 	public Access getDefaultAccess();
 	
@@ -37,7 +39,7 @@ public interface KeroAccessAgent {
 	
 	public AccessScheme getOrCreateScheme(Class<?> rawType);
 	public boolean hasScheme(Class<?> rawType);
-	public AccessScheme getSchemeByAlise(String aliase);
+	public AccessScheme getSchemeByName(String name);
 	public AccessScheme getScheme(Class<?> rawType);
 
 	public default <T> T protect(T object) {

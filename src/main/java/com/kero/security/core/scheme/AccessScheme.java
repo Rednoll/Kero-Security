@@ -34,8 +34,7 @@ public interface AccessScheme extends DefaultAccessOwner {
 	
 	public Class<?> getTypeClass();
 	
-	public void setAliase(String name);
-	public String getAliase();
+	public String getName();
 	
 	public KeroAccessAgent getAgent();
 	
@@ -123,10 +122,7 @@ public interface AccessScheme extends DefaultAccessOwner {
 		}
 		
 		@Override
-		public void setAliase(String aliase) {}
-
-		@Override
-		public String getAliase() {
+		public String getName() {
 			
 			return null;
 		}

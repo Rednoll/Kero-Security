@@ -21,11 +21,11 @@ public class AccessSchemeStorageImpl extends HashMap<Class<?>, AccessScheme> imp
 	}
 	
 	@Override
-	public AccessScheme getByAliase(String aliase) {
+	public AccessScheme getByName(String name) {
 		
 		for(AccessScheme scheme : this.values()) {
 			
-			if(scheme.getAliase().equals(aliase)) {
+			if(scheme.getName().equals(name)) {
 				
 				return scheme;
 			}
