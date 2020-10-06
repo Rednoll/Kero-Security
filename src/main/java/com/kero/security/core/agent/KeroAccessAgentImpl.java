@@ -126,14 +126,14 @@ public class KeroAccessAgentImpl implements KeroAccessAgent {
 				name = namesMap.get(rawType);
 			}
 		
+		LOGGER.debug("Creating access scheme for class: "+rawType.getCanonicalName());	
+			
 		ClassAccessSchemeDefinition definition = new ClassAccessSchemeDefinition(this, name, rawType);
 			
 			for(AccessSchemeDefinitionConfigurator configurator : definitionConfigurators) {
 				
 				configurator.configure(definition);
 			}
-		
-		LOGGER.debug("Creating access scheme for class: "+rawType.getCanonicalName());
 		
 		AccessScheme scheme = definition.createScheme();
 

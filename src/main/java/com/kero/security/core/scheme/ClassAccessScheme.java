@@ -52,18 +52,11 @@ public class ClassAccessScheme implements AccessScheme, InvocationHandler {
 	
 	}
 	
-	public ClassAccessScheme(KeroAccessAgent agent, Class<?> type) {
-		this();
-		
-		this.agent = agent;
-		this.type = type;
-		this.name = type.getSimpleName();
-	}
-	
 	public ClassAccessScheme(KeroAccessAgent agent, String name, Class<?> type) {
-		this(agent, type);
-		
+
+		this.agent = agent;
 		this.name = name;
+		this.type = type;
 	}
 	
 	protected void initProxy() throws Exception {
