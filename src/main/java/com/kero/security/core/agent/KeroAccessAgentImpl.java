@@ -66,6 +66,11 @@ public class KeroAccessAgentImpl implements KeroAccessAgent {
 		ignoreType(boolean.class);
 	}
 	
+	public void setSchemeNamingStrategy(AccessSchemeNamingStrategy strategy) {
+	
+		this.schemeNamingStrategy = strategy;
+	}
+	
 	public void addConfigurator(AccessSchemeConfigurator configurator) {
 		
 		this.configurators.add(configurator);

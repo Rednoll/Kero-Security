@@ -14,11 +14,14 @@ import com.kero.security.core.scheme.AccessScheme;
 import com.kero.security.core.scheme.configurator.AccessSchemeConfigurator;
 import com.kero.security.core.scheme.definition.configurator.AccessSchemeDefinitionConfigurator;
 import com.kero.security.core.scheme.storage.AccessSchemeStorage;
+import com.kero.security.core.scheme.strategy.AccessSchemeNamingStrategy;
 
 public interface KeroAccessAgent {
 	
 	public void ignoreType(Class<?> type);
 
+	public void setSchemeNamingStrategy(AccessSchemeNamingStrategy strategy);
+	
 	public void addConfigurator(AccessSchemeConfigurator configurator);
 	public void addDefinitionConfigurator(AccessSchemeDefinitionConfigurator definitionConfigurator);
 	
