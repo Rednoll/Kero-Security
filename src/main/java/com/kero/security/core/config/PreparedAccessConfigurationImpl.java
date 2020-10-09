@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.kero.security.core.config.prepared.PreparedAction;
+import com.kero.security.core.scheme.AccessProxy;
 import com.kero.security.core.scheme.AccessScheme;
 
 public class PreparedAccessConfigurationImpl implements PreparedAccessConfiguration {
@@ -22,7 +23,10 @@ public class PreparedAccessConfigurationImpl implements PreparedAccessConfigurat
 		this.defaultAction = defaultTypeAction;
 	}
 	
-	public Object process(Object original, Method method, Object[] args) {
+	@Override
+	public Object invoke(Object proxy, Method method, Object[] args) {
+		
+		Object original = ((AccessProxy) proxy).getOriginal();
 		
 		String name = type.getAgent().extractPropertyName(method.getName());
 		

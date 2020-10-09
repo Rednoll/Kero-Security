@@ -1,10 +1,6 @@
 package com.kero.security.core.scheme;
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -23,13 +19,8 @@ import com.kero.security.core.config.prepared.PreparedGrantRule;
 import com.kero.security.core.property.LocalProperty;
 import com.kero.security.core.property.Property;
 import com.kero.security.core.role.Role;
-import com.kero.security.core.scheme.proxy.AdaptiveProxyAgent;
-import com.kero.security.core.scheme.proxy.CustomProxyAgent;
-import com.kero.security.core.scheme.proxy.ProxyAgent;
-import com.kero.security.core.scheme.proxy.SubclassProxyAgent;
-import com.kero.security.core.utils.ByteBuddyClassUtils;
 
-public class ClassAccessScheme implements AccessScheme, InvocationHandler {
+public class ClassAccessScheme implements AccessScheme {
 
 	protected static Logger LOGGER = LoggerFactory.getLogger("Kero-Security");
 	
@@ -44,10 +35,6 @@ public class ClassAccessScheme implements AccessScheme, InvocationHandler {
 	
 	protected boolean inherit = true;
 	
-	protected ProxyAgent proxyAgent = null;
-	
-	protected Map<Set<Role>, PreparedAccessConfiguration> configsCache = new HashMap<>();
-	
 	public ClassAccessScheme() {
 	
 	}
@@ -58,49 +45,10 @@ public class ClassAccessScheme implements AccessScheme, InvocationHandler {
 		this.name = name;
 		this.type = type;
 	}
-	
-	protected void initProxy() throws Exception {
+
+	public PreparedAccessConfiguration prepareAccessConfiguration(Collection<Role> rolesArg) {
 		
-		if(this.proxyAgent != null) return;
-		
-		if(!Modifier.isAbstract(type.getModifiers())) {
-			
-			LOGGER.debug("Building proxy for: "+type.getCanonicalName());
-		
-			this.proxyAgent = createProxyAgent();
-		}
-	}
-	
-	@Override
-	public Object invoke(Object rawProxy, Method method, Object[] args) throws Throwable {
-		
-		AccessProxy proxy = (AccessProxy) rawProxy;
-		
-		Object original = proxy.getOriginal();
-		PreparedAccessConfiguration pac = proxy.getConfiguration();
-	
-		return pac.process(original, method, args);
-	}
-	
-	public <T> T protect(T object, Collection<Role> roles) throws Exception {
-		
-		if(this.proxyAgent == null) {
-			
-			initProxy();
-		}
-		
-		PreparedAccessConfiguration config = configsCache.get(roles);
-		
-		if(config == null) {
-	
-			config = prepareAccessConfiguration(roles);
-			configsCache.put(Collections.unmodifiableSet(new HashSet<>(roles)), config);
-		}
-		
-		return (T) this.proxyAgent.wrap(object, config);
-	}
-	
-	private PreparedAccessConfiguration prepareAccessConfiguration(Collection<Role> roles) {
+		Set<Role> roles = new HashSet<>(rolesArg);
 		
 		String rolesList = "[";
 		
@@ -117,29 +65,30 @@ public class ClassAccessScheme implements AccessScheme, InvocationHandler {
 
 		Set<Property> properties = collectProperties();
 		
-		properties.forEach((property)-> {
+			properties.forEach((property)-> {
+	
+				preparedActions.put(property.getName(), property.prepare(roles));
+			});
 
-			preparedActions.put(property.getName(), property.prepare(roles));
-		});
+		PreparedAction defaultAction = determineDefaultAction(roles);
+		
+		return new PreparedAccessConfigurationImpl(this, preparedActions, defaultAction);
+	}
+	
+	protected PreparedAction determineDefaultAction(Collection<Role> roles) {
 		
 		Access defaultAccess = determineDefaultAccess();
-		
-		PreparedAction defaultAction = null;
-		
+	
 		if(defaultAccess == Access.GRANT) {
 			
-			defaultAction = new PreparedGrantRule(this, roles);
+			return new PreparedGrantRule(this, roles);
 		}
 		else if(defaultAccess == Access.DENY) {
 			
-			defaultAction = new PreparedDenyRule(this);
-		}
-		else if(defaultAccess == Access.UNKNOWN) {
-			
-			throw new RuntimeException("Can't prepare default access for : "+this+". Your Kero-Security configuration is bad, if you see this exception.");
+			return new PreparedDenyRule(this);
 		}
 		
-		return new PreparedAccessConfigurationImpl(this, preparedActions, defaultAction);
+		throw new RuntimeException("Can't prepare default access for : "+this+". Your Kero-Security configuration is bad, if you see this exception.");
 	}
 	
 	public Set<Property> collectProperties() {
@@ -182,25 +131,6 @@ public class ClassAccessScheme implements AccessScheme, InvocationHandler {
 		return getParent().determineDefaultAccess();
 	}
 
-	public void setProxyClass(Class<? extends AccessProxy> proxyClass) {
-		
-		this.proxyAgent = CustomProxyAgent.create(this, proxyClass);
-	}
-	
-	public ProxyAgent createProxyAgent() { 
-	
-		boolean accessible = ByteBuddyClassUtils.checkAccessible(this.type);
-		
-		if(!Modifier.isFinal(this.type.getModifiers()) && accessible) {
-			
-			return SubclassProxyAgent.create(this);
-		}
-		else {
-			
-			return AdaptiveProxyAgent.create(this);
-		}
-	}
-	
 	@Override
 	public Property createLocalProperty(String name) {
 		

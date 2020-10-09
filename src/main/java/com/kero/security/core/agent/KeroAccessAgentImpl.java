@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 
 import com.kero.security.core.access.annotations.Access;
 import com.kero.security.core.configurator.KeroAccessConfigurator;
+import com.kero.security.core.protector.KeroProtector;
+import com.kero.security.core.protector.storage.KeroProtectorStorage;
 import com.kero.security.core.role.Role;
 import com.kero.security.core.role.storage.RoleStorage;
 import com.kero.security.core.scheme.AccessScheme;
@@ -28,6 +30,7 @@ public class KeroAccessAgentImpl implements KeroAccessAgent {
 	
 	protected RoleStorage roleStorage = RoleStorage.create();
 	protected AccessSchemeStorage schemeStorage = AccessSchemeStorage.create();
+	protected KeroProtectorStorage protectorStorage = KeroProtectorStorage.create();
 	protected KeroAccessConfigurator configurator = new KeroAccessConfigurator(this);
 		
 	protected Access defaultAccess = Access.GRANT;
@@ -148,17 +151,17 @@ public class KeroAccessAgentImpl implements KeroAccessAgent {
 	}
 
 	@Override
-	public <T> T protect(T object, Collection<Role> roles) {
+	public Object unsafeProtect(Object object, Collection<Role> roles) {
 		
 		if(object == null) return null;
-		
 		if(this.ignoreList.contains(object.getClass())) return object;
-
+		
 		try {
 			
 			ClassAccessScheme scheme = (ClassAccessScheme) getOrCreateScheme(object.getClass());
-				
-			return scheme.protect(object, roles);
+			KeroProtector protector = protectorStorage.getOrCreateProtector(scheme);
+			
+			return protector.protect(object, roles);
 		}
 		catch(Exception e) {
 			

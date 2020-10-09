@@ -89,6 +89,7 @@ public class CodeAccessSchemeConfigurator {
 		return this;
 	}
 	
+	/*
 	public CodeAccessSchemeConfigurator proxy(Class<? extends AccessProxy> proxy) {
 		
 		if(!(this.scheme instanceof ClassAccessScheme)) throw new RuntimeException("Can't set proxy class to not CLASS scheme!");
@@ -97,6 +98,7 @@ public class CodeAccessSchemeConfigurator {
 		
 		return this;
 	}
+	*/
 	
 	public KeroAccessAgent getAgent() {
 		

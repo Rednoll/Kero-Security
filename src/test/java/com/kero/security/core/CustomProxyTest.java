@@ -31,12 +31,10 @@ public class CustomProxyTest {
 	public static class TestObjectProxy extends TestObject implements AccessProxy {
 
 		private TestObject original;
-		private PreparedAccessConfiguration pac;
 		
-		public TestObjectProxy(TestObject original, PreparedAccessConfiguration pac) {
+		public TestObjectProxy(TestObject original) {
 			
 			this.original = original;
-			this.pac = pac;
 		}
 
 		@Override
@@ -56,11 +54,5 @@ public class CustomProxyTest {
 			
 			return this.original;
 		}
-
-		@Override
-		public PreparedAccessConfiguration getConfiguration() {
-			
-			return this.pac;
-		}	
 	}
 }

@@ -62,8 +62,13 @@ public interface KeroAccessAgent {
 		return protect(object, new HashSet<>(Arrays.asList(roles)));
 	}
 	
-	public <T> T protect(T object, Collection<Role> roles);
+	public default <T> T protect(T object, Collection<Role> roles) {
+		
+		return (T) unsafeProtect(object, roles);
+	}
 
+	public Object unsafeProtect(Object object, Collection<Role> roles);
+	
 	public AccessSchemeStorage getSchemeStorage();
 	public RoleStorage getRoleStorage();
 	public KeroAccessConfigurator getKeroAccessConfigurator();

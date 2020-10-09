@@ -1,16 +1,21 @@
 package com.kero.security.core.scheme;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
 
 import com.kero.security.core.DefaultAccessOwner;
 import com.kero.security.core.access.annotations.Access;
 import com.kero.security.core.agent.KeroAccessAgent;
+import com.kero.security.core.config.PreparedAccessConfiguration;
 import com.kero.security.core.property.Property;
+import com.kero.security.core.role.Role;
 
 public interface AccessScheme extends DefaultAccessOwner {
 
 	public static AccessScheme EMPTY = new Empty();
+	
+	public PreparedAccessConfiguration prepareAccessConfiguration(Collection<Role> roles);
 	
 	public default Property getOrCreateLocalProperty(String name) {
 		
@@ -62,6 +67,13 @@ public interface AccessScheme extends DefaultAccessOwner {
 	}
 	
 	public Access determineDefaultAccess();
+	
+	public static AccessScheme addCacheWrap(AccessScheme scheme) {
+		
+		if(scheme instanceof AccessSchemeCacheWrap) return scheme;
+		
+		return new AccessSchemeCacheWrap(scheme);
+	}
 	
 	public static class Empty implements AccessScheme {
 
@@ -155,6 +167,12 @@ public interface AccessScheme extends DefaultAccessOwner {
 		public Set<Property> collectProperties() {
 			
 			return Collections.emptySet();
+		}
+
+		@Override
+		public PreparedAccessConfiguration prepareAccessConfiguration(Collection<Role> roles) {
+		
+			return null;
 		}
 	}
 }
