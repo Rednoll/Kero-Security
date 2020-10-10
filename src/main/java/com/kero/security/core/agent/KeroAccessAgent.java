@@ -62,19 +62,7 @@ public interface KeroAccessAgent {
 		return protect(object, new HashSet<>(Arrays.asList(roles)));
 	}
 	
-	public default <T> T protect(T object, Collection<Role> roles) {
-		
-		Object result = protectWithoutCast(object, roles);
-		
-		if(object.getClass().isAssignableFrom(result.getClass()) || object.getClass() == result.getClass()) {
-		
-			return (T) protectWithoutCast(object, roles);
-		}
-		
-		throw new RuntimeException("Can't protect "+object.getClass().getSimpleName()+" with cast. Maybe your target class is final or not visible for KeroSecurity.");
-	}
-
-	public Object protectWithoutCast(Object object, Collection<Role> roles);
+	public <T> T protect(T object, Collection<Role> roles);
 	
 	public AccessSchemeStorage getSchemeStorage();
 	public RoleStorage getRoleStorage();
