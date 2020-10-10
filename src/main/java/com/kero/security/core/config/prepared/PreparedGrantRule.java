@@ -26,7 +26,7 @@ public class PreparedGrantRule extends PreparedActionBase implements PreparedAct
 			
 			KeroAccessAgent agent = this.scheme.getAgent();
 			
-			methodResult = agent.protect(methodResult, this.propagatedRoles);
+			methodResult = agent.protectWithoutCast(methodResult, this.propagatedRoles);
 
 			return methodResult;
 		}

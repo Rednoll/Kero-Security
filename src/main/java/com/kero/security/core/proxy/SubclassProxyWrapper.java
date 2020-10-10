@@ -47,7 +47,7 @@ public class SubclassProxyWrapper extends ProxyWrapperBase {
 				.intercept(InvocationHandlerAdapter.toField("pac"))
 				.defineMethod("getOriginal", Object.class, Visibility.PUBLIC).intercept(FieldAccessor.ofField("original"))
 				.make()
-				.load(this.targetClass.getClassLoader())
+				.load(ClassLoader.getSystemClassLoader())
 				.getLoaded();
 		}
 		catch(Exception e) {

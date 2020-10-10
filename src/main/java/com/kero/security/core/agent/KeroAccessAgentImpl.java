@@ -151,7 +151,7 @@ public class KeroAccessAgentImpl implements KeroAccessAgent {
 	}
 
 	@Override
-	public Object unsafeProtect(Object object, Collection<Role> roles) {
+	public Object protectWithoutCast(Object object, Collection<Role> roles) {
 		
 		if(object == null) return null;
 		if(this.ignoreList.contains(object.getClass())) return object;

@@ -2,7 +2,9 @@ package com.kero.security.core.proxy;
 
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.kero.security.core.config.PreparedAccessConfiguration;
 import com.kero.security.core.scheme.AccessProxy;
@@ -55,7 +57,7 @@ public class AdaptiveProxyWrapper extends ProxyWrapperBase {
 				.intercept(InvocationHandlerAdapter.toField("pac"))
 				.defineMethod("getOriginal", Object.class, Visibility.PUBLIC).intercept(FieldAccessor.ofField("original"))
 				.make()
-				.load(this.targetClass.getClassLoader())
+				.load(ClassLoader.getSystemClassLoader())
 				.getLoaded();
 		}
 		catch(Exception e) {
@@ -66,7 +68,7 @@ public class AdaptiveProxyWrapper extends ProxyWrapperBase {
 	
 	private List<Class<?>> collectProxyInterfaces(Class<?> superClazz) {
 		
-		List<Class<?>> interfaces = new ArrayList<>();
+		Set<Class<?>> interfaces = new HashSet<>();
 			interfaces.add(AccessProxy.class);
 		
 			Class<?> currentClass = this.targetClass;
@@ -81,7 +83,7 @@ public class AdaptiveProxyWrapper extends ProxyWrapperBase {
 				currentClass = currentClass.getSuperclass();
 			}
 		
-		return interfaces;
+		return new ArrayList<>(interfaces);
 	}
 	
 	private Class<?> determineProxySuperclass() {
