@@ -154,6 +154,7 @@ public class KeroAccessAgentImpl implements KeroAccessAgent {
 	public <T> T protect(T object, Collection<Role> roles) {
 		
 		if(object == null) return null;
+		if(object instanceof Enum) return object;
 		if(this.ignoreList.contains(object.getClass())) return object;
 		
 		try {
