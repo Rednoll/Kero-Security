@@ -8,7 +8,7 @@ import java.util.Set;
 
 import com.kero.security.core.DefaultAccessOwner;
 import com.kero.security.core.access.annotations.Access;
-import com.kero.security.core.config.prepared.PreparedAction;
+import com.kero.security.core.config.action.Action;
 import com.kero.security.core.interceptor.DenyInterceptor;
 import com.kero.security.core.role.Role;
 
@@ -16,7 +16,7 @@ public interface Property extends DefaultAccessOwner {
 	
 	public static final Property EMPTY = new Empty();
 	
-	public PreparedAction prepare(Collection<Role> roles);
+	public Action prepare(Collection<Role> roles);
 
 	public Access accessible(Collection<Role> rolesArg);
 
@@ -146,7 +146,7 @@ public interface Property extends DefaultAccessOwner {
 		public void grantRoles(Collection<Role> roles) {}
 
 		@Override
-		public PreparedAction prepare(Collection<Role> roles) {
+		public Action prepare(Collection<Role> roles) {
 
 			return null;
 		}

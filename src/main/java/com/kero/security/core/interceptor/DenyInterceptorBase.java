@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.kero.security.core.config.prepared.PreparedInterceptor;
+import com.kero.security.core.config.action.ActionInterceptor;
 import com.kero.security.core.role.Role;
 import com.kero.security.core.scheme.AccessScheme;
 
@@ -23,11 +23,11 @@ public abstract class DenyInterceptorBase implements DenyInterceptor {
 	}
 	
 	@Override
-	public PreparedInterceptor prepare(Collection<Role> roles) {
+	public ActionInterceptor prepare(Collection<Role> roles) {
 		
 		if(manageAny(roles) || this.roles.isEmpty()) {
 		
-			return new PreparedInterceptor(this.scheme, this::intercept);
+			return new ActionInterceptor(this.scheme, this::intercept);
 		}
 		else {
 			

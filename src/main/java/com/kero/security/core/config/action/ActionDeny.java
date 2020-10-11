@@ -1,13 +1,13 @@
-package com.kero.security.core.config.prepared;
+package com.kero.security.core.config.action;
 
 import java.lang.reflect.Method;
 
 import com.kero.security.core.exception.AccessException;
 import com.kero.security.core.scheme.AccessScheme;
 
-public class PreparedDenyRule extends PreparedActionBase implements PreparedAction {
+public class ActionDeny extends ActionBase implements Action {
 
-	public PreparedDenyRule(AccessScheme scheme) {
+	public ActionDeny(AccessScheme scheme) {
 		super(scheme);
 		
 	}

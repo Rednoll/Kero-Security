@@ -13,9 +13,9 @@ import com.kero.security.core.access.annotations.Access;
 import com.kero.security.core.agent.KeroAccessAgent;
 import com.kero.security.core.config.PreparedAccessConfiguration;
 import com.kero.security.core.config.PreparedAccessConfigurationImpl;
-import com.kero.security.core.config.prepared.PreparedAction;
-import com.kero.security.core.config.prepared.PreparedDenyRule;
-import com.kero.security.core.config.prepared.PreparedGrantRule;
+import com.kero.security.core.config.action.Action;
+import com.kero.security.core.config.action.ActionDeny;
+import com.kero.security.core.config.action.ActionGrant;
 import com.kero.security.core.property.LocalProperty;
 import com.kero.security.core.property.Property;
 import com.kero.security.core.role.Role;
@@ -61,7 +61,7 @@ public class ClassAccessScheme implements AccessScheme {
 		
 		LOGGER.debug("Prepare access configuration for "+type.getCanonicalName()+" roles: "+rolesList);
 		
-		Map<String, PreparedAction> preparedActions = new HashMap<>();
+		Map<String, Action> preparedActions = new HashMap<>();
 
 		Set<Property> properties = collectProperties();
 		
@@ -70,22 +70,22 @@ public class ClassAccessScheme implements AccessScheme {
 				preparedActions.put(property.getName(), property.prepare(roles));
 			});
 
-		PreparedAction defaultAction = determineDefaultAction(roles);
+		Action defaultAction = determineDefaultAction(roles);
 		
 		return new PreparedAccessConfigurationImpl(this, preparedActions, defaultAction);
 	}
 	
-	protected PreparedAction determineDefaultAction(Collection<Role> roles) {
+	protected Action determineDefaultAction(Collection<Role> roles) {
 		
 		Access defaultAccess = determineDefaultAccess();
 	
 		if(defaultAccess == Access.GRANT) {
 			
-			return new PreparedGrantRule(this, roles);
+			return new ActionGrant(this, roles);
 		}
 		else if(defaultAccess == Access.DENY) {
 			
-			return new PreparedDenyRule(this);
+			return new ActionDeny(this);
 		}
 		
 		throw new RuntimeException("Can't prepare default access for : "+this+". Your Kero-Security configuration is bad, if you see this exception.");

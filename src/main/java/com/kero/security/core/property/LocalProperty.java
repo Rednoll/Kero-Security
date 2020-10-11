@@ -11,9 +11,9 @@ import java.util.Map;
 import java.util.Set;
 
 import com.kero.security.core.access.annotations.Access;
-import com.kero.security.core.config.prepared.PreparedAction;
-import com.kero.security.core.config.prepared.PreparedDenyRule;
-import com.kero.security.core.config.prepared.PreparedGrantRule;
+import com.kero.security.core.config.action.Action;
+import com.kero.security.core.config.action.ActionDeny;
+import com.kero.security.core.config.action.ActionGrant;
 import com.kero.security.core.interceptor.DenyInterceptor;
 import com.kero.security.core.role.Role;
 import com.kero.security.core.scheme.AccessScheme;
@@ -71,7 +71,7 @@ public class LocalProperty implements Property {
 		}
 	}
 	
-	public PreparedAction prepare(Collection<Role> roles) {
+	public Action prepare(Collection<Role> roles) {
 		
 		Access accessible = accessible(roles);
 		
@@ -82,7 +82,7 @@ public class LocalProperty implements Property {
 		
 		if(accessible == Access.GRANT) {
 			
-			return new PreparedGrantRule(this.scheme, propagateRoles(roles));
+			return new ActionGrant(this.scheme, propagateRoles(roles));
 		}
 		else if(accessible == Access.DENY) {
 		
@@ -94,7 +94,7 @@ public class LocalProperty implements Property {
 			}
 			else {
 				
-				return new PreparedDenyRule(this.scheme);
+				return new ActionDeny(this.scheme);
 			}
 		}
 		else {

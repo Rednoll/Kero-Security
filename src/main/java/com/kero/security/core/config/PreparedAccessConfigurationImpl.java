@@ -4,19 +4,19 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.kero.security.core.config.prepared.PreparedAction;
+import com.kero.security.core.config.action.Action;
 import com.kero.security.core.scheme.AccessProxy;
 import com.kero.security.core.scheme.AccessScheme;
 
 public class PreparedAccessConfigurationImpl implements PreparedAccessConfiguration {
 
-	private Map<String, PreparedAction> actions = new HashMap<>();
-	private PreparedAction defaultAction = null;
+	private Map<String, Action> actions = new HashMap<>();
+	private Action defaultAction = null;
 	private AccessScheme type = null;
 	
 	public PreparedAccessConfigurationImpl() {}
 	
-	public PreparedAccessConfigurationImpl(AccessScheme type, Map<String, PreparedAction> actions, PreparedAction defaultTypeAction) {
+	public PreparedAccessConfigurationImpl(AccessScheme type, Map<String, Action> actions, Action defaultTypeAction) {
 		
 		this.type = type;
 		this.actions = actions;
@@ -30,7 +30,7 @@ public class PreparedAccessConfigurationImpl implements PreparedAccessConfigurat
 		
 		String name = type.getAgent().extractPropertyName(method.getName());
 		
-		PreparedAction action = actions.get(name);
+		Action action = actions.get(name);
 		
 		if(action != null) {
 			

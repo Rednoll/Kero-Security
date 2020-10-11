@@ -1,4 +1,4 @@
-package com.kero.security.core.config.prepared;
+package com.kero.security.core.config.action;
 
 import java.lang.reflect.Method;
 import java.util.Collection;
@@ -7,11 +7,11 @@ import com.kero.security.core.agent.KeroAccessAgent;
 import com.kero.security.core.role.Role;
 import com.kero.security.core.scheme.AccessScheme;
 
-public class PreparedGrantRule extends PreparedActionBase implements PreparedAction {
+public class ActionGrant extends ActionBase implements Action {
 	
 	private Collection<Role> propagatedRoles;
 	
-	public PreparedGrantRule(AccessScheme scheme, Collection<Role> propogatedRoles) {
+	public ActionGrant(AccessScheme scheme, Collection<Role> propogatedRoles) {
 		super(scheme);
 	
 		this.propagatedRoles = propogatedRoles;
