@@ -21,7 +21,7 @@ public class RootNodeList extends ArrayList<KsdlRootNode> {
 			
 				SchemeNode node = (SchemeNode) suspect;
 				
-				result.put(node.getTypeAlise(), node);
+				result.put(node.getName(), node);
 			}
 		}
 		

@@ -12,17 +12,17 @@ import com.kero.security.lang.nodes.metaline.PropertyMetalineBase;
 public class PropertyNode extends KsdlNodeBase {
 
 	private String name;
-	private DefaultRuleNode defaultRule;
+	private DefaultAccessNode defaultAccess;
 	
 	private Set<String> grantRoles;
 	private Set<String> denyRoles;
 	
 	private List<PropertyMetalineBase> metalines;
 	
-	public PropertyNode(String name, DefaultRuleNode defaultRule, Set<String> grantRoles, Set<String> denyRoles, List<PropertyMetalineBase> metalines) {
+	public PropertyNode(String name, DefaultAccessNode defaultAccess, Set<String> grantRoles, Set<String> denyRoles, List<PropertyMetalineBase> metalines) {
 		
 		this.name = name;
-		this.defaultRule = defaultRule;
+		this.defaultAccess = defaultAccess;
 		
 		this.grantRoles = grantRoles;
 		this.denyRoles = denyRoles;
@@ -36,7 +36,7 @@ public class PropertyNode extends KsdlNodeBase {
 		
 		Property prop = scheme.getOrCreateLocalProperty(this.name);
 
-			defaultRule.interpret(manager, prop);
+			defaultAccess.interpret(manager, prop);
 			
 			prop.grantRoles(roleStorage.getOrCreate(this.grantRoles));
 			prop.denyRoles(roleStorage.getOrCreate(this.denyRoles));
@@ -45,5 +45,30 @@ public class PropertyNode extends KsdlNodeBase {
 				
 				metaline.interpret(manager, prop);
 			}
+	}
+	
+	public List<PropertyMetalineBase> getMetalines() {
+		
+		return this.metalines;
+	}
+	
+	public Set<String> getGrantRoles() {
+		
+		return this.grantRoles;
+	}
+	
+	public Set<String> getDenyRoles() {
+	
+		return this.denyRoles;
+	}
+	
+	public DefaultAccessNode getDefaultAccess() {
+		
+		return this.defaultAccess;
+	}
+	
+	public String getName() {
+		
+		return this.name;
 	}
 }

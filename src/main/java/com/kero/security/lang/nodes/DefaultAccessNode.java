@@ -4,13 +4,13 @@ import com.kero.security.core.DefaultAccessOwner;
 import com.kero.security.core.access.Access;
 import com.kero.security.core.agent.KeroAccessAgent;
 
-public enum DefaultRuleNode implements KsdlNode {
+public enum DefaultAccessNode implements KsdlNode {
 	
 	EMPTY(Access.UNKNOWN), GRANT(Access.GRANT), DENY(Access.DENY);
 
 	private Access access;
 		
-	private DefaultRuleNode(Access access) {
+	private DefaultAccessNode(Access access) {
 		
 		this.access = access;
 	}

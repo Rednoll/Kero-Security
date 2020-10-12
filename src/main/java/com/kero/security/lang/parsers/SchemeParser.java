@@ -3,7 +3,7 @@ package com.kero.security.lang.parsers;
 import java.util.List;
 
 import com.kero.security.lang.collections.TokenSequence;
-import com.kero.security.lang.nodes.DefaultRuleNode;
+import com.kero.security.lang.nodes.DefaultAccessNode;
 import com.kero.security.lang.nodes.PropertyNode;
 import com.kero.security.lang.nodes.SchemeNode;
 import com.kero.security.lang.tokens.DefaultRuleToken;
@@ -32,7 +32,7 @@ public class SchemeParser extends KsdlNodeParserBase<SchemeNode> implements Ksdl
 		
 		List<PropertyNode> props = this.parseBlock(tokens);
 		String typeName = nameToken.getRaw();
-		DefaultRuleNode defaultRule = defaultRuleToken.toNode();
+		DefaultAccessNode defaultRule = defaultRuleToken.toNode();
 		
 		return new SchemeNode(typeName, defaultRule, props);
 	}

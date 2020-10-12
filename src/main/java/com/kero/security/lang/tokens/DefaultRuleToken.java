@@ -1,6 +1,6 @@
 package com.kero.security.lang.tokens;
 
-import com.kero.security.lang.nodes.DefaultRuleNode;
+import com.kero.security.lang.nodes.DefaultAccessNode;
 
 public enum DefaultRuleToken implements KsdlToken {
 
@@ -13,12 +13,12 @@ public enum DefaultRuleToken implements KsdlToken {
 		this.defaultAccessible = defaultAccessible;
 	}
 	
-	public DefaultRuleNode toNode() {
+	public DefaultAccessNode toNode() {
 		
-		if(defaultAccessible == null) return DefaultRuleNode.EMPTY;
-		if(defaultAccessible) return DefaultRuleNode.GRANT;
+		if(defaultAccessible == null) return DefaultAccessNode.EMPTY;
+		if(defaultAccessible) return DefaultAccessNode.GRANT;
 		
-		return DefaultRuleNode.DENY;
+		return DefaultAccessNode.DENY;
 	}
 	
 	@Override

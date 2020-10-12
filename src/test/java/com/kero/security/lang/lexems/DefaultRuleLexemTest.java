@@ -27,8 +27,10 @@ public class DefaultRuleLexemTest {
 		
 		DefaultRuleToken grant = lexem.tokenize("(G)");
 		assertEquals(grant, DefaultRuleToken.GRANT);
-
+		assertEquals(grant.getDefaultAccessible(), true);
+		
 		DefaultRuleToken deny = lexem.tokenize("(D)");
 		assertEquals(deny, DefaultRuleToken.DENY);
+		assertEquals(deny.getDefaultAccessible(), false);
 	}
 }

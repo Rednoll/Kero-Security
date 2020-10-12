@@ -25,4 +25,9 @@ public class PropagationMetaline extends PropertyMetalineBase {
 			property.addRolePropagation(from, to);
 		});
 	}
+	
+	public Map<String, String> getPropagationMap() {
+		
+		return this.propagationMap;
+	}
 }
