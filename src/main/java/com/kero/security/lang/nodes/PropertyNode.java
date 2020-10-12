@@ -7,6 +7,7 @@ import com.kero.security.core.agent.KeroAccessAgent;
 import com.kero.security.core.property.Property;
 import com.kero.security.core.role.storage.RoleStorage;
 import com.kero.security.core.scheme.AccessScheme;
+import com.kero.security.lang.nodes.metaline.PropertyMetalineBase;
 
 public class PropertyNode extends KsdlNodeBase {
 

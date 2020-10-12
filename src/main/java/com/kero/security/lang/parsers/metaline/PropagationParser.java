@@ -1,11 +1,10 @@
-package com.kero.security.lang.parsers;
+package com.kero.security.lang.parsers.metaline;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import com.kero.security.lang.collections.TokenSequence;
-import com.kero.security.lang.nodes.PropagationMetaline;
-import com.kero.security.lang.parsers.metaline.MetalineParserBase;
+import com.kero.security.lang.nodes.metaline.PropagationMetaline;
 import com.kero.security.lang.tokens.KeyWordToken;
 import com.kero.security.lang.tokens.NameToken;
 
