@@ -121,7 +121,7 @@ public class LocalProperty implements Property {
 		int minTrash = Integer.MAX_VALUE;
 		DenyInterceptor result = null;
 		
-		List<DenyInterceptor> interceptors = collectInterceptors();
+		List<DenyInterceptor> interceptors = getInterceptors();
 		
 		for(DenyInterceptor interceptor : interceptors) {
 			
@@ -213,11 +213,6 @@ public class LocalProperty implements Property {
 	
 	public List<DenyInterceptor> getInterceptors() {
 	
-		return this.collectInterceptors();
-	}
-	
-	protected List<DenyInterceptor> collectInterceptors() {
-		
 		List<DenyInterceptor> interceptors = new ArrayList<>(this.interceptors);
 		
 		if(this.scheme.isInherit()) {
@@ -280,18 +275,13 @@ public class LocalProperty implements Property {
 	
 	public Access getDefaultAccess() {
 		
-		return this.findDefaultAccess();
-	}
-
-	protected Access findDefaultAccess() {
-		
 		if(hasDefaultAccess()) return this.defaultAccess;
 
 		if(!this.scheme.isInherit()) return Access.UNKNOWN;
 		
 		return getParent().getDefaultAccess();
 	}
-	
+
 	public String getName() {
 		
 		return this.name;
@@ -308,11 +298,6 @@ public class LocalProperty implements Property {
 	}
 
 	public DenyInterceptor getDefaultInterceptor() {
-		
-		return this.findDefaultInterceptor();
-	}
-
-	protected DenyInterceptor findDefaultInterceptor() {
 		
 		if(hasDefaultInterceptor()) return this.defaultInterceptor;
 		
