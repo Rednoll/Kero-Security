@@ -29,7 +29,7 @@ public class MapsTest {
 				.defaultGrant()
 				.property("text")
 					.defaultDeny()
-					.addDenyInterceptor((obj)-> "forbidden", "FRIEND")
+					.addDenyInterceptor((obj, args)-> "forbidden", "FRIEND")
 					.grantFor("OWNER");
 	}
 	

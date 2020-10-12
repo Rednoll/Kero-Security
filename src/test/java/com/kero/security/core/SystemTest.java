@@ -230,7 +230,7 @@ public class SystemTest {
 			.scheme(TestObject.class)
 				.defaultDeny()
 				.property("text")
-					.denyWithInterceptor((obj)-> {
+					.denyWithInterceptor((obj, args)-> {
 						
 						return ((TestObject) obj).getText() + "_OWNER";
 					}, "OWNER");
@@ -247,11 +247,11 @@ public class SystemTest {
 			.scheme(TestObject.class)
 				.defaultDeny()
 				.property("text")
-					.denyWithInterceptor((obj)-> {
+					.denyWithInterceptor((obj, args)-> {
 						
 						return ((TestObject) obj).getText() + "_OWNER";
 					}, "OWNER")
-					.denyWithInterceptor((obj)-> {
+					.denyWithInterceptor((obj, args)-> {
 						
 						return ((TestObject) obj).getText() + "_ADMIN";
 					}, "ADMIN");
@@ -268,23 +268,23 @@ public class SystemTest {
 			.scheme(TestObject.class)
 				.defaultDeny()
 				.property("text")
-					.denyWithInterceptor((obj)-> {
+					.denyWithInterceptor((obj, args)-> {
 						
 						return ((TestObject) obj).getText() + "_3";
 					}, "COMMON", "OWNER", "ADMIN")
-					.denyWithInterceptor((obj)-> {
+					.denyWithInterceptor((obj, args)-> {
 						
 						return ((TestObject) obj).getText() + "_ADMIN";
 					}, "ADMIN")
-					.denyWithInterceptor((obj)-> {
+					.denyWithInterceptor((obj, args)-> {
 						
 						return ((TestObject) obj).getText() + "_OWNER";
 					}, "OWNER")
-					.denyWithInterceptor((obj)-> {
+					.denyWithInterceptor((obj, args)-> {
 						
 						return ((TestObject) obj).getText() + "_COMMON";
 					}, "COMMON")
-					.denyWithInterceptor((obj)-> {
+					.denyWithInterceptor((obj, args)-> {
 						
 						return ((TestObject) obj).getText() + "_2";
 					}, "COMMON", "ADMIN");
@@ -302,7 +302,7 @@ public class SystemTest {
 				.defaultDeny()
 				.property("text")
 					.grantFor("OWNER")
-					.addDenyInterceptor((obj)-> {
+					.addDenyInterceptor((obj, args)-> {
 						
 						return ((TestObject) obj).getText() + "_1";
 					}, "OWNER");

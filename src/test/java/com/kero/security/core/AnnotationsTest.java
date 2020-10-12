@@ -47,7 +47,7 @@ public class AnnotationsTest {
 	public static class TestInterceptor extends DenyInterceptorBase {
 
 		@Override
-		public Object intercept(Object obj) {
+		public Object intercept(Object original, Object[] args) {
 			
 			return "Intercepted!";
 		}

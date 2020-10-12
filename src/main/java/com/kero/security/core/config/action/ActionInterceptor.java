@@ -1,15 +1,15 @@
 package com.kero.security.core.config.action;
 
 import java.lang.reflect.Method;
-import java.util.function.Function;
+import java.util.function.BiFunction;
 
 import com.kero.security.core.scheme.AccessScheme;
 
 public class ActionInterceptor extends ActionBase implements Action {
 
-	private Function<Object, Object> interceptor;
+	private BiFunction<Object, Object[], Object> interceptor;
 	
-	public ActionInterceptor(AccessScheme scheme, Function<Object, Object> interceptor) {
+	public ActionInterceptor(AccessScheme scheme, BiFunction<Object, Object[], Object> interceptor) {
 		super(scheme);
 		
 		this.interceptor = interceptor;
@@ -18,6 +18,7 @@ public class ActionInterceptor extends ActionBase implements Action {
 	@Override
 	public Object process(Method method, Object original, Object[] args) {
 		
-		return interceptor.apply(original);
+		
+		return interceptor.apply(original, args);
 	}
 }

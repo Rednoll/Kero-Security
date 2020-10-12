@@ -3,6 +3,7 @@ package com.kero.security.core.property.configurator;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import com.kero.security.core.access.annotations.Access;
@@ -83,14 +84,14 @@ public class SinglePropertyConfigurator {
 		return this;
 	}
 	
-	public SinglePropertyConfigurator denyWithInterceptor(Function<Object, Object> silentInterceptor, String... roleNames) {
+	public SinglePropertyConfigurator denyWithInterceptor(BiFunction<Object, Object[], Object> silentInterceptor, String... roleNames) {
 		
 		Set<Role> roles = schemeConf.getAgent().getOrCreateRole(roleNames);
 		
 		return denyWithInterceptor(silentInterceptor, roles);
 	}
 	
-	public SinglePropertyConfigurator denyWithInterceptor(Function<Object, Object> function, Set<Role> roles) {
+	public SinglePropertyConfigurator denyWithInterceptor(BiFunction<Object, Object[], Object> function, Set<Role> roles) {
 			
 		return denyWithInterceptor(createInterceptor(function, roles));
 	}
@@ -109,14 +110,14 @@ public class SinglePropertyConfigurator {
 		}
 	}
 
-	public SinglePropertyConfigurator addDenyInterceptor(Function<Object, Object> function, String... roleNames) {
+	public SinglePropertyConfigurator addDenyInterceptor(BiFunction<Object, Object[], Object> function, String... roleNames) {
 		
 		Set<Role> roles = schemeConf.getAgent().getOrCreateRole(roleNames);
 		
 		return addDenyInterceptor(function, roles);
 	}
 	
-	public SinglePropertyConfigurator addDenyInterceptor(Function<Object, Object> function, Set<Role> roles) {
+	public SinglePropertyConfigurator addDenyInterceptor(BiFunction<Object, Object[], Object> function, Set<Role> roles) {
 		
 		return addDenyInterceptor(createInterceptor(function, roles));
 	}
@@ -130,7 +131,7 @@ public class SinglePropertyConfigurator {
 		return this;
 	}
 	
-	public SinglePropertyConfigurator defaultInterceptor(Function<Object, Object> function) {
+	public SinglePropertyConfigurator defaultInterceptor(BiFunction<Object, Object[], Object> function) {
 		
 		return defaultInterceptor(createInterceptor(function, Collections.EMPTY_SET));
 	}
@@ -142,7 +143,7 @@ public class SinglePropertyConfigurator {
 		return this;
 	}
 	
-	private DenyInterceptorImpl createInterceptor(Function<Object, Object> function, Set<Role> roles) {
+	private DenyInterceptorImpl createInterceptor(BiFunction<Object, Object[], Object> function, Set<Role> roles) {
 	
 		return new DenyInterceptorImpl(this.schemeConf.getScheme(), roles, function);
 	}

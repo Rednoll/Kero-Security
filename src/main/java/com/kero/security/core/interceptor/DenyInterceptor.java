@@ -9,7 +9,7 @@ import com.kero.security.core.role.Role;
 public interface DenyInterceptor {
 
 	public ActionInterceptor prepare(Collection<Role> roles);
-	public Object intercept(Object obj);
+	public Object intercept(Object original, Object[] args);
 	
 	public void setRoles(Set<Role> roles);
 	public Set<Role> getRoles();
