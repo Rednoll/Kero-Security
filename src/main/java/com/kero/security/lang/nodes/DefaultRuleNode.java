@@ -1,7 +1,7 @@
 package com.kero.security.lang.nodes;
 
 import com.kero.security.core.DefaultAccessOwner;
-import com.kero.security.core.access.annotations.Access;
+import com.kero.security.core.access.Access;
 import com.kero.security.core.agent.KeroAccessAgent;
 
 public enum DefaultRuleNode implements KsdlNode {

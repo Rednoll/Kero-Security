@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.kero.security.core.access.annotations.Access;
+import com.kero.security.core.access.Access;
 import com.kero.security.core.config.action.Action;
 import com.kero.security.core.config.action.ActionDeny;
 import com.kero.security.core.config.action.ActionGrant;

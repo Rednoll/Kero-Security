@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.kero.security.core.DefaultAccessOwner;
-import com.kero.security.core.access.annotations.Access;
+import com.kero.security.core.access.Access;
 import com.kero.security.core.config.action.Action;
 import com.kero.security.core.interceptor.DenyInterceptor;
 import com.kero.security.core.role.Role;

@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.kero.security.core.access.annotations.Access;
+import com.kero.security.core.access.Access;
 import com.kero.security.core.configurator.KeroAccessConfigurator;
 import com.kero.security.core.role.Role;
 import com.kero.security.core.role.storage.RoleStorage;

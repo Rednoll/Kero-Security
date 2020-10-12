@@ -9,7 +9,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.kero.security.core.access.annotations.Access;
+import com.kero.security.core.access.Access;
 import com.kero.security.core.agent.KeroAccessAgent;
 import com.kero.security.core.config.PreparedAccessConfiguration;
 import com.kero.security.core.config.PreparedAccessConfigurationImpl;
@@ -50,7 +50,7 @@ public class ClassAccessScheme implements AccessScheme {
 		
 		Set<Role> roles = new HashSet<>(rolesArg);
 	
-		LOGGER.debug("Prepare access configuration for \""+this.name+"\" roles: \""+roles+"\"");
+		LOGGER.debug("Prepare access configuration for \""+this.name+"\" roles: "+roles);
 		
 		Map<String, Action> preparedActions = new HashMap<>();
 

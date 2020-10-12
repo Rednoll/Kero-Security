@@ -6,7 +6,7 @@ import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import com.kero.security.core.access.annotations.Access;
+import com.kero.security.core.access.Access;
 import com.kero.security.core.agent.KeroAccessAgent;
 import com.kero.security.core.interceptor.DenyInterceptor;
 import com.kero.security.core.interceptor.DenyInterceptorImpl;

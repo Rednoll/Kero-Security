@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.Set;
 
 import com.kero.security.core.DefaultAccessOwner;
-import com.kero.security.core.access.annotations.Access;
+import com.kero.security.core.access.Access;
 import com.kero.security.core.agent.KeroAccessAgent;
 import com.kero.security.core.config.PreparedAccessConfiguration;
 import com.kero.security.core.property.Property;

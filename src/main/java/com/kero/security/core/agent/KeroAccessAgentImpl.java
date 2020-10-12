@@ -9,7 +9,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.kero.security.core.access.annotations.Access;
+import com.kero.security.core.access.Access;
 import com.kero.security.core.configurator.KeroAccessConfigurator;
 import com.kero.security.core.protector.KeroProtector;
 import com.kero.security.core.protector.storage.KeroProtectorStorage;

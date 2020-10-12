@@ -1,6 +1,6 @@
 package com.kero.security.core;
 
-import com.kero.security.core.access.annotations.Access;
+import com.kero.security.core.access.Access;
 
 public interface DefaultAccessOwner {
 
