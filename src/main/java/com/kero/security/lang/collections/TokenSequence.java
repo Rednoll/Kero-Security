@@ -32,6 +32,8 @@ public class TokenSequence extends LinkedList<KsdlToken> {
 	
 	public boolean isToken(int index, KsdlToken token) {
 		
+		if(index >= size()) return false;
+		
 		return get(index) == token;
 	}
 	
