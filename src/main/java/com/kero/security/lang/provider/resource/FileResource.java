@@ -3,6 +3,7 @@ package com.kero.security.lang.provider.resource;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.StringJoiner;
 
 public class FileResource implements KsdlTextResource {
 
@@ -24,14 +25,14 @@ public class FileResource implements KsdlTextResource {
 	@Override
 	public String getRawText() {
 		
-		StringBuilder builder = new StringBuilder();
-		 
-		collectText(this.file, builder);
+		StringJoiner joiner = new StringJoiner("\n");
 		
-		return builder.toString();
+		collectText(this.file, joiner);
+		
+		return joiner.toString();
 	}
 	
-	private void collectText(File src, StringBuilder builder) {
+	private void collectText(File src, StringJoiner joiner) {
 		
 		if(src.isFile()) {
 			
@@ -39,7 +40,7 @@ public class FileResource implements KsdlTextResource {
 				
 				try {
 					
-					builder.append(new String(Files.readAllBytes(src.toPath())));
+					joiner.add(new String(Files.readAllBytes(src.toPath())));
 				}
 				catch(IOException e) {
 					
@@ -51,7 +52,7 @@ public class FileResource implements KsdlTextResource {
 			
 			for(File sub : src.listFiles()) {
 				
-				collectText(sub, builder);
+				collectText(sub, joiner);
 			}
 		}
 	}
