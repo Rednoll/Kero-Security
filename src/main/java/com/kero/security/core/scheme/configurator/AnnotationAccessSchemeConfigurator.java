@@ -123,7 +123,7 @@ public class AnnotationAccessSchemeConfigurator extends AccessSchemeConfigurator
 			annotations.forEach((annotation)-> {
 
 				if(propertyInterpreters.containsKey(annotation.annotationType())) {
-					
+
 					propertyInterpreters.get(annotation.annotationType()).interpret(propertyConfigurator, annotation);
 				}
 			});

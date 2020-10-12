@@ -13,7 +13,7 @@ public class PropagateRolesInterpreter extends PropertyAnnotationInterpreterBase
 
 	@Override
 	public void interpret(SinglePropertyConfigurator configurator, PropagateRoles annotation) {
-	
+		
 		PropagateRole[] roles = annotation.value();
 		
 		if(roles == null) return;
@@ -22,6 +22,8 @@ public class PropagateRolesInterpreter extends PropertyAnnotationInterpreterBase
 			
 			configurator
 				.propagateRole(child.from(), child.to());
+			
+			System.out.println(child.from()+" -> "+child.to());
 		}
 	}
 }

@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.kero.security.core.access.Access;
 import com.kero.security.core.agent.KeroAccessAgent;
+import com.kero.security.core.configurator.KeroAccessConfigurator;
 import com.kero.security.core.property.Property;
 import com.kero.security.core.property.configurator.PropertiesConfigurator;
 import com.kero.security.core.property.configurator.SinglePropertyConfigurator;
@@ -21,6 +22,11 @@ public class CodeAccessSchemeConfigurator {
 		
 		this.agent = agent;
 		this.scheme = scheme;
+	}
+	
+	public KeroAccessConfigurator cd() {
+		
+		return agent.getKeroAccessConfigurator();
 	}
 	
 	public CodeAccessSchemeConfigurator defaultGrant() {

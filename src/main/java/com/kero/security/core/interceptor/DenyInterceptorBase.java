@@ -30,15 +30,8 @@ public abstract class DenyInterceptorBase implements DenyInterceptor {
 			return new ActionInterceptor(this.scheme, this::intercept);
 		}
 		else {
-			
-			String rolesMessage = "";
-			
-			for(Role role : roles) {
-				
-				rolesMessage += role.getName()+" ";
-			}
-			
-			throw new RuntimeException("This interceptor not suitable for roles: ["+rolesMessage.trim()+"]");
+
+			throw new RuntimeException("This interceptor not suitable for roles: "+roles);
 		}
 	}
 
