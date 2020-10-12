@@ -15,7 +15,7 @@ public abstract class ProxyWrapperBase implements ProxyWrapper {
 
 	@Override
 	public Object wrap(Object obj, PreparedAccessConfiguration pac) {
-	
+
 		Class<?> proxyClass = getProxyClass();
 		
 		try {

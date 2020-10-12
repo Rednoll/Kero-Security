@@ -25,7 +25,7 @@ public class AdaptiveProxyWrapper extends ProxyWrapperBase {
 	}
 
 	@Override
-	public Class<?> createProxyClass() {
+	protected Class<?> createProxyClass() {
 		
 		Class<?> superType = determineProxySuperclass();
 		List<Class<?>> interfaces = collectProxyInterfaces(superType);

@@ -18,7 +18,7 @@ public class SubclassProxyWrapper extends ProxyWrapperBase {
 	}
 
 	@Override
-	public Class<?> createProxyClass() {
+	protected Class<?> createProxyClass() {
 
 		boolean hasDefaultConstructor = true;
 	
