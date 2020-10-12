@@ -27,7 +27,7 @@ public class AccessSchemeCacheWrap implements AccessScheme {
 	@Override
 	public PreparedAccessConfiguration prepareAccessConfiguration(Collection<Role> roles) {
 		
-		roles = Collections.unmodifiableCollection(new HashSet<>(roles));
+		roles = Collections.unmodifiableSet(new HashSet<>(roles));
 
 		return configsCache.computeIfAbsent(roles, original::prepareAccessConfiguration);
 	}
