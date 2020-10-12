@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import com.kero.security.lang.collections.TokenSequence;
-import com.kero.security.lang.tokens.DefaultRuleToken;
+import com.kero.security.lang.tokens.DefaultAccessToken;
 import com.kero.security.lang.tokens.KeyWordToken;
 import com.kero.security.lang.tokens.NameToken;
 import com.kero.security.lang.tokens.RoleToken;
@@ -28,10 +28,10 @@ public class KsdlLexerTest {
 		
 		assertEquals(seq.get(0), KeyWordToken.SCHEME);
 		assertTrue(seq.get(1) instanceof NameToken);
-		assertEquals(seq.get(2), DefaultRuleToken.DENY);
+		assertEquals(seq.get(2), DefaultAccessToken.DENY);
 		assertEquals(seq.get(3), KeyWordToken.OPEN_BLOCK);
 		assertTrue(seq.get(4) instanceof NameToken);
-		assertEquals(seq.get(5), DefaultRuleToken.GRANT);
+		assertEquals(seq.get(5), DefaultAccessToken.GRANT);
 		assertEquals(seq.get(6), KeyWordToken.OPEN_BLOCK);
 		assertTrue(seq.get(7) instanceof RoleToken);
 		assertEquals(seq.get(8), KeyWordToken.CLOSE_BLOCK);

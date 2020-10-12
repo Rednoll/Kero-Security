@@ -1,8 +1,8 @@
 package com.kero.security.lang.lexems;
 
-import com.kero.security.lang.tokens.DefaultRuleToken;
+import com.kero.security.lang.tokens.DefaultAccessToken;
 
-public class DefaultRuleLexem extends KsdlLexemBase<DefaultRuleToken> {
+public class DefaultRuleLexem extends KsdlLexemBase<DefaultAccessToken> {
 
 	public DefaultRuleLexem() {
 		super("\\([GD]\\)");
@@ -10,15 +10,15 @@ public class DefaultRuleLexem extends KsdlLexemBase<DefaultRuleToken> {
 	}
 
 	@Override
-	public DefaultRuleToken tokenize(String data) {
+	public DefaultAccessToken tokenize(String data) {
 		
 		if(data.charAt(1) == 'G') {
 			
-			return DefaultRuleToken.GRANT;
+			return DefaultAccessToken.GRANT;
 		}
 		else {
 			
-			return DefaultRuleToken.DENY;
+			return DefaultAccessToken.DENY;
 		}	
 	}
 }

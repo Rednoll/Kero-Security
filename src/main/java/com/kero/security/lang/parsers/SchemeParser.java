@@ -6,7 +6,7 @@ import com.kero.security.lang.collections.TokenSequence;
 import com.kero.security.lang.nodes.DefaultAccessNode;
 import com.kero.security.lang.nodes.PropertyNode;
 import com.kero.security.lang.nodes.SchemeNode;
-import com.kero.security.lang.tokens.DefaultRuleToken;
+import com.kero.security.lang.tokens.DefaultAccessToken;
 import com.kero.security.lang.tokens.KeyWordToken;
 import com.kero.security.lang.tokens.NameToken;
 
@@ -28,7 +28,7 @@ public class SchemeParser extends KsdlNodeParserBase<SchemeNode> implements Ksdl
 		
 		NameToken nameToken = (NameToken) tokens.poll();
 		
-		DefaultRuleToken defaultRuleToken = tokens.tryGetOrDefault(DefaultRuleToken.EMPTY);
+		DefaultAccessToken defaultRuleToken = tokens.tryGetOrDefault(DefaultAccessToken.EMPTY);
 		
 		List<PropertyNode> props = this.parseBlock(tokens);
 		String typeName = nameToken.getRaw();

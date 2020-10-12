@@ -11,13 +11,13 @@ public class DefaultRuleTokenTest {
 	@Test
 	public void toNode() {
 		
-		DefaultRuleToken grant = DefaultRuleToken.GRANT;
+		DefaultAccessToken grant = DefaultAccessToken.GRANT;
 		assertEquals(grant.toNode(), DefaultAccessNode.GRANT);
 		
-		DefaultRuleToken deny = DefaultRuleToken.DENY;
+		DefaultAccessToken deny = DefaultAccessToken.DENY;
 		assertEquals(deny.toNode(), DefaultAccessNode.DENY);
 		
-		DefaultRuleToken empty = DefaultRuleToken.EMPTY;
+		DefaultAccessToken empty = DefaultAccessToken.EMPTY;
 		assertEquals(empty.toNode(), DefaultAccessNode.EMPTY);
 	}
 }

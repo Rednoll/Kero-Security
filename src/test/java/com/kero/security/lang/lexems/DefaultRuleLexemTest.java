@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import com.kero.security.lang.tokens.DefaultRuleToken;
+import com.kero.security.lang.tokens.DefaultAccessToken;
 
 public class DefaultRuleLexemTest {
 
@@ -25,12 +25,12 @@ public class DefaultRuleLexemTest {
 		
 		DefaultRuleLexem lexem = new DefaultRuleLexem();
 		
-		DefaultRuleToken grant = lexem.tokenize("(G)");
-		assertEquals(grant, DefaultRuleToken.GRANT);
+		DefaultAccessToken grant = lexem.tokenize("(G)");
+		assertEquals(grant, DefaultAccessToken.GRANT);
 		assertEquals(grant.getDefaultAccessible(), true);
 		
-		DefaultRuleToken deny = lexem.tokenize("(D)");
-		assertEquals(deny, DefaultRuleToken.DENY);
+		DefaultAccessToken deny = lexem.tokenize("(D)");
+		assertEquals(deny, DefaultAccessToken.DENY);
 		assertEquals(deny.getDefaultAccessible(), false);
 	}
 }

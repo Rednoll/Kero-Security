@@ -2,13 +2,13 @@ package com.kero.security.lang.tokens;
 
 import com.kero.security.lang.nodes.DefaultAccessNode;
 
-public enum DefaultRuleToken implements KsdlToken {
+public enum DefaultAccessToken implements KsdlToken {
 
 	EMPTY(null), GRANT(true), DENY(false);
 	
 	private Boolean defaultAccessible;
 	
-	private DefaultRuleToken(Boolean defaultAccessible) {
+	private DefaultAccessToken(Boolean defaultAccessible) {
 		
 		this.defaultAccessible = defaultAccessible;
 	}

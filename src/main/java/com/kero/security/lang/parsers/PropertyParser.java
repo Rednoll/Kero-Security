@@ -12,7 +12,7 @@ import com.kero.security.lang.nodes.metaline.PropertyMetalineBase;
 import com.kero.security.lang.parsers.metaline.HasMetalines;
 import com.kero.security.lang.parsers.metaline.MetalineParser;
 import com.kero.security.lang.parsers.metaline.PropagationParser;
-import com.kero.security.lang.tokens.DefaultRuleToken;
+import com.kero.security.lang.tokens.DefaultAccessToken;
 import com.kero.security.lang.tokens.NameToken;
 import com.kero.security.lang.tokens.RoleToken;
 
@@ -29,7 +29,7 @@ public class PropertyParser extends KsdlNodeParserBase<PropertyNode> implements 
 		
 		NameToken nameToken = (NameToken) tokens.poll();
 		
-		DefaultRuleToken defaultRuleToken = tokens.tryGetOrDefault(DefaultRuleToken.EMPTY);
+		DefaultAccessToken defaultRuleToken = tokens.tryGetOrDefault(DefaultAccessToken.EMPTY);
 		
 		Set<String> grantRoles = new HashSet<>();
 		Set<String> denyRoles = new HashSet<>();
