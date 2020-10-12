@@ -41,34 +41,22 @@ public class LocalProperty implements Property {
 	}
 	
 	public Access accessible(Collection<Role> rolesArg) {
-		
-		Set<Role> roles = new HashSet<>(rolesArg);
 	
-		if(roles.isEmpty()) {
-			
-			return Access.UNKNOWN;
-		}
+		if(rolesArg.isEmpty()) return Access.UNKNOWN;
+				
+		Set<Role> roles = new HashSet<>(rolesArg);
+			roles.removeAll(this.denyRoles);
 		
-		roles.removeAll(this.denyRoles);
-		
-		if(roles.isEmpty()) {
-			
-			return Access.DENY;
-		}
+		if(roles.isEmpty()) return Access.DENY;
 		
 		if(!Collections.disjoint(roles, this.grantRoles)) {
 			
 			return Access.GRANT;
 		}
-		
-		if(this.scheme.isInherit()) {
-			
-			return getParent().accessible(roles);
-		}
-		else {
-			
-			return Access.UNKNOWN;
-		}
+
+		if(!this.scheme.isInherit()) return Access.UNKNOWN;
+	
+		return getParent().accessible(roles);
 	}
 	
 	public Action prepare(Collection<Role> roles) {
@@ -156,10 +144,7 @@ public class LocalProperty implements Property {
 			}
 		}
 	
-		if(maxOverlap == 0) {
-
-			return getDefaultInterceptor();
-		}
+		if(maxOverlap == 0 || result == null) return getDefaultInterceptor();
 		
 		return result;
 	}
@@ -172,7 +157,9 @@ public class LocalProperty implements Property {
 		return propagateRoles(data).iterator().next();
 	}
 	
-	public Set<Role> propagateRoles(Collection<Role> roles) {
+	public Set<Role> propagateRoles(Collection<Role> rolesArg) {
+		
+		Set<Role> roles = new HashSet<>(rolesArg);
 		
 		Set<Role> result = new HashSet<>();
 		Set<Role> propagated = new HashSet<>();
@@ -188,8 +175,8 @@ public class LocalProperty implements Property {
 		
 		roles.removeAll(propagated);
 		
-		if(!roles.isEmpty()) {
-			
+		if(this.scheme.isInherit()) {
+		
 			result.addAll(this.getParent().propagateRoles(roles));
 		}
 		
