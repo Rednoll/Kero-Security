@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import com.kero.security.core.access.annotations.DefaultDeny;
 import com.kero.security.core.access.annotations.DefaultGrant;
+import com.kero.security.core.access.annotations.DenyFor;
 import com.kero.security.core.access.annotations.GrantFor;
 import com.kero.security.core.agent.KeroAccessAgent;
 import com.kero.security.core.agent.KeroAccessAgentFactoryImpl;
@@ -29,11 +30,13 @@ public class AnnotationsTest {
 	
 		assertEquals(ownerPr.getText(), "default_text");
 		assertEquals(ownerPr.getChildren().getName(), "default_text_child");
+		assertEquals(ownerPr.getChildren().getAge(), 18);
 		
 		TestAnnotatedObject friendPr = agent.protect(new TestAnnotatedObject("default_text"), "FRIEND");
 		
 		assertEquals(friendPr.getText(), "Intercepted!");
 		assertThrows(AccessException.class, friendPr.getChildren()::getName);
+		assertThrows(AccessException.class, friendPr.getChildren()::getAge);
 	}
 	
 	@DefaultGrant
@@ -46,6 +49,8 @@ public class AnnotationsTest {
 			@PropagateRole(from = "OWNER", to = "GUEST"),
 			@PropagateRole(from = "FRIEND", to = "ANY")
 		})
+		@DefaultDeny
+		@GrantFor({"OWNER", "FRIEND"})
 		private Children children;
 		
 		public TestAnnotatedObject() {}
@@ -72,11 +77,20 @@ public class AnnotationsTest {
 			@GrantFor("GUEST")
 			private String name;
 		
+			@DefaultGrant
+			@DenyFor("ANY")
+			private int age = 18;
+			
 			public Children() {}
 			
 			public Children(String name) {
 				
 				this.name = name;
+			}
+			
+			public int getAge() {
+				
+				return this.age;
 			}
 			
 			public String getName() {
