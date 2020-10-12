@@ -49,17 +49,8 @@ public class ClassAccessScheme implements AccessScheme {
 	public PreparedAccessConfiguration prepareAccessConfiguration(Collection<Role> rolesArg) {
 		
 		Set<Role> roles = new HashSet<>(rolesArg);
-		
-		String rolesList = "[";
-		
-		for(Role role : roles) {
-			
-			rolesList += role.getName()+" ";
-		}
-		
-		rolesList = rolesList.trim()+"]";
-		
-		LOGGER.debug("Prepare access configuration for "+type.getCanonicalName()+" roles: "+rolesList);
+	
+		LOGGER.debug("Prepare access configuration for \""+this.name+"\" roles: \""+roles+"\"");
 		
 		Map<String, Action> preparedActions = new HashMap<>();
 
@@ -88,7 +79,7 @@ public class ClassAccessScheme implements AccessScheme {
 			return new ActionDeny(this);
 		}
 		
-		throw new RuntimeException("Can't prepare default access for : "+this+". Your Kero-Security configuration is bad, if you see this exception.");
+		throw new RuntimeException("Can't prepare default access for: \""+this.name+"\". Your Kero-Security configuration is bad, if you see this exception.");
 	}
 	
 	public Set<Property> collectProperties() {
@@ -134,7 +125,7 @@ public class ClassAccessScheme implements AccessScheme {
 	@Override
 	public Property createLocalProperty(String name) {
 		
-		LOGGER.debug("Creating property: "+name+" for scheme: "+this.getTypeClass().getSimpleName());
+		LOGGER.debug("Creating property: \""+name+"\" for scheme: \""+this.name+"\"");
 		
 		Property prop = new LocalProperty(this, name);
 		

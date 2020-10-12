@@ -99,7 +99,7 @@ public class LocalProperty implements Property {
 		}
 		else {
 		
-			throw new RuntimeException("Can't prepare property: "+this+", cause access "+accessible+". Your Kero-Security configuration is bad, if you see this exception.");
+			throw new RuntimeException("Can't prepare property: \""+this.name+"\". Your Kero-Security configuration is bad, if you see this exception.");
 		}
 	}
 	
