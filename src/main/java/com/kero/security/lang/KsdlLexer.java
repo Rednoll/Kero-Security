@@ -67,7 +67,9 @@ public class KsdlLexer {
 		return tokens;
 	}
 
-	private String prepareRawText(String text) {
+	private String prepareRawText(String rawText) {
+		
+		String text = rawText;
 		
 		text += " ";
 		text = text.replaceAll("\\r\\n", "\n");

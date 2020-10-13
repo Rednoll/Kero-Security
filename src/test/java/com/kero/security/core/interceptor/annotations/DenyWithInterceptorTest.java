@@ -36,6 +36,16 @@ public class DenyWithInterceptorTest {
 		
 		@DenyWithInterceptor(DefaultInterceptor.class)
 		private String text;
+	
+		public String getName() {
+			
+			return this.name;
+		}
+		
+		public String getText() {
+			
+			return this.text;
+		}
 	}
 	
 	public static class Interceptor extends DenyInterceptorBase {

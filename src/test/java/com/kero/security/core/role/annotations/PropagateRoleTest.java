@@ -26,5 +26,10 @@ public class PropagateRoleTest {
 		
 		@PropagateRole(from = "OWNER", to = "FRIEND")
 		private String name;
+		
+		public String getName() {
+			
+			return this.name;
+		}
 	}
 }
