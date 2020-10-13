@@ -4,7 +4,7 @@ import com.kero.security.core.agent.KeroAccessAgent;
 import com.kero.security.core.annotations.SchemeAnnotationInterpreterBase;
 import com.kero.security.core.scheme.configurator.CodeAccessSchemeConfigurator;
 
-public class EnableInheritInterpreter extends SchemeAnnotationInterpreterBase<DisableInherit> {
+public class EnableInheritInterpreter extends SchemeAnnotationInterpreterBase<EnableInherit> {
 
 	public EnableInheritInterpreter(KeroAccessAgent agent) {
 		super(agent);
@@ -12,7 +12,7 @@ public class EnableInheritInterpreter extends SchemeAnnotationInterpreterBase<Di
 	}
 
 	@Override
-	public void interpret(CodeAccessSchemeConfigurator configurator, DisableInherit annotation) {
+	public void interpret(CodeAccessSchemeConfigurator configurator, EnableInherit annotation) {
 	
 		configurator.enableInherit();
 	}
