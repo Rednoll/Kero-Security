@@ -1,6 +1,5 @@
 package com.kero.security.lang.provider;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import com.kero.security.lang.collections.RootNodeList;
@@ -8,11 +7,6 @@ import com.kero.security.lang.collections.RootNodeList;
 public class CompositeProvider implements KsdlProvider {
 
 	private Set<KsdlProvider> sources;
-	
-	public CompositeProvider() {
-		
-		this.sources = new HashSet<>();
-	}
 	
 	public CompositeProvider(Set<KsdlProvider> sources) {
 		
