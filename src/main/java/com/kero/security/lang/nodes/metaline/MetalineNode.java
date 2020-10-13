@@ -1,5 +1,7 @@
 package com.kero.security.lang.nodes.metaline;
 
-public interface MetalineNode {
+import com.kero.security.lang.nodes.KsdlNode;
+
+public interface MetalineNode extends KsdlNode {
 
 }

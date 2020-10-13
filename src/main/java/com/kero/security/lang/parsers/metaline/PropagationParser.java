@@ -16,6 +16,17 @@ public class PropagationParser extends MetalineParserBase<PropagationMetaline> {
 	}
 
 	@Override
+	public boolean isMatch(TokenSequence tokens) {
+		
+		boolean superMatch = super.isMatch(tokens);
+	
+		if(!superMatch) return false;
+		if(!tokens.isToken(2, KeyWordToken.OPEN_BLOCK)) return false;
+		
+		return true;
+	}
+	
+	@Override
 	public PropagationMetaline parse(TokenSequence tokens) {
 		
 		tokens.poll(); // META_LINE

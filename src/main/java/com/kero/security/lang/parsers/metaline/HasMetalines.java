@@ -24,7 +24,7 @@ public interface HasMetalines<N extends MetalineNode> {
 	public default N parseLine(TokenSequence tokens) {
 
 		List<? extends MetalineParser<? extends N>> parsers = getMetalineParsers();
-		
+
 		for(MetalineParser<? extends N> parser : parsers) {
 			
 			if(parser.isMatch(tokens)) {

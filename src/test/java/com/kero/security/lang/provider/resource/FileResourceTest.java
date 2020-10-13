@@ -28,9 +28,11 @@ public class FileResourceTest {
 		
 		Path file1 = fileSystem.getPath("/root/file1.k-s");
 		Path file2 = fileSystem.getPath("/root/sub/file2.k-s");
+		Path file3 = fileSystem.getPath("/root/sub/file3.txt");
 		
 		Files.write(file1, "test1".getBytes(), StandardOpenOption.CREATE_NEW);
 		Files.write(file2, "test2".getBytes(), StandardOpenOption.CREATE_NEW);
+		Files.write(file3, "test3".getBytes(), StandardOpenOption.CREATE_NEW);
 
 		FileResource resource = new FileResource(root);
 		
