@@ -3,7 +3,7 @@ jdk:
   - openjdk8
 
 env:
-  - CODACY_API_BASE_URL=9bc8d622d7b1418a88b4894febb13b90
+  - CODACY_PROJECT_TOKEN=9bc8d622d7b1418a88b4894febb13b90
 
 before_install:
   - chmod +x gradlew
