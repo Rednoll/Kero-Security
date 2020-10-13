@@ -13,7 +13,7 @@ public class KeroProtectorStorageImpl extends HashMap<AccessScheme, KeroProtecto
 	@Override
 	public KeroProtector createProtector(AccessScheme scheme) {
 	
-		if(containsKey(scheme)) throw new RuntimeException("Already has protector for: "+scheme);
+		if(hasProtector(scheme)) throw new RuntimeException("Already has protector for: "+scheme);
 		
 		return computeIfAbsent(scheme, BaseKeroProtector::new);
 	}
