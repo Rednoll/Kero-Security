@@ -3,43 +3,36 @@ package com.kero.security.lang.provider.resource;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
+import java.nio.file.FileSystem;
 import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 
 import org.junit.jupiter.api.Test;
 
+import com.google.common.jimfs.Configuration;
+import com.google.common.jimfs.Jimfs;
+
 public class FileResourceTest {
 
 	@Test
 	public void getRawText() throws IOException {
-	
-		Path dir = Files.createTempDirectory("k-s");
 		
-		Path file1 = Files.createTempFile(dir, "file1", ".k-s");
-		Path file2 = Files.createTempFile(dir, "file2", ".k-s");
+		FileSystem fileSystem = Jimfs.newFileSystem(Configuration.unix());
 		
-		try {
-			
-			Files.delete(file1);
-		}
-		catch(NoSuchFileException e) {
-			
-		}
+		Path root = fileSystem.getPath("/root");
+		Files.createDirectories(root);
 		
-		try {
-
-			Files.delete(file2);
-		}
-		catch(NoSuchFileException e) {
-			
-		}
+		Path subFolder = fileSystem.getPath("/root/sub");
+		Files.createDirectories(subFolder);
+		
+		Path file1 = fileSystem.getPath("/root/file1.k-s");
+		Path file2 = fileSystem.getPath("/root/sub/file2.k-s");
 		
 		Files.write(file1, "test1".getBytes(), StandardOpenOption.CREATE_NEW);
 		Files.write(file2, "test2".getBytes(), StandardOpenOption.CREATE_NEW);
 
-		FileResource resource = new FileResource(dir.toFile());
+		FileResource resource = new FileResource(root);
 		
 		assertEquals(resource.getRawText(), "test1\ntest2");
 	}

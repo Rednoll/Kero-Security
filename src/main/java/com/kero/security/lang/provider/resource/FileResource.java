@@ -1,23 +1,23 @@
 package com.kero.security.lang.provider.resource;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.StringJoiner;
 
 public class FileResource implements KsdlTextResource {
 
 	private String[] suffixes;
-	private File file;
+	private Path path;
 	
-	public FileResource(File file) {
+	public FileResource(Path path) {
 		
-		this.file = file;
+		this.path = path;
 		this.suffixes = new String[] {".ks", ".k-s"};
 	}
 	
-	public FileResource(File file, String... suffixes) {
-		this(file);
+	public FileResource(Path path, String... suffixes) {
+		this(path);
 		
 		this.suffixes = suffixes;
 	}
@@ -27,41 +27,42 @@ public class FileResource implements KsdlTextResource {
 		
 		StringJoiner joiner = new StringJoiner("\n");
 		
-		collectText(this.file, joiner);
+		try {
+			
+			Files.walk(this.path).forEach((sub)-> collectText(sub, joiner));
+		
+			collectText(this.path, joiner);
+		}
+		catch(Exception e) {
+			
+			throw new RuntimeException(e);
+		}
 		
 		return joiner.toString();
 	}
 	
-	private void collectText(File src, StringJoiner joiner) {
+	private void collectText(Path src, StringJoiner joiner) {
 		
-		if(src.isFile()) {
+		if(isSuitable(src)) {
 			
-			if(isSuitable(src)) {
+			try {
 				
-				try {
-					
-					joiner.add(new String(Files.readAllBytes(src.toPath())));
-				}
-				catch(IOException e) {
-					
-					throw new RuntimeException(e);
-				}
+				joiner.add(new String(Files.readAllBytes(src)));
 			}
-		}
-		else if(src.isDirectory()) {
-			
-			for(File sub : src.listFiles()) {
+			catch(IOException e) {
 				
-				collectText(sub, joiner);
+				throw new RuntimeException(e);
 			}
 		}
 	}
 	
-	private boolean isSuitable(File file) {
+	private boolean isSuitable(Path path) {
+		
+		if(!Files.isRegularFile(path)) return false;
 		
 		for(String suffix : suffixes) {
 		
-			if(file.getName().endsWith(suffix)) {
+			if(path.toString().endsWith(suffix)) {
 				
 				return true;
 			}
