@@ -31,6 +31,6 @@ public class AccessSchemeStorageImpl extends HashMap<Class<?>, AccessScheme> imp
 			}
 		}
 		
-		return null;
+		return AccessScheme.EMPTY;
 	}
 }
