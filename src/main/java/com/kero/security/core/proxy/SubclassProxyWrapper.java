@@ -1,6 +1,7 @@
 package com.kero.security.core.proxy;
 
 import com.kero.security.core.config.PreparedAccessConfiguration;
+import com.kero.security.core.proxy.exception.CreateProxyClassException;
 import com.kero.security.core.scheme.AccessProxy;
 
 import net.bytebuddy.ByteBuddy;
@@ -52,7 +53,7 @@ public class SubclassProxyWrapper extends ProxyWrapperBase {
 		}
 		catch(Exception e) {
 			
-			throw new RuntimeException(e);
+			throw new CreateProxyClassException(e);
 		}
 	}
 }

@@ -26,5 +26,10 @@ public class GrantForTest {
 		
 		@GrantFor("OWNER")
 		private String name;
+		
+		public String getName() {
+			
+			return this.name;
+		}
 	}
 }

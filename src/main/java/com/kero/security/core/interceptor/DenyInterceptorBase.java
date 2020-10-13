@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.kero.security.core.config.action.ActionInterceptor;
+import com.kero.security.core.interceptor.exceptions.UnsuitableDenyInterceptorException;
 import com.kero.security.core.role.Role;
 import com.kero.security.core.scheme.AccessScheme;
 
@@ -31,7 +32,7 @@ public abstract class DenyInterceptorBase implements DenyInterceptor {
 		}
 		else {
 
-			throw new RuntimeException("This interceptor not suitable for roles: "+roles);
+			throw new UnsuitableDenyInterceptorException("This interceptor not suitable for roles: "+roles);
 		}
 	}
 

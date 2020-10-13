@@ -19,6 +19,7 @@ import com.kero.security.core.config.action.ActionGrant;
 import com.kero.security.core.property.LocalProperty;
 import com.kero.security.core.property.Property;
 import com.kero.security.core.role.Role;
+import com.kero.security.core.scheme.exception.AccessSchemePrepareException;
 
 public class ClassAccessScheme implements AccessScheme {
 
@@ -79,7 +80,7 @@ public class ClassAccessScheme implements AccessScheme {
 			return new ActionDeny(this);
 		}
 		
-		throw new RuntimeException("Can't prepare default access for: \""+this.name+"\". Your Kero-Security configuration is bad, if you see this exception.");
+		throw new AccessSchemePrepareException("Can't prepare default access for: \""+this.name+"\". Your Kero-Security configuration is bad, if you see this exception.");
 	}
 	
 	public Set<Property> collectProperties() {

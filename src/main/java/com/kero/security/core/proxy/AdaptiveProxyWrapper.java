@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.kero.security.core.config.PreparedAccessConfiguration;
+import com.kero.security.core.proxy.exception.CreateProxyClassException;
 import com.kero.security.core.scheme.AccessProxy;
 import com.kero.security.core.utils.ByteBuddyClassUtils;
 
@@ -62,7 +63,7 @@ public class AdaptiveProxyWrapper extends ProxyWrapperBase {
 		}
 		catch(Exception e) {
 			
-			throw new RuntimeException(e);
+			throw new CreateProxyClassException(e);
 		}
 	}
 	
@@ -73,7 +74,7 @@ public class AdaptiveProxyWrapper extends ProxyWrapperBase {
 		
 			Class<?> currentClass = this.targetClass;
 			
-			while(currentClass != superClazz) {
+			while(!currentClass.equals(superClazz)) {
 				
 				for(Class<?> inter : currentClass.getInterfaces()) {
 					
@@ -90,7 +91,7 @@ public class AdaptiveProxyWrapper extends ProxyWrapperBase {
 		
 		Class<?> superType = this.targetClass.getSuperclass();
 		
-		while(superType != Object.class) {
+		while(!superType.equals(Object.class)) {
 			
 			boolean superAccessible = ByteBuddyClassUtils.checkAccessible(superType);
 			

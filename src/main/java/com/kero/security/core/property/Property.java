@@ -47,7 +47,9 @@ public interface Property extends DefaultAccessOwner {
 	
 	public static class Empty implements Property {
 
-		private Empty() {}
+		private Empty() {
+			
+		}
 		
 		@Override
 		public Access accessible(Collection<Role> rolesArg) {
@@ -56,7 +58,9 @@ public interface Property extends DefaultAccessOwner {
 		}
 		
 		@Override
-		public void setDefaultAccess(Access access) {}
+		public void setDefaultAccess(Access access) {
+			
+		}
 
 		@Override
 		public boolean hasDefaultAccess() {
@@ -71,7 +75,9 @@ public interface Property extends DefaultAccessOwner {
 		}
 
 		@Override
-		public void addRolePropagation(Role from, Role to) {}
+		public void addRolePropagation(Role from, Role to) {
+			
+		}
 
 		@Override
 		public Set<Role> propagateRoles(Collection<Role> roles) {
@@ -80,10 +86,14 @@ public interface Property extends DefaultAccessOwner {
 		}
 		
 		@Override
-		public void grantRole(Role role) {}
+		public void grantRole(Role role) {
+			
+		}
 
 		@Override
-		public void grantRoles(Collection<Role> roles) {}
+		public void grantRoles(Collection<Role> roles) {
+			
+		}
 		
 		@Override
 		public Set<Role> getGrantRoles() {
@@ -92,10 +102,14 @@ public interface Property extends DefaultAccessOwner {
 		}
 
 		@Override
-		public void denyRole(Role rule) {}
+		public void denyRole(Role rule) {
+			
+		}
 
 		@Override
-		public void denyRoles(Collection<Role> roles) {}
+		public void denyRoles(Collection<Role> roles) {
+			
+		}
 		
 		@Override
 		public Set<Role> getDenyRoles() {
@@ -104,7 +118,9 @@ public interface Property extends DefaultAccessOwner {
 		}
 
 		@Override
-		public void setDefaultInterceptor(DenyInterceptor interceptor) {}
+		public void setDefaultInterceptor(DenyInterceptor interceptor) {
+			
+		}
 
 		@Override
 		public boolean hasDefaultInterceptor() {
@@ -119,7 +135,9 @@ public interface Property extends DefaultAccessOwner {
 		}
 
 		@Override
-		public void addInterceptor(DenyInterceptor interceptor) {}
+		public void addInterceptor(DenyInterceptor interceptor) {
+			
+		}
 
 		@Override
 		public List<DenyInterceptor> getInterceptors() {

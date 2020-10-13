@@ -26,5 +26,10 @@ public class DenyForTest {
 		
 		@DenyFor("FRIEND")
 		private String name;
+		
+		public String getName() {
+			
+			return this.name;
+		}
 	}
 }

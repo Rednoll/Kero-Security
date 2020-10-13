@@ -5,6 +5,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.StringJoiner;
 
+import com.kero.security.lang.provider.resource.exception.FileResourceIOException;
+
 public class FileResource implements KsdlTextResource {
 
 	private String[] suffixes;
@@ -37,13 +39,13 @@ public class FileResource implements KsdlTextResource {
 				}
 				catch(Exception e) {
 					
-					throw new RuntimeException(e);
+					throw new FileResourceIOException(e);
 				}
 			});
 		}
 		catch(Exception e) {
 			
-			throw new RuntimeException(e);
+			throw new FileResourceIOException(e);
 		}
 		
 		return joiner.toString();

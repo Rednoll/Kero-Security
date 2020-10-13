@@ -38,6 +38,11 @@ public class DefaultDenyTest {
 		
 		@DefaultDeny
 		private String name;
+		
+		public String getName() {
+			
+			return this.name;
+		}
 	}
 	
 	@DefaultDeny

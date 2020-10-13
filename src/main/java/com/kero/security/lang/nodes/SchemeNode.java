@@ -60,9 +60,13 @@ public class SchemeNode extends KsdlNodeBase implements KsdlRootNode {
 		}
 		
 		@Override
-		public void interpret(KeroAccessAgent manager) {}
+		public void interpret(KeroAccessAgent manager) {
+			
+		}
 		
 		@Override
-		public void interpret(AccessScheme scheme) {}
+		public void interpret(AccessScheme scheme) {
+			
+		}
 	}
 }

@@ -1,6 +1,7 @@
 package com.kero.security.core.proxy;
 
 import com.kero.security.core.config.PreparedAccessConfiguration;
+import com.kero.security.core.proxy.exception.ProxyWrappingException;
 
 public abstract class ProxyWrapperBase implements ProxyWrapper {
 	
@@ -23,7 +24,7 @@ public abstract class ProxyWrapperBase implements ProxyWrapper {
 		}
 		catch(Exception e) {
 			
-			throw new RuntimeException(e);
+			throw new ProxyWrappingException(e);
 		}
 	}
 

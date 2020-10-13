@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.kero.security.lang.collections.TokenSequence;
 import com.kero.security.lang.nodes.metaline.PropagationMetaline;
+import com.kero.security.lang.parsers.exceptions.KsdlParseException;
 import com.kero.security.lang.tokens.KeyWordToken;
 import com.kero.security.lang.tokens.NameToken;
 
@@ -35,7 +36,7 @@ public class PropagationParser extends MetalineParserBase<PropagationMetaline> {
 		
 		if(!(tokens.peek() instanceof NameToken)) {
 			
-			throw new RuntimeException("Can't parse!");
+			throw new KsdlParseException("Can't parse!");
 		}
 		
 		NameToken fromRoleName = (NameToken) tokens.poll();
@@ -50,11 +51,11 @@ public class PropagationParser extends MetalineParserBase<PropagationMetaline> {
 				break;
 			}
 			
-			if(tokens.peek() != KeyWordToken.FORWARD_DIRECTION) throw new RuntimeException("Can't parse!");
+			if(tokens.peek() != KeyWordToken.FORWARD_DIRECTION) throw new KsdlParseException("Can't parse!");
 			
 			tokens.poll(); // FORWARD_DIRECTION
 			
-			if(!(tokens.peek() instanceof NameToken)) throw new RuntimeException("Can't parse!");
+			if(!(tokens.peek() instanceof NameToken)) throw new KsdlParseException("Can't parse!");
 			
 			NameToken toRoleName = (NameToken) tokens.poll();
 		

@@ -2,6 +2,8 @@ package com.kero.security.core.config.action;
 
 import java.lang.reflect.Method;
 
+import com.kero.security.core.config.action.exceptions.RunnedEmptyActionException;
+
 public interface Action {
 	
 	public static Action EMPTY = new Empty();
@@ -17,7 +19,7 @@ public interface Action {
 		@Override
 		public Object process(Method method, Object original, Object[] args) {
 			
-			throw new RuntimeException("Runned EMPTY action. Your Kero-Security configuration is bad, if you see this exception.");
+			throw new RunnedEmptyActionException();
 		}
 	}
 }

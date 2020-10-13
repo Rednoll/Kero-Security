@@ -64,9 +64,9 @@ public class CodeAccessSchemeConfigurator {
 	}
 	
 	
-	public SinglePropertyConfigurator property(String propertyName) {
+	public SinglePropertyConfigurator property(String rawPropertyName) {
 		
-		propertyName = agent.extractPropertyName(propertyName);
+		String propertyName = agent.extractPropertyName(rawPropertyName);
 		
 		return property(this.scheme.getOrCreateLocalProperty(propertyName));
 	}

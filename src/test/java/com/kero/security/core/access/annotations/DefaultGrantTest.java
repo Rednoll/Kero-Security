@@ -38,6 +38,11 @@ public class DefaultGrantTest {
 		
 		@DefaultGrant
 		private String name;
+		
+		public String getName() {
+			
+			return this.name;
+		}
 	}
 	
 	@DefaultGrant

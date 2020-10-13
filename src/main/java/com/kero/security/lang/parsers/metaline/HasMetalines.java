@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.kero.security.lang.collections.TokenSequence;
 import com.kero.security.lang.nodes.metaline.MetalineNode;
+import com.kero.security.lang.parsers.exceptions.ParserNotFoundException;
 import com.kero.security.lang.tokens.KeyWordToken;
 
 public interface HasMetalines<N extends MetalineNode> {
@@ -33,7 +34,7 @@ public interface HasMetalines<N extends MetalineNode> {
 			}
 		}
 		
-		throw new RuntimeException("Can't find parser for metaline!");
+		throw new ParserNotFoundException("Can't find parser for metaline!");
 	}
 	
 	public List<? extends MetalineParser<? extends N>> getMetalineParsers();

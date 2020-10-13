@@ -31,9 +31,9 @@ public class KsdlLexer {
 		lexems.add(new NameLexem());
 	}
 	
-	public TokenSequence tokenize(String data) {
+	public TokenSequence tokenize(String rawData) {
 		
-		data = prepareRawText(data);
+		String data = prepareRawText(rawData);
 		
 		int findShortEnd = 0;
 		

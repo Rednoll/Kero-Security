@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 
 import com.kero.security.core.agent.KeroAccessAgent;
+import com.kero.security.core.config.action.exceptions.ActionGrantMethodInvokeException;
 import com.kero.security.core.role.Role;
 import com.kero.security.core.scheme.AccessScheme;
 
@@ -20,19 +21,21 @@ public class ActionGrant extends ActionBase implements Action {
 	@Override
 	public Object process(Method method, Object original, Object[] args) {
 		
+		Object methodResult = null;
+		
 		try {
 		
-			Object methodResult = method.invoke(original, args);
-			
-			KeroAccessAgent agent = this.scheme.getAgent();
-			
-			methodResult = agent.protect(methodResult, this.propagatedRoles);
-
-			return methodResult;
+			methodResult = method.invoke(original, args);
 		}
 		catch(Exception e) {
 			
-			throw new RuntimeException(e);
+			throw new ActionGrantMethodInvokeException(e);
 		}
+		
+		KeroAccessAgent agent = this.scheme.getAgent();
+		
+		methodResult = agent.protect(methodResult, this.propagatedRoles);
+
+		return methodResult;
 	}
 }

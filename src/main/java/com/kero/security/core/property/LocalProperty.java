@@ -15,6 +15,8 @@ import com.kero.security.core.config.action.Action;
 import com.kero.security.core.config.action.ActionDeny;
 import com.kero.security.core.config.action.ActionGrant;
 import com.kero.security.core.interceptor.DenyInterceptor;
+import com.kero.security.core.property.exceptions.PropertyPrepareException;
+import com.kero.security.core.property.exceptions.RoleCollisionException;
 import com.kero.security.core.role.Role;
 import com.kero.security.core.scheme.AccessScheme;
 
@@ -87,7 +89,7 @@ public class LocalProperty implements Property {
 		}
 		else {
 		
-			throw new RuntimeException("Can't prepare property: \""+this.name+"\". Your Kero-Security configuration is bad, if you see this exception.");
+			throw new PropertyPrepareException("Can't prepare property: \""+this.name+"\". Your Kero-Security configuration is bad, if you see this exception.");
 		}
 	}
 	
@@ -220,7 +222,7 @@ public class LocalProperty implements Property {
 	
 	public void grantRole(Role role) {
 		
-		if(this.denyRoles.contains(role)) throw new RuntimeException("Detected roles collision: "+role);
+		if(this.denyRoles.contains(role)) throw new RoleCollisionException("Detected roles collision: "+role);
 		
 		this.grantRoles.add(role);
 	}
@@ -235,7 +237,7 @@ public class LocalProperty implements Property {
 
 	public void denyRole(Role role) {
 		
-		if(this.grantRoles.contains(role)) throw new RuntimeException("Detected roles collision: "+role);
+		if(this.grantRoles.contains(role)) throw new RoleCollisionException("Detected roles collision: "+role);
 		
 		this.denyRoles.add(role);
 	}

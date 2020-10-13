@@ -22,7 +22,9 @@ public class ProxyWrapperBaseTest {
 	
 	public static class TestProxyClass implements AccessProxy {
 
-		public TestProxyClass(Object obj, PreparedAccessConfiguration pac) {}
+		public TestProxyClass(Object obj, PreparedAccessConfiguration pac) {
+			
+		}
 		
 		@Override
 		public Object getOriginal() {

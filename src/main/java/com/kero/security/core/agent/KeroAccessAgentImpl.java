@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.kero.security.core.access.Access;
+import com.kero.security.core.agent.exception.AccessSchemeIncorrectTypeException;
 import com.kero.security.core.configurator.KeroAccessConfigurator;
 import com.kero.security.core.protector.KeroProtector;
 import com.kero.security.core.protector.storage.KeroProtectorStorage;
@@ -118,7 +119,7 @@ public class KeroAccessAgentImpl implements KeroAccessAgent {
 	public AccessScheme createScheme(Class<?> rawType) {
 		
 		if(rawType == null) return AccessScheme.EMPTY;	
-		if(rawType.isInterface()) throw new RuntimeException("Can't create scheme for interface!");
+		if(rawType.isInterface()) throw new AccessSchemeIncorrectTypeException("Can't create scheme for interface!");
 		
 		String name = schemeNamingStrategy.getName(rawType);
 		
@@ -155,29 +156,24 @@ public class KeroAccessAgentImpl implements KeroAccessAgent {
 		if(object instanceof Enum) return object;
 		if(this.ignoreList.contains(object.getClass())) return object;
 		
-		try {
-			
-			ClassAccessScheme scheme = (ClassAccessScheme) getOrCreateScheme(object.getClass());
-			KeroProtector protector = protectorStorage.getOrCreateProtector(scheme);
-			
-			return protector.protect(object, roles);
-		}
-		catch(Exception e) {
-			
-			throw new RuntimeException(e);
-		}
+		ClassAccessScheme scheme = (ClassAccessScheme) getOrCreateScheme(object.getClass());
+		KeroProtector protector = protectorStorage.getOrCreateProtector(scheme);
+		
+		return protector.protect(object, roles);
 	}
 	
 	public String extractPropertyName(String rawName) {
 		
-		if(rawName.startsWith("get")) {
+		String name = rawName;
+		
+		if(name.startsWith("get")) {
 			
-			rawName = rawName.replaceFirst("get", "");
+			name = name.replaceFirst("get", "");
 		}
 		
-		rawName = rawName.toLowerCase();
+		name = name.toLowerCase();
 	
-		return rawName;
+		return name;
 	}
 	
 	@Override

@@ -1,7 +1,6 @@
 package com.kero.security.core.scheme;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Collections;
 
@@ -40,7 +39,7 @@ public class AccessSchemeTest {
 		
 		Property getted = scheme.getOrCreateLocalProperty("name");
 	
-		assertTrue(created == getted);
+		assertEquals(created, getted);
 	}
 	
 	@Test
@@ -49,6 +48,6 @@ public class AccessSchemeTest {
 		AccessScheme wrap = AccessScheme.addCacheWrap(AccessScheme.EMPTY);
 		AccessScheme wrap2 = AccessScheme.addCacheWrap(wrap);
 	
-		assertTrue(wrap == wrap2);
+		assertEquals(wrap, wrap2);
 	}
 }

@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import com.kero.security.core.protector.BaseKeroProtector;
 import com.kero.security.core.protector.KeroProtector;
+import com.kero.security.core.protector.storage.exceptions.ProtectorAlreadyExistsException;
 import com.kero.security.core.scheme.AccessScheme;
 
 public class KeroProtectorStorageImpl extends HashMap<AccessScheme, KeroProtector> implements KeroProtectorStorage {
@@ -13,7 +14,7 @@ public class KeroProtectorStorageImpl extends HashMap<AccessScheme, KeroProtecto
 	@Override
 	public KeroProtector createProtector(AccessScheme scheme) {
 	
-		if(hasProtector(scheme)) throw new RuntimeException("Already has protector for: "+scheme);
+		if(hasProtector(scheme)) throw new ProtectorAlreadyExistsException("Already has protector for: "+scheme);
 		
 		return computeIfAbsent(scheme, BaseKeroProtector::new);
 	}
