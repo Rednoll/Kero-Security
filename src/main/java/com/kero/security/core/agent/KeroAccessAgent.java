@@ -25,8 +25,6 @@ public interface KeroAccessAgent {
 	public void addConfigurator(AccessSchemeConfigurator configurator);
 	public void addDefinitionConfigurator(AccessSchemeDefinitionConfigurator definitionConfigurator);
 	
-	public ClassLoader getClassLoader();
-	
 	public void setTypeName(String name, Class<?> type);
 
 	public Access getDefaultAccess();

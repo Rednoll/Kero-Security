@@ -35,8 +35,6 @@ public class KeroAccessAgentImpl implements KeroAccessAgent {
 		
 	protected Access defaultAccess = Access.GRANT;
 	
-	protected ClassLoader proxiesClassLoader = ClassLoader.getSystemClassLoader();
-	
 	protected Set<Class> ignoreList = new HashSet<>();
 
 	protected Map<Class, String> namesMap = new HashMap<>();
@@ -186,12 +184,6 @@ public class KeroAccessAgentImpl implements KeroAccessAgent {
 	public Access getDefaultAccess() {
 		
 		return this.defaultAccess;
-	}
-
-	@Override
-	public ClassLoader getClassLoader() {
-		
-		return this.proxiesClassLoader;
 	}
 	
 	@Override
