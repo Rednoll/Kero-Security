@@ -78,10 +78,13 @@ public interface Property extends DefaultAccessOwner {
 			
 			return new HashSet<>(roles);
 		}
-
+		
 		@Override
 		public void grantRole(Role role) {}
 
+		@Override
+		public void grantRoles(Collection<Role> roles) {}
+		
 		@Override
 		public Set<Role> getGrantRoles() {
 			
@@ -141,9 +144,6 @@ public interface Property extends DefaultAccessOwner {
 			
 			return role;
 		}
-
-		@Override
-		public void grantRoles(Collection<Role> roles) {}
 
 		@Override
 		public Action prepare(Collection<Role> roles) {
