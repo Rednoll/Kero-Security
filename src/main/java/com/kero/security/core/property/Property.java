@@ -148,7 +148,7 @@ public interface Property extends DefaultAccessOwner {
 		@Override
 		public Action prepare(Collection<Role> roles) {
 
-			return null;
+			return Action.EMPTY;
 		}
 		
 		@Override
