@@ -32,7 +32,7 @@ public class AccessSchemeCacheWrapTest {
 	}
 	
 	@Test
-	public void forwardedTest() {
+	public void forwardTest() {
 		
 		AccessScheme schemeMock = Mockito.mock(AccessScheme.class);
 		AccessScheme cachedScheme = AccessScheme.addCacheWrap(schemeMock);

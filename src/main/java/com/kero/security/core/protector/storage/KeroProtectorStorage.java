@@ -5,16 +5,12 @@ import com.kero.security.core.scheme.AccessScheme;
 
 public interface KeroProtectorStorage {
 
-	public default KeroProtector createProtector(AccessScheme scheme) {
-		
-		return createProtector(scheme);
-	}
-	
 	public default KeroProtector getOrCreateProtector(AccessScheme scheme) {
 		
 		return hasProtector(scheme) ? getProtector(scheme) : createProtector(scheme);
 	}
-	
+
+	public KeroProtector createProtector(AccessScheme scheme);
 	public boolean hasProtector(AccessScheme scheme);
 	public KeroProtector getProtector(AccessScheme scheme);
 	
