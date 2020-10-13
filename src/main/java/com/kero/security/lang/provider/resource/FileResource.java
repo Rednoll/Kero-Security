@@ -26,12 +26,20 @@ public class FileResource implements KsdlTextResource {
 	public String getRawText() {
 		
 		StringJoiner joiner = new StringJoiner("\n");
-		
+				
 		try {
 			
-			Files.walk(this.path).forEach((sub)-> collectText(sub, joiner));
-		
-			collectText(this.path, joiner);
+			Files.walk(this.path).forEach((sub)-> {
+				
+				try {
+				
+					collectText(sub, joiner);
+				}
+				catch(Exception e) {
+					
+					throw new RuntimeException(e);
+				}
+			});
 		}
 		catch(Exception e) {
 			
@@ -41,18 +49,11 @@ public class FileResource implements KsdlTextResource {
 		return joiner.toString();
 	}
 	
-	private void collectText(Path src, StringJoiner joiner) {
+	private void collectText(Path src, StringJoiner joiner) throws IOException {
 		
 		if(isSuitable(src)) {
-			
-			try {
 				
-				joiner.add(new String(Files.readAllBytes(src)));
-			}
-			catch(IOException e) {
-				
-				throw new RuntimeException(e);
-			}
+			joiner.add(new String(Files.readAllBytes(src)));
 		}
 	}
 	

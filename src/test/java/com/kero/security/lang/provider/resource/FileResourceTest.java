@@ -37,5 +37,9 @@ public class FileResourceTest {
 		FileResource resource = new FileResource(root);
 		
 		assertEquals(resource.getRawText(), "test1\ntest2");
+		
+		resource = new FileResource(root, ".txt");
+		
+		assertEquals(resource.getRawText(), "test3");
 	}
 }
