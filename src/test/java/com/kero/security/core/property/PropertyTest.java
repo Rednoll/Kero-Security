@@ -22,13 +22,16 @@ public class PropertyTest {
 		assertEquals(empty.accessible(Collections.emptySet()), Access.UNKNOWN);
 		assertEquals(empty.determineInterceptor(Collections.emptySet()), null);
 		assertEquals(empty.getDefaultAccess(), Access.UNKNOWN);
+		assertEquals(empty.hasDefaultAccess(), false);
 		assertEquals(empty.getDefaultInterceptor(), null);
 		assertEquals(empty.getDenyRoles(), Collections.emptySet());
 		assertEquals(empty.getGrantRoles(), Collections.emptySet());
 		assertEquals(empty.getInterceptors(), Collections.emptyList());
+		assertEquals(empty.hasDefaultInterceptor(), false);
 		assertEquals(empty.getName(), null);
 		assertEquals(empty.getParent(), Property.EMPTY);
 		assertEquals(empty.prepare(Collections.emptySet()), Action.EMPTY);
+		assertEquals(empty.hasPropagationFor(null), false);
 		
 		Role role = Mockito.mock(Role.class);
 		assertTrue(empty.propagateRole(role) == role);
