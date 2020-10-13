@@ -9,9 +9,7 @@ import com.kero.security.core.configurator.KeroAccessConfigurator;
 import com.kero.security.core.property.Property;
 import com.kero.security.core.property.configurator.PropertiesConfigurator;
 import com.kero.security.core.property.configurator.SinglePropertyConfigurator;
-import com.kero.security.core.scheme.AccessProxy;
 import com.kero.security.core.scheme.AccessScheme;
-import com.kero.security.core.scheme.ClassAccessScheme;
 
 public class CodeAccessSchemeConfigurator {
 

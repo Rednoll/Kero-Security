@@ -1,7 +1,6 @@
 package com.kero.security.core.proxy;
 
 import com.kero.security.core.config.PreparedAccessConfiguration;
-import com.kero.security.core.config.action.ActionProvider;
 
 public abstract class ProxyWrapperBase implements ProxyWrapper {
 	

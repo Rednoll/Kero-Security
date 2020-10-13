@@ -11,7 +11,6 @@ import com.kero.security.lang.collections.RootNodeList;
 import com.kero.security.lang.collections.TokenSequence;
 import com.kero.security.lang.nodes.PropertyNode;
 import com.kero.security.lang.nodes.SchemeNode;
-import com.kero.security.lang.nodes.metaline.MetalineNodeBase;
 import com.kero.security.lang.nodes.metaline.PropagationMetaline;
 import com.kero.security.lang.nodes.metaline.PropertyMetalineBase;
 import com.kero.security.lang.tokens.DefaultAccessToken;

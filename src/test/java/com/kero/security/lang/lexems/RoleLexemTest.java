@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import com.kero.security.lang.lexems.RoleLexem;
 import com.kero.security.lang.tokens.RoleToken;
 
 public class RoleLexemTest {
