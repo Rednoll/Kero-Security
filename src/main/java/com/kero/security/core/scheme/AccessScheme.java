@@ -160,7 +160,7 @@ public interface AccessScheme extends DefaultAccessOwner {
 		@Override
 		public AccessScheme getParent() {
 			
-			return this;
+			return AccessScheme.EMPTY;
 		}
 
 		@Override

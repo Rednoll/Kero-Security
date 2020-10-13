@@ -33,6 +33,12 @@ public class AccessSchemeCacheWrap implements AccessScheme {
 	}
 	
 	@Override
+	public Property getOrCreateLocalProperty(String name) {
+		
+		return original.getOrCreateLocalProperty(name);
+	}
+	
+	@Override
 	public void setDefaultAccess(Access access) {
 		
 		original.setDefaultAccess(access);;
@@ -85,6 +91,12 @@ public class AccessSchemeCacheWrap implements AccessScheme {
 		
 		return original.getLocalProperties();
 	}
+	
+	@Override
+	public Property getParentProperty(String name) {
+		
+		return original.getParentProperty(name);
+	}
 
 	@Override
 	public Class<?> getTypeClass() {
@@ -102,6 +114,12 @@ public class AccessSchemeCacheWrap implements AccessScheme {
 	public KeroAccessAgent getAgent() {
 		
 		return original.getAgent();
+	}
+	
+	@Override
+	public AccessScheme getParent() {
+		
+		return original.getParent();
 	}
 
 	@Override
