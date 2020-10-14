@@ -8,10 +8,3 @@ before_install:
 after_success:
   - bash <(curl -s https://codecov.io/bash)
   - bash <(curl -Ls https://coverage.codacy.com/get.sh)
-  
-deploy:
-  provider: bintray
-  user: "Kerovazzky"
-  key: "$BINTRAY_TOKEN"
-  passphrase: "$KEY_PASS"
-  skip_cleanup: true # to upload artifacts created during the build
