@@ -20,8 +20,15 @@ plugins {
 apply plugin: 'com.jfrog.bintray'
 
 group = 'com.github.rednoll'
-version = '0.1.0'
+version = '0.1.2'
 sourceCompatibility = '1.8'
+
+ext {
+	
+	git = 'https://github.com/Rednoll/kero-security.git'
+}
+
+description = 'Kero-Security is a library for statically controlling access to properties of objects / classes.'
 
 repositories {
 
@@ -120,7 +127,7 @@ def pomConfig = {
 	
 	scm {
 		
-		url 'https://github.com/Rednoll/Kero-Security'
+		url project.git
 	}
 }
 
@@ -134,8 +141,8 @@ publishing {
 				
 				def root = asNode()
 					root.appendNode('name', project.name)
-					root.appendNode('description', 'Kero-Security is a library for statically controlling access to properties of objects / classes.')
-					root.appendNode('url', 'https://github.com/Rednoll/Kero-Security')
+					root.appendNode('description', project.description)
+					root.appendNode('url', project.git)
 				
 				root.children().last() + pomConfig
 			
@@ -167,10 +174,10 @@ bintray {
 	
 	pkg {
 		
-		repo = project.name
+		repo = 'Kero-Security'
 		name = project.name
 		licenses = ['Apache-2.0']
-		vcsUrl = 'https://github.com/Rednoll/Kero-Security.git'
+		vcsUrl = project.git
 	
 		version {
 	

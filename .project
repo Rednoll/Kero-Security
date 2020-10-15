@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>Kero-Security</name>
-	<comment>Project GraphQL-Security created by Buildship.</comment>
+	<name>kero-security</name>
+	<comment>Project Kero-Security created by Buildship.</comment>
 	<projects>
 	</projects>
 	<buildSpec>
