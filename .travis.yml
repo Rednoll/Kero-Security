@@ -14,3 +14,5 @@ deploy:
   script: ./gradlew bintrayUpload
   skip_cleanup: true # to upload artifacts created during the build
   dry-run: false
+  on:
+    tags: true
