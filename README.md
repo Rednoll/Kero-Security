@@ -3,5 +3,6 @@
 [![Code Coverage](https://img.shields.io/codecov/c/github/Rednoll/kero-security/master)](https://codecov.io/gh/Rednoll/kero-security?branch=master)
 [![Language grade: Java](https://img.shields.io/lgtm/grade/java/g/Rednoll/kero-security.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/Rednoll/kero-security/context:java)
 [![Codacy branch grade](https://img.shields.io/codacy/grade/32bfcb98a57a4073a3284d4dee283b68/master)](https://app.codacy.com/gh/Rednoll/kero-security/dashboard)
+![Maven Central](https://img.shields.io/maven-central/v/com.github.rednoll/kero-security)
 
 Wiki(RU): <https://kero-security.readthedocs.io/ru/latest/>
