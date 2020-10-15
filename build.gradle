@@ -193,6 +193,13 @@ bintray {
 				sign = true
 				passphrase = System.getenv('KEY_PASS')
             }
+			
+			mavenCentralSync {
+				
+				sync = true
+				user = System.getenv('OSS_USER')
+				password = System.getenv('OSS_PASS')
+			}
 		}
 	}
 }
