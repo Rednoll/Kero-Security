@@ -23,7 +23,7 @@ apply plugin: 'com.jfrog.bintray'
 apply plugin: 'com.palantir.git-version'
 
 group = 'com.github.rednoll'
-version = gitVersion()
+version = gitVersion(prefix: 'release@')
 sourceCompatibility = '1.8'
 
 ext {
