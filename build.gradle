@@ -185,7 +185,7 @@ bintray {
 		version {
 	
 			name = project.version
-			vcsTag = project.version
+			vcsTag = 'release@' + project.version
 			released  = new Date()
 			
 			gpg {
