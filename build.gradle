@@ -22,16 +22,16 @@ plugins {
 apply plugin: 'com.jfrog.bintray'
 apply plugin: 'com.palantir.git-version'
 
+sourceCompatibility = '1.8'
+
 group = 'com.github.rednoll'
 version = gitVersion(prefix: 'release@') - ~/.dirty$/
-sourceCompatibility = '1.8'
+description = 'Kero-Security is a library for statically controlling access to properties of objects / classes.'
 
 ext {
 	
 	git = 'https://github.com/Rednoll/kero-security.git'
 }
-
-description = 'Kero-Security is a library for statically controlling access to properties of objects / classes.'
 
 repositories {
 
