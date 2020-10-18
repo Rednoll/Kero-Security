@@ -17,7 +17,7 @@ public class CachedProvider implements KsdlProvider {
 	public RootNodeList getRoots() {
 		
 		if(roots == null) {
-			
+	
 			roots = original.getRoots();
 		}
 		

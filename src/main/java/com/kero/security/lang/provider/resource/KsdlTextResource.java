@@ -6,6 +6,16 @@ public interface KsdlTextResource {
 	
 	public static KsdlTextResource addCacheWrap(KsdlTextResource resource) {
 		
-		return new CachedTextResource(resource);
+		if(resource instanceof KsdlTextResourceWrap) {
+		
+			KsdlTextResourceWrap wrap = (KsdlTextResourceWrap) resource;
+			
+			if(wrap.hasWrap(TextResourceCacheWrap.class)) {
+				
+				return wrap;
+			}
+		}
+		
+		return new TextResourceCacheWrap(resource);
 	}
 }

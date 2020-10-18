@@ -1,12 +1,12 @@
 package com.kero.security.lang.provider.resource;
 
-public class CachedTextResource implements KsdlTextResource {
+public class TextResourceCacheWrap implements KsdlTextResourceWrap {
 	
 	private KsdlTextResource original;
 	
 	private String rawText;
 	
-	public CachedTextResource(KsdlTextResource original) {
+	public TextResourceCacheWrap(KsdlTextResource original) {
 	
 		this.original = original;
 	}
@@ -20,5 +20,11 @@ public class CachedTextResource implements KsdlTextResource {
 		}
 		
 		return this.rawText;
+	}
+
+	@Override
+	public KsdlTextResource getOriginal() {
+		
+		return this.original;
 	}
 }
