@@ -39,9 +39,9 @@ ext.determineVersion = {
 	
 		def snapVersion = details.lastTag - ~/^(.*@)|.dirty$/;
 		
-		if(details.commitDistance != 0) {
+		if(details.lastTag =~ /^release@/) {
 			
-			snapVersion = (snapVersion - ~/\..*$/) + "." + (snapVersion.replaceAll(/^[0-9]+\.|\.[0-9]+$/, "").toInteger() + 1) + "." + (snapVersion - ~/^.*\./)
+			snapVersion = (snapVersion - ~/\..*$/) + "." + (snapVersion.replaceAll(/^[0-9]+\.|\.[0-9]+$/, "").toInteger() + 1) + ".0"
 		}
 		
 		snapVersion += "-SNAPSHOT"
