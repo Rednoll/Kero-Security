@@ -17,6 +17,7 @@ public class NameLexemTest {
 		
 		assertTrue(lexem.isMatch("name"));
 		assertFalse(lexem.isMatch("0name"));
+		assertFalse(lexem.isMatch(""));
 	}
 	
 	@Test

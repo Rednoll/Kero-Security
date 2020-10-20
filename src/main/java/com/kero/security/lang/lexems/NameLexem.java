@@ -5,7 +5,7 @@ import com.kero.security.lang.tokens.NameToken;
 public class NameLexem extends KsdlLexemBase<NameToken> {
 
 	public NameLexem() {
-		super("[A-Za-z]+[A-Za-z_0-9]");
+		super("[A-Za-z][A-Za-z_0-9]+");
 	
 	}
 	

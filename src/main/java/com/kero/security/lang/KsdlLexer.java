@@ -33,6 +33,8 @@ public class KsdlLexer {
 	
 	public TokenSequence tokenize(String rawData) {
 		
+		if(rawData == null || rawData.isEmpty()) return new TokenSequence();
+		
 		String data = prepareRawText(rawData);
 		
 		int findShortEnd = 0;
