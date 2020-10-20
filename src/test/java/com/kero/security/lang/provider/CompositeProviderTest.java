@@ -36,7 +36,7 @@ public class CompositeProviderTest {
 			sources.add(source1);
 			sources.add(source2);
 			
-		CompositeProvider provider = new CompositeProvider(sources);
+		CompositeProvider provider = new BaseCompositeProvider(sources);
 			
 		assertTrue(provider.getRoots().contains(node1));
 		assertTrue(provider.getRoots().contains(node2));

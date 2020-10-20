@@ -2,13 +2,13 @@ package com.kero.security.lang.provider;
 
 import com.kero.security.lang.collections.RootNodeList;
 
-public class CachedProvider implements KsdlProvider {
+public class ProviderCacheWrap implements KsdlProvider {
 
 	private KsdlProvider original;
 	
 	private RootNodeList roots;
 	
-	public CachedProvider(KsdlProvider original) {
+	public ProviderCacheWrap(KsdlProvider original) {
 		
 		this.original = original;
 	}

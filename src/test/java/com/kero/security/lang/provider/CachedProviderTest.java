@@ -13,7 +13,7 @@ public class CachedProviderTest {
 		KsdlProvider provider = Mockito.mock(KsdlProvider.class);
 		Mockito.when(provider.getRoots()).thenReturn(new RootNodeList());
 		
-		CachedProvider cached = new CachedProvider(provider);
+		ProviderCacheWrap cached = new ProviderCacheWrap(provider);
 		
 		cached.getRoots();
 		cached.getRoots();

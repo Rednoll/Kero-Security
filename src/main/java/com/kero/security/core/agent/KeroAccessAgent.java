@@ -15,6 +15,8 @@ import com.kero.security.core.scheme.configurator.AccessSchemeConfigurator;
 import com.kero.security.core.scheme.definition.configurator.AccessSchemeDefinitionConfigurator;
 import com.kero.security.core.scheme.storage.AccessSchemeStorage;
 import com.kero.security.core.scheme.strategy.AccessSchemeNamingStrategy;
+import com.kero.security.lang.provider.CompositeProvider;
+import com.kero.security.lang.provider.KsdlProvider;
 
 public interface KeroAccessAgent {
 	
@@ -42,7 +44,13 @@ public interface KeroAccessAgent {
 	public boolean hasScheme(Class<?> rawType);
 	public AccessScheme getSchemeByName(String name);
 	public AccessScheme getScheme(Class<?> rawType);
-
+	
+	public void setMainProvider(CompositeProvider provider);
+	public CompositeProvider getMainProvider();
+	public void preloadMainProvider();
+	
+	public void addKsdlProvider(KsdlProvider provider);
+	
 	public default <T> T protect(T object) {
 		
 		return (T) protect(object, Collections.EMPTY_SET);

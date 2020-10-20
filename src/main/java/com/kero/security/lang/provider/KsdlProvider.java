@@ -8,6 +8,6 @@ public interface KsdlProvider {
 	
 	public static KsdlProvider addCacheWrap(KsdlProvider source) {
 		
-		return new CachedProvider(source);
+		return new ProviderCacheWrap(source);
 	}
 }
