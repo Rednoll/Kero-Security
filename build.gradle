@@ -31,22 +31,26 @@ ext.determineVersion = {
 
 	def details = versionDetails()
 	
-	if(details.commitDistance == 0 && details.lastTag ==~ /release@[0-9]+\.[0-9]+\.[0-9]+/) {
+	if(details.lastTag ==~ /release@[0-9]+\.[0-9]+\.[0-9]+/) {
+	
+		if(details.commitDistance == 0) {
+			
+			return details.lastTag - ~/^(.*@)|.dirty$/;
+		}
+		else {
 		
-		return details.lastTag - ~/^(.*@)|.dirty$/;
+			def snapVersion = details.lastTag - ~/^(.*@)|.dirty$/;
+
+			snapVersion = (snapVersion - ~/\..*$/) + "." + (snapVersion.replaceAll(/^[0-9]+\.|\.[0-9]+$/, "").toInteger() + 1) + ".0"
+
+			snapVersion += "-SNAPSHOT"
+			
+			return snapVersion;
+		}
 	}
 	else if(details.lastTag ==~ /.*@[0-9]+\.[0-9]+\.[0-9]+/) {
 	
-		def snapVersion = details.lastTag - ~/^(.*@)|.dirty$/;
-		
-		if(details.lastTag =~ /^release@/) {
-			
-			snapVersion = (snapVersion - ~/\..*$/) + "." + (snapVersion.replaceAll(/^[0-9]+\.|\.[0-9]+$/, "").toInteger() + 1) + ".0"
-		}
-		
-		snapVersion += "-SNAPSHOT"
-		
-		return snapVersion;
+		return details.lastTag - ~/^(.*@)|.dirty$/ + "-SNAPSHOT";
 	}
 
 	throw new InvalidUserDataException("Can't determine version! Last commit not match .*@[0-9]+\\.[0-9]+\\.[0-9]+")
