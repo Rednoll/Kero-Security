@@ -253,13 +253,7 @@ bintray {
 }
 
 signing {
-	
-	def signingKeyId = System.getenv('KEY_ID')
-	def signingKey = System.getenv('KEY_VALUE')
-	def signingPassword = System.getenv('KEY_PASS')
-	
-	useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
-	
+
 	if(version.endsWith("-SNAPSHOT")) {
 		
 		sign publishing.publications.PomFile
