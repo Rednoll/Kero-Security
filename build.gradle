@@ -281,7 +281,7 @@ task deploy() {
 	}
 	else {
 	
-		dependsOn bintrayUpload
 		dependsOn artifactoryPublish
+		dependsOn bintrayUpload
 	}
 }
