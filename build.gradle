@@ -313,20 +313,26 @@ task deploy() {
 }
 
 model {
-	
-	if(project.version.endsWith("-SNAPSHOT")) {
 
-		tasks.generatePomFileForMavenJavaPublication {
+	tasks.generatePomFileForMavenJavaPublication {
+			
+		if(project.version.endsWith("-SNAPSHOT")) {	
 			
 			destination = file("$buildDir/generated-pom.xml")
 		}
-	
-		tasks.publishMavenJavaPublicationToMavenLocal {
+	}
+
+	tasks.publishMavenJavaPublicationToMavenLocal {
+		
+		if(project.version.endsWith("-SNAPSHOT")) {
 			
 			dependsOn project.tasks.signArchives
 		}
+	}
 
-		tasks.publishMavenJavaPublicationToMavenRepository {
+	tasks.publishMavenJavaPublicationToMavenRepository {
+		
+		if(project.version.endsWith("-SNAPSHOT")) {
 			
 			dependsOn project.tasks.signArchives
 		}
