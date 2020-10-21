@@ -25,11 +25,14 @@ apply plugin: 'com.palantir.git-version'
 ext {
 	
 	git = 'https://github.com/Rednoll/kero-security.git'
+	vcsTag = ""
 }
 
 ext.determineVersion = {
 
 	def details = versionDetails()
+	
+	vcsTag = details.lastTag
 	
 	if(details.lastTag ==~ /release@[0-9]+\.[0-9]+\.[0-9]+/) {
 	
@@ -214,7 +217,7 @@ bintray {
 		version {
 	
 			name = project.version
-			vcsTag = 'release@' + project.version
+			vcsTag = project.vcsTag
 			released  = new Date()
 			
 			gpg {
