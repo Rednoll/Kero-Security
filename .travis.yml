@@ -2,7 +2,7 @@ language: java
 jdk:
 - openjdk8
 before_install:
-- openssl aes-256-cbc -K $encrypted_ea5617bfdeba_key -iv $encrypted_ea5617bfdeba_iv
+- openssl aes-256-cbc -K $encrypted_39a29b9bceb4_key -iv $encrypted_39a29b9bceb4_iv
   -in private_key_sender.asc.enc -out private_key_sender.asc -d
 - chmod +x gradlew
 after_success:
