@@ -64,17 +64,6 @@ group = 'com.github.rednoll'
 version = determineVersion()
 description = 'Kero-Security is a library for statically controlling access to properties of objects / classes.'
 
-signing {
-	
-	def signingKeyId = System.getenv('KEY_ID')
-	def signingKey = System.getenv('KEY_VALUE')
-	def signingPassword = System.getenv('KEY_PASS')
-	
-	useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
-	
-	sign configurations.archives
-}
-
 repositories {
 
 	mavenCentral()
@@ -204,43 +193,6 @@ publishing {
 						dependencyNode.appendNode('version', it.version)
 					}
 				}
-				
-				if(project.version.endsWith("-SNAPSHOT")) {
-
-					def pomFile = file("${project.buildDir}/generated-pom.xml")
-					
-					writeTo(pomFile)
-					
-					def pomAscFile = signing.sign(pomFile).signatureFiles[0]
-					
-					artifact(pomAscFile) {
-					
-						classifier = null
-						extension = 'pom.asc'
-					}
-				}
-			}
-			
-			if(project.version.endsWith("-SNAPSHOT")) {
-
-				project.tasks.signArchives.signatureFiles.each {
-				
-					artifact(it) {
-					
-						def matcher = it.file =~ /-(sources|javadoc)\.jar\.asc$/
-						
-						if(matcher.find()) {
-						
-							classifier = matcher.group(1)
-						}
-						else {
-						
-							classifier = null
-						}
-						
-						extension = 'jar.asc'
-					}
-				}
 			}
 		}
 	}
@@ -300,41 +252,28 @@ bintray {
 	}
 }
 
+signing {
+	
+	def signingKeyId = System.getenv('KEY_ID')
+	def signingKey = System.getenv('KEY_VALUE')
+	def signingPassword = System.getenv('KEY_PASS')
+	
+	useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
+	
+	if(version.endsWith("-SNAPSHOT")) {
+		
+		sign publishing.publications.PomFile
+	}
+}
+
 task deploy() {
 	
 	if(version.endsWith("-SNAPSHOT")) {
-	
+		
 		dependsOn publish
 	}
 	else {
 		
 		dependsOn bintrayUpload
-	}
-}
-
-model {
-
-	tasks.generatePomFileForMavenJavaPublication {
-			
-		if(project.version.endsWith("-SNAPSHOT")) {	
-			
-			destination = file("$buildDir/generated-pom.xml")
-		}
-	}
-
-	tasks.publishMavenJavaPublicationToMavenLocal {
-		
-		if(project.version.endsWith("-SNAPSHOT")) {
-			
-			dependsOn project.tasks.signArchives
-		}
-	}
-
-	tasks.publishMavenJavaPublicationToMavenRepository {
-		
-		if(project.version.endsWith("-SNAPSHOT")) {
-			
-			dependsOn project.tasks.signArchives
-		}
 	}
 }
