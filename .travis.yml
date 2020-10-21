@@ -11,6 +11,6 @@ after_success:
 
 deploy:
   provider: script
-  script: ./gradlew bintrayUpload
+  script: ./gradlew deploy
   skip_cleanup: true # to upload artifacts created during the build
   dry-run: false

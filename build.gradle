@@ -9,6 +9,7 @@ buildscript {
 		
 		classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.+'
 		classpath 'com.palantir.gradle.gitversion:gradle-git-version:0.12.+'
+		classpath 'org.jfrog.buildinfo:build-info-extractor-gradle:latest.release'
 	}
 }
 
@@ -20,19 +21,18 @@ plugins {
 }
 
 apply plugin: 'com.jfrog.bintray'
+apply plugin: 'com.jfrog.artifactory'
 apply plugin: 'com.palantir.git-version'
 
 ext {
 	
 	git = 'https://github.com/Rednoll/kero-security.git'
-	vcsTag = ""
+	vcsTag = versionDetails().lastTag
 }
 
 ext.determineVersion = {
 
 	def details = versionDetails()
-	
-	vcsTag = details.lastTag
 	
 	if(details.lastTag ==~ /release@[0-9]+\.[0-9]+\.[0-9]+/) {
 	
@@ -199,6 +199,43 @@ publishing {
 	}
 }
 
+artifactory {
+
+	contextUrl = 'https://oss.jfrog.org'
+	
+	resolve {
+	
+		repository {
+			
+			repoKey = 'libs-release'
+		}
+	}
+	
+	publish {
+	
+		repository {
+		
+			if(project.version.endsWith("-SNAPSHOT")) {
+				
+				repoKey = 'oss-snapshot-local'
+			}
+			else {
+			
+				repoKey = 'oss-release-local' 
+			}
+
+			username = 'kerovazzky'
+			password = System.getenv('BINTRAY_TOKEN')
+		}
+		
+		defaults {
+		
+			publications 'maven'
+			properties = [ 'bintray.repo': 'kerovazzky/Kero-Security', 'bintray.package': 'Kero-Security:'+project.name, 'bintray.version': project.version ]
+		}
+	}
+}
+
 bintray {
 
 	user = 'kerovazzky'
@@ -233,5 +270,18 @@ bintray {
 				password = System.getenv('OSS_PASS')
 			}
 		}
+	}
+}
+
+task deploy() {
+	
+	if(version.endsWith("-SNAPSHOT")) {
+	
+		dependsOn artifactoryPublish
+	}
+	else {
+	
+		dependsOn bintrayUpload
+		dependsOn artifactoryPublish
 	}
 }
