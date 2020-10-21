@@ -15,3 +15,7 @@ deploy:
   script: "./gradlew deploy -Psigning.keyId=${KEY_ID} -Psigning.password=${KEY_PASS} -Psigning.secretKeyRingFile=pubring.gpg"
   skip_cleanup: true
   dry-run: false
+  branches:
+    only:
+      - master
+      - /.*@[0-9]+\.[0-9]+\.[0-9]+/
