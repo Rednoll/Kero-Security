@@ -89,16 +89,18 @@ dependencies {
 	
 }
 
-javadoc {
-	
-	source = sourceSets.main.allJava
-	classpath = configurations.compile
-}
-
 java {
 
     withJavadocJar()
     withSourcesJar()
+}
+
+javadoc {
+
+	if(JavaVersion.current().isJava9Compatible()) {
+		
+		options.addBooleanOption('html5', true)
+	}
 }
 
 test {
@@ -160,7 +162,7 @@ publishing {
 		mavenJava(MavenPublication) {
 			
 			from components.java
-			
+
 			pom.withXml {
 				
 				def root = asNode()
