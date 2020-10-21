@@ -205,57 +205,59 @@ publishing {
 					}
 				}
 				
-				def pomFile = file("${project.buildDir}/generated-pom.xml")
-				
-                writeTo(pomFile)
-				
-                def pomAscFile = signing.sign(pomFile).signatureFiles[0]
-				
-                artifact(pomAscFile) {
-				
-                    classifier = null
-                    extension = 'pom.asc'
-                }
+				if(project.version.endsWith("-SNAPSHOT")) {
+
+					def pomFile = file("${project.buildDir}/generated-pom.xml")
+					
+					writeTo(pomFile)
+					
+					def pomAscFile = signing.sign(pomFile).signatureFiles[0]
+					
+					artifact(pomAscFile) {
+					
+						classifier = null
+						extension = 'pom.asc'
+					}
+				}
 			}
 			
-			project.tasks.signArchives.signatureFiles.each {
-			
-                artifact(it) {
+			if(project.version.endsWith("-SNAPSHOT")) {
+
+				project.tasks.signArchives.signatureFiles.each {
 				
-                    def matcher = it.file =~ /-(sources|javadoc)\.jar\.asc$/
+					artifact(it) {
 					
-                    if(matcher.find()) {
-					
-                        classifier = matcher.group(1)
-                    }
-					else {
-					
-                        classifier = null
-                    }
-					
-                    extension = 'jar.asc'
-                }
-            }
+						def matcher = it.file =~ /-(sources|javadoc)\.jar\.asc$/
+						
+						if(matcher.find()) {
+						
+							classifier = matcher.group(1)
+						}
+						else {
+						
+							classifier = null
+						}
+						
+						extension = 'jar.asc'
+					}
+				}
+			}
 		}
 	}
 	
 	repositories {
 		
-		maven {
-			
-			if(project.version.endsWith("-SNAPSHOT")) {
-				
+		if(project.version.endsWith("-SNAPSHOT")) {
+
+			maven {
+
 				url "https://oss.sonatype.org/content/repositories/snapshots"
-			}
-			else {
-				
-				url "https://oss.sonatype.org/service/local/staging/deploy/maven2"
-			}
-			
-			credentials {
-				
-				username System.getenv('OSS_USER')
-				password System.getenv('OSS_PASS')
+
+				credentials {
+					
+					username System.getenv('OSS_USER')
+					password System.getenv('OSS_PASS')
+				}
 			}
 		}
 	}
@@ -311,19 +313,22 @@ task deploy() {
 }
 
 model {
+	
+	if(project.version.endsWith("-SNAPSHOT")) {
 
-	tasks.generatePomFileForMavenJavaPublication {
-		
-		destination = file("$buildDir/generated-pom.xml")
-	}
+		tasks.generatePomFileForMavenJavaPublication {
+			
+			destination = file("$buildDir/generated-pom.xml")
+		}
+	
+		tasks.publishMavenJavaPublicationToMavenLocal {
+			
+			dependsOn project.tasks.signArchives
+		}
 
-	tasks.publishMavenJavaPublicationToMavenLocal {
-		
-		dependsOn project.tasks.signArchives
-	}
-
-	tasks.publishMavenJavaPublicationToMavenRepository {
-		
-		dependsOn project.tasks.signArchives
+		tasks.publishMavenJavaPublicationToMavenRepository {
+			
+			dependsOn project.tasks.signArchives
+		}
 	}
 }
