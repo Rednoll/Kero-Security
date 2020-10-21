@@ -229,6 +229,8 @@ artifactory {
 		}
 		
 		defaults {
+			
+			publishBuildInfo = false
 		
 			publications 'maven'
 			properties = [ 'bintray.repo': 'kerovazzky/Kero-Security', 'bintray.package': 'Kero-Security:'+project.name, 'bintray.version': project.version ]
