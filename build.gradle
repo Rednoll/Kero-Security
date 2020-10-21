@@ -9,7 +9,6 @@ buildscript {
 		
 		classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.+'
 		classpath 'com.palantir.gradle.gitversion:gradle-git-version:0.12.+'
-		classpath 'org.jfrog.buildinfo:build-info-extractor-gradle:latest.release'
 	}
 }
 
@@ -18,10 +17,10 @@ plugins {
 	id 'java-library'
 	id 'jacoco'
 	id 'maven-publish'
+	id 'signing'
 }
 
 apply plugin: 'com.jfrog.bintray'
-apply plugin: 'com.jfrog.artifactory'
 apply plugin: 'com.palantir.git-version'
 
 ext {
@@ -64,6 +63,10 @@ sourceCompatibility = '1.8'
 group = 'com.github.rednoll'
 version = determineVersion()
 description = 'Kero-Security is a library for statically controlling access to properties of objects / classes.'
+
+signing.keyId = System.getenv('KEY_ID')
+signing.password = System.getenv('KEY_PASS')
+signing.secretKeyRingFile = "private_key_sender.asc"
 
 repositories {
 
@@ -112,6 +115,11 @@ artifacts {
 
     archives sourcesJar
     archives javadocJar
+}
+
+signing {
+
+	sign configurations.archives
 }
 
 test {
@@ -195,45 +203,57 @@ publishing {
 					}
 				}
 			}
-		}
-	}
-}
-
-artifactory {
-
-	contextUrl = 'https://oss.jfrog.org'
-	
-	resolve {
-	
-		repository {
 			
-			repoKey = 'libs-release'
+			pom.withXml {
+			
+                def pomFile = file("${project.buildDir}/generated-pom.xml")
+                writeTo(pomFile)
+                def pomAscFile = signing.sign(pomFile).signatureFiles[0]
+                artifact(pomAscFile) {
+                    classifier = null
+                    extension = 'pom.asc'
+                }
+            }
+			
+			project.tasks.signArchives.signatureFiles.each {
+			
+                artifact(it) {
+				
+                    def matcher = it.file =~ /-(sources|javadoc)\.jar\.asc$/
+					
+                    if(matcher.find()) {
+					
+                        classifier = matcher.group(1)
+                    }
+					else {
+					
+                        classifier = null
+                    }
+					
+                    extension = 'jar.asc'
+                }
+            }
 		}
 	}
 	
-	publish {
-	
-		repository {
+	repositories {
 		
+		maven {
+			
 			if(project.version.endsWith("-SNAPSHOT")) {
 				
-				repoKey = 'oss-snapshot-local'
+				url "https://oss.sonatype.org/content/repositories/snapshots"
 			}
 			else {
-			
-				repoKey = 'oss-release-local' 
+				
+				url "https://oss.sonatype.org/service/local/staging/deploy/maven2"
 			}
-
-			username = 'kerovazzky'
-			password = System.getenv('BINTRAY_TOKEN')
-		}
-		
-		defaults {
 			
-			publishBuildInfo = false
-		
-			publications 'maven'
-			properties = [ 'bintray.repo': 'kerovazzky/Kero-Security', 'bintray.package': 'Kero-Security:'+project.name, 'bintray.version': project.version ]
+			credentials {
+				
+				username System.getenv('OSS_USER')
+				password System.getenv('OSS_PASS')
+			}
 		}
 	}
 }
@@ -279,11 +299,28 @@ task deploy() {
 	
 	if(version.endsWith("-SNAPSHOT")) {
 	
-		dependsOn artifactoryPublish
+		dependsOn publish
 	}
 	else {
-	
-		dependsOn artifactoryPublish
+		
 		dependsOn bintrayUpload
+	}
+}
+
+model {
+
+	tasks.generatePomFileForMavenJavaPublication {
+		
+		destination = file("$buildDir/generated-pom.xml")
+	}
+
+	tasks.publishMavenJavaPublicationToMavenLocal {
+		
+		dependsOn project.tasks.signArchives
+	}
+
+	tasks.publishMavenJavaPublicationToMavenRepository {
+		
+		dependsOn project.tasks.signArchives
 	}
 }
