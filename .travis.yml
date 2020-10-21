@@ -3,6 +3,7 @@ jdk:
 - openjdk8
 
 before_install:
+  - openssl aes-256-cbc -K $encrypted_39a29b9bceb4_key -iv $encrypted_39a29b9bceb4_iv -in private_key.asc.enc -out private_key.asc -d
   - chmod +x gradlew
 
 after_success:
@@ -11,6 +12,6 @@ after_success:
 
 deploy:
   provider: script
-  script: "./gradlew deploy"
+  script: "./gradlew deploy -Psigning.keyId=${KEY_ID} -Psigning.password=${KEY_PASS} -Psigning.secretKeyRingFile=private_key.asc"
   skip_cleanup: true
   dry-run: false
