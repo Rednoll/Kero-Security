@@ -95,22 +95,10 @@ javadoc {
 	classpath = configurations.compile
 }
 
-task sourcesJar(type: Jar, dependsOn: classes) {
+java {
 
-    classifier = 'sources'
-    from sourceSets.main.allSource
-}
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-
-    classifier = 'javadoc'
-    from javadoc.destinationDir
-}
-
-artifacts {
-
-    archives sourcesJar
-    archives javadocJar
+    withJavadocJar()
+    withSourcesJar()
 }
 
 test {
@@ -169,7 +157,9 @@ publishing {
 
 	publications {
 		
-		PomFile(MavenPublication) {
+		mavenJava(MavenPublication) {
+			
+			from components.java
 			
 			pom.withXml {
 				
@@ -221,7 +211,7 @@ bintray {
 	key = System.getenv('BINTRAY_TOKEN')
 	
 	configurations = ['archives']
-	publications = ['PomFile']
+	publications = ['mavenJava']
 	
 	pkg {
 		
@@ -256,7 +246,7 @@ signing {
 
 	if(version.endsWith("-SNAPSHOT")) {
 		
-		sign publishing.publications.PomFile
+		sign publishing.publications.mavenJava
 	}
 }
 
