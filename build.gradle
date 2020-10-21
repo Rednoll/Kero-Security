@@ -64,9 +64,16 @@ group = 'com.github.rednoll'
 version = determineVersion()
 description = 'Kero-Security is a library for statically controlling access to properties of objects / classes.'
 
-signing.keyId = System.getenv('KEY_ID')
-signing.password = System.getenv('KEY_PASS')
-signing.secretKeyRingFile = "private_key_sender.asc"
+signing {
+	
+	def signingKeyId = System.getenv('KEY_ID')
+	def signingKey = System.getenv('KEY_VALUE')
+	def signingPassword = System.getenv('KEY_PASS')
+	
+	useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
+	
+	sign configurations.archives
+}
 
 repositories {
 
@@ -115,11 +122,6 @@ artifacts {
 
     archives sourcesJar
     archives javadocJar
-}
-
-signing {
-
-	sign configurations.archives
 }
 
 test {
