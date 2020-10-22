@@ -3,7 +3,7 @@ jdk:
 - openjdk8
 
 before_install:
-  - openssl aes-256-cbc -K $encrypted_39a29b9bceb4_key -iv $encrypted_39a29b9bceb4_iv -in pubring.gpg.enc -out pubring.gpg -d
+  - echo '${KEY_VALUE}' | base64 -d > pubring.gpg
   - chmod +x gradlew
 
 after_success:
