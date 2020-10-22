@@ -3,7 +3,7 @@ jdk:
 - openjdk8
 
 before_install:
-  - echo '${KEY_VALUE}' | base64 -d > pubring.gpg
+  - echo ${KEY_VALUE} | base64 -d > pubring.gpg
   - chmod +x gradlew
 
 after_success:
