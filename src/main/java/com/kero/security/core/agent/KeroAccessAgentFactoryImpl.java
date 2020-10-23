@@ -31,11 +31,6 @@ public class KeroAccessAgentFactoryImpl implements KeroAccessAgentFactory {
 			conf.configure(agent);
 		}
 		
-		if(this.mainProviderPreloading) {
-			
-			agent.preloadMainProvider();
-		}
-		
 		return agent;
 	}
 	
@@ -50,30 +45,5 @@ public class KeroAccessAgentFactoryImpl implements KeroAccessAgentFactory {
 	public boolean isPreloadMainProvider() {
 		
 		return this.mainProviderPreloading;
-	}
-	
-	public static class Builder implements KeroAccessAgentFactoryBuilder {
-		
-		private boolean mainProviderPreloading = true;
-		
-		public KeroAccessAgentFactoryImpl build() {
-			
-			KeroAccessAgentFactoryImpl factory = new KeroAccessAgentFactoryImpl();
-				factory.mainProviderPreloading = this.mainProviderPreloading;
-			
-			return factory;
-		}
-		
-		public Builder setMainProviderPreloading(boolean i) {
-			
-			this.mainProviderPreloading = i;
-			
-			return this;
-		}
-		
-		public Builder disableMainProviderPreloading() {
-			
-			return setMainProviderPreloading(false);
-		}
 	}
 }

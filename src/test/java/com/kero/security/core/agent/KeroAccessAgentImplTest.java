@@ -7,8 +7,6 @@ import org.mockito.Mockito;
 
 import com.kero.security.core.scheme.AccessScheme;
 import com.kero.security.core.scheme.definition.configurator.AccessSchemeDefinitionConfigurator;
-import com.kero.security.lang.provider.TextualProvider;
-import com.kero.security.lang.provider.resource.KsdlTextResource;
 
 public class KeroAccessAgentImplTest {
 
@@ -34,28 +32,6 @@ public class KeroAccessAgentImplTest {
 		agent.getOrCreateScheme(TestClass.class);
 		
 		Mockito.verify(configMock, Mockito.times(1)).configure(Mockito.any());
-	}
-	
-	@Test
-	public void mainProvider_PreloadTest() {
-		
-		KsdlTextResource resource1 = Mockito.mock(KsdlTextResource.class);
-		Mockito.when(resource1.getRawText()).thenReturn("");
-
-		KsdlTextResource resource2 = Mockito.mock(KsdlTextResource.class);
-		Mockito.when(resource2.getRawText()).thenReturn("");
-		
-		KeroAccessAgent agent = new KeroAccessAgentFactoryImpl().create();
-			agent.addKsdlProvider(new TextualProvider(resource1));
-			agent.addKsdlProvider(new TextualProvider(resource2));
-	
-		agent.preloadMainProvider();
-		
-		agent.getMainProvider().getRoots();
-		agent.getMainProvider().getRoots();
-		
-		Mockito.verify(resource1, Mockito.times(1)).getRawText();
-		Mockito.verify(resource2, Mockito.times(1)).getRawText();
 	}
 	
 	public static class TestClass {}
