@@ -84,9 +84,6 @@ dependencies {
 	testImplementation 'log4j:log4j:1.2.17'
 	
 	testImplementation 'org.mockito:mockito-all:1.10.19'
-	
-	testImplementation 'com.google.jimfs:jimfs:1.1'
-	
 }
 
 java {

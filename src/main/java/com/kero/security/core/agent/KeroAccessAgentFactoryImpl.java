@@ -14,8 +14,6 @@ public class KeroAccessAgentFactoryImpl implements KeroAccessAgentFactory {
 	
 	private Set<KeroAccessAgentConfigurator> configurators = new HashSet<>();
 	
-	private boolean mainProviderPreloading = true;
-	
 	public KeroAccessAgentFactoryImpl() {
 	
 	}
@@ -40,10 +38,5 @@ public class KeroAccessAgentFactoryImpl implements KeroAccessAgentFactory {
 		this.configurators.add(conf);
 		
 		LOGGER.debug("Add configurator: "+conf+" to agent factory.");
-	}
-	
-	public boolean isPreloadMainProvider() {
-		
-		return this.mainProviderPreloading;
 	}
 }
