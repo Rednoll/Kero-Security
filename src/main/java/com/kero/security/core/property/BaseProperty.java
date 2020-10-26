@@ -20,7 +20,7 @@ import com.kero.security.core.property.exceptions.RoleCollisionException;
 import com.kero.security.core.role.Role;
 import com.kero.security.core.scheme.AccessScheme;
 
-public class LocalProperty implements Property {
+public class BaseProperty implements Property {
 
 	private String name;
 	
@@ -34,14 +34,15 @@ public class LocalProperty implements Property {
 	private DenyInterceptor defaultInterceptor;
 	private List<DenyInterceptor> interceptors = new LinkedList<>();
 	
-	private Map<Role, Role> rolesPropagations = new HashMap<>();
+	private Map<Role, Role> rolesPropagation = new HashMap<>();
 	
-	public LocalProperty(AccessScheme scheme, String name) {
+	public BaseProperty(AccessScheme scheme, String name) {
 		
 		this.scheme = scheme;
 		this.name = name;
 	}
 	
+	@Override
 	public Access accessible(Collection<Role> rolesArg) {
 	
 		if(rolesArg.isEmpty()) return Access.UNKNOWN;
@@ -61,6 +62,7 @@ public class LocalProperty implements Property {
 		return getParent().accessible(roles);
 	}
 	
+	@Override
 	public Action prepare(Collection<Role> roles) {
 		
 		Access accessible = accessible(roles);
@@ -105,6 +107,7 @@ public class LocalProperty implements Property {
 		return defaultAccess;
 	}
 	
+	@Override
 	public DenyInterceptor determineInterceptor(Collection<Role> roles) {
 		
 		int maxOverlap = 0;
@@ -151,6 +154,7 @@ public class LocalProperty implements Property {
 		return result;
 	}
 	
+	@Override
 	public Role propagateRole(Role role) {
 		
 		Set<Role> data = new HashSet<>();
@@ -159,6 +163,7 @@ public class LocalProperty implements Property {
 		return propagateRoles(data).iterator().next();
 	}
 	
+	@Override
 	public Set<Role> propagateRoles(Collection<Role> rolesArg) {
 		
 		Set<Role> roles = new HashSet<>(rolesArg);
@@ -170,7 +175,7 @@ public class LocalProperty implements Property {
 			
 			if(hasPropagationFor(fromRole)) {
 				
-				result.add(this.rolesPropagations.get(fromRole));
+				result.add(this.rolesPropagation.get(fromRole));
 				propagated.add(fromRole);
 			}
 		}
@@ -185,21 +190,31 @@ public class LocalProperty implements Property {
 		return result;
 	}
 	
+	@Override
 	public boolean hasPropagationFor(Role target) {
 		
-		return rolesPropagations.containsKey(target);
+		return rolesPropagation.containsKey(target);
 	}
 	
+	@Override
 	public void addRolePropagation(Role from, Role to) {
 		
-		this.rolesPropagations.put(from, to);
+		this.rolesPropagation.put(from, to);
 	}
 	
+	@Override
+	public Map<Role, Role> getLocalRolesPropagation() {
+		
+		return this.rolesPropagation;
+	}
+	
+	@Override
 	public void addInterceptor(DenyInterceptor interceptor) {
 		
 		this.interceptors.add(interceptor);
 	}
 	
+	@Override
 	public List<DenyInterceptor> getInterceptors() {
 	
 		List<DenyInterceptor> interceptors = new ArrayList<>(this.interceptors);
@@ -242,36 +257,43 @@ public class LocalProperty implements Property {
 		this.denyRoles.add(role);
 	}
 
+	@Override
 	public Set<Role> getLocalGrantRoles() {
 		
 		return this.grantRoles;
 	}
 	
+	@Override
 	public Set<Role> getLocalDenyRoles() {
 		
 		return this.denyRoles;
 	}
 
+	@Override
 	public void setDefaultAccess(Access access) {
 		
 		this.defaultAccess = access;
 	}
 	
+	@Override
 	public boolean hasLocalDefaultAccess() {
 		
 		return this.getLocalDefaultAccess() != Access.UNKNOWN;
 	}
 	
+	@Override
 	public Access getLocalDefaultAccess() {
 		
 		return this.defaultAccess;
 	}
 	
+	@Override
 	public boolean hasDefaultAccess() {
 		
 		return this.getDefaultAccess() != Access.UNKNOWN;
 	}
 	
+	@Override
 	public Access getDefaultAccess() {
 		
 		if(hasLocalDefaultAccess()) return this.getLocalDefaultAccess();
@@ -281,21 +303,25 @@ public class LocalProperty implements Property {
 		return getParent().getDefaultAccess();
 	}
 
+	@Override
 	public String getName() {
 		
 		return this.name;
 	}
 
+	@Override
 	public void setDefaultInterceptor(DenyInterceptor interceptor) {
 		
 		this.defaultInterceptor = interceptor;
 	}
 
+	@Override
 	public boolean hasDefaultInterceptor() {
 		
 		return this.defaultInterceptor != null;
 	}
 
+	@Override
 	public DenyInterceptor getDefaultInterceptor() {
 		
 		if(hasDefaultInterceptor()) return this.defaultInterceptor;
@@ -305,20 +331,27 @@ public class LocalProperty implements Property {
 		return this.getParent().getDefaultInterceptor();
 	}
 	
+	@Override
 	public Property getParent() {
 		
 		return this.scheme.getParentProperty(this.name);
 	}
 
 	@Override
-	public Set<Role> getGrantRoles() {
+	public List<DenyInterceptor> getLocalInterceptors() {
 		
-		return this.getLocalGrantRoles();
+		return this.interceptors;
 	}
 
 	@Override
-	public Set<Role> getDenyRoles() {
+	public boolean hasLocalDefaultInterceptor() {
 		
-		return this.getLocalDenyRoles();
+		return this.defaultInterceptor != null;
+	}
+
+	@Override
+	public DenyInterceptor getLocalDefaultInterceptor() {
+		
+		return this.defaultInterceptor;
 	}
 }

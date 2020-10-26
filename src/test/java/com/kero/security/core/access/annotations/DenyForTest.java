@@ -19,7 +19,7 @@ public class DenyForTest {
 			
 		AccessScheme scheme = agent.getOrCreateScheme(TestClass.class);
 	
-		assertTrue(scheme.getOrCreateLocalProperty("name").getDenyRoles().contains(agent.getRole("FRIEND")));
+		assertTrue(scheme.getOrCreateLocalProperty("name").getLocalDenyRoles().contains(agent.getRole("FRIEND")));
 	}
 	
 	public static class TestClass {

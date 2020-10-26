@@ -23,7 +23,7 @@ public class DenyWithInterceptorTest {
 		AccessScheme scheme = agent.getOrCreateScheme(TestClass.class);
 	
 		assertEquals(scheme.getLocalProperty("name").getInterceptors().get(0).getClass(), Interceptor.class);
-		assertTrue(scheme.getLocalProperty("name").getDenyRoles().contains(agent.getRole("OWNER")));
+		assertTrue(scheme.getLocalProperty("name").getLocalDenyRoles().contains(agent.getRole("OWNER")));
 		
 		assertEquals(scheme.getLocalProperty("text").getDefaultInterceptor().getClass(), DefaultInterceptor.class);
 		assertEquals(scheme.getLocalProperty("text").getDefaultAccess(), Access.DENY);

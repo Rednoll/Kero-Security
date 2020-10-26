@@ -16,7 +16,7 @@ import com.kero.security.core.config.PreparedAccessConfigurationImpl;
 import com.kero.security.core.config.action.Action;
 import com.kero.security.core.config.action.ActionDeny;
 import com.kero.security.core.config.action.ActionGrant;
-import com.kero.security.core.property.LocalProperty;
+import com.kero.security.core.property.BaseProperty;
 import com.kero.security.core.property.Property;
 import com.kero.security.core.role.Role;
 import com.kero.security.core.scheme.exception.AccessSchemePrepareException;
@@ -128,7 +128,7 @@ public class ClassAccessScheme implements AccessScheme {
 		
 		LOGGER.debug("Creating property: \""+name+"\" for scheme: \""+this.name+"\"");
 		
-		Property prop = new LocalProperty(this, name);
+		Property prop = new BaseProperty(this, name);
 		
 		localProperties.put(name, prop);
 		

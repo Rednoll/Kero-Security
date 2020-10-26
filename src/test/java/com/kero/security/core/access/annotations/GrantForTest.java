@@ -19,7 +19,7 @@ public class GrantForTest {
 			
 		AccessScheme scheme = agent.getOrCreateScheme(TestClass.class);
 	
-		assertTrue(scheme.getOrCreateLocalProperty("name").getGrantRoles().contains(agent.getRole("OWNER")));
+		assertTrue(scheme.getOrCreateLocalProperty("name").getLocalGrantRoles().contains(agent.getRole("OWNER")));
 	}
 	
 	public static class TestClass {

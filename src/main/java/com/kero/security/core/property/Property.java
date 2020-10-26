@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.kero.security.core.DefaultAccessOwner;
@@ -24,26 +25,33 @@ public interface Property extends DefaultAccessOwner {
 	public Set<Role> propagateRoles(Collection<Role> roles);
 	public boolean hasPropagationFor(Role target);
 	public void addRolePropagation(Role from, Role to);
-
+	public Map<Role, Role> getLocalRolesPropagation();
+	
 	public void grantRoles(Collection<Role> roles);
 	public void grantRole(Role role);
-	public Set<Role> getGrantRoles();
+	public Set<Role> getLocalGrantRoles();
 
 	public void denyRoles(Collection<Role> roles);
 	public void denyRole(Role role);
-	public Set<Role> getDenyRoles();
+	public Set<Role> getLocalDenyRoles();
 	
 	public DenyInterceptor determineInterceptor(Collection<Role> roles);
 	public void addInterceptor(DenyInterceptor interceptor);
 	public List<DenyInterceptor> getInterceptors();
+	public List<DenyInterceptor> getLocalInterceptors();
 	
 	public void setDefaultInterceptor(DenyInterceptor interceptor);
 	public boolean hasDefaultInterceptor();
 	public DenyInterceptor getDefaultInterceptor();
+	public boolean hasLocalDefaultInterceptor();
+	public DenyInterceptor getLocalDefaultInterceptor();
 	
 	public String getName();
 	
 	public Property getParent();
+	
+	public boolean hasLocalDefaultAccess();
+	public Access getLocalDefaultAccess();
 	
 	public static class Empty implements Property {
 
@@ -96,7 +104,7 @@ public interface Property extends DefaultAccessOwner {
 		}
 		
 		@Override
-		public Set<Role> getGrantRoles() {
+		public Set<Role> getLocalGrantRoles() {
 			
 			return Collections.emptySet();
 		}
@@ -112,7 +120,7 @@ public interface Property extends DefaultAccessOwner {
 		}
 		
 		@Override
-		public Set<Role> getDenyRoles() {
+		public Set<Role> getLocalDenyRoles() {
 			
 			return Collections.emptySet();
 		}
@@ -179,6 +187,42 @@ public interface Property extends DefaultAccessOwner {
 		public DenyInterceptor determineInterceptor(Collection<Role> roles) {
 		
 			return null;
+		}
+
+		@Override
+		public Map<Role, Role> getLocalRolesPropagation() {
+			
+			return Collections.emptyMap();
+		}
+
+		@Override
+		public List<DenyInterceptor> getLocalInterceptors() {
+			
+			return Collections.emptyList();
+		}
+
+		@Override
+		public boolean hasLocalDefaultInterceptor() {
+			
+			return false;
+		}
+
+		@Override
+		public DenyInterceptor getLocalDefaultInterceptor() {
+		
+			return null;
+		}
+
+		@Override
+		public boolean hasLocalDefaultAccess() {
+			
+			return false;
+		}
+
+		@Override
+		public Access getLocalDefaultAccess() {
+			
+			return Access.UNKNOWN;
 		}
 	}
 }
