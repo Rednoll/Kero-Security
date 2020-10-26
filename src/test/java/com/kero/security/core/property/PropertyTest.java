@@ -28,8 +28,6 @@ public class PropertyTest {
 		assertEquals(empty.getDefaultAccess(), Access.UNKNOWN);
 		assertEquals(empty.hasDefaultAccess(), false);
 		assertEquals(empty.getDefaultInterceptor(), null);
-		assertEquals(empty.getDenyRoles(), Collections.emptySet());
-		assertEquals(empty.getGrantRoles(), Collections.emptySet());
 		assertEquals(empty.getInterceptors(), Collections.emptyList());
 		assertEquals(empty.hasDefaultInterceptor(), false);
 		assertEquals(empty.getName(), null);
@@ -61,16 +59,12 @@ public class PropertyTest {
 			roles.add(owner);
 		
 		empty.grantRoles(roles);
-		assertTrue(empty.getGrantRoles().isEmpty());
 		
 		empty.grantRole(owner);
-		assertTrue(empty.getGrantRoles().isEmpty());
 		
 		empty.denyRoles(roles);
-		assertTrue(empty.getGrantRoles().isEmpty());
 		
 		empty.denyRole(owner);
-		assertTrue(empty.getDenyRoles().isEmpty());
 		
 		DenyInterceptor inter = Mockito.mock(DenyInterceptor.class);
 		

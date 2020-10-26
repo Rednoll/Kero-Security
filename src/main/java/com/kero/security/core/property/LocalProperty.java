@@ -45,7 +45,7 @@ public class LocalProperty implements Property {
 	public Access accessible(Collection<Role> rolesArg) {
 	
 		if(rolesArg.isEmpty()) return Access.UNKNOWN;
-				
+		
 		Set<Role> roles = new HashSet<>(rolesArg);
 			roles.removeAll(this.denyRoles);
 		
@@ -242,12 +242,12 @@ public class LocalProperty implements Property {
 		this.denyRoles.add(role);
 	}
 
-	public Set<Role> getGrantRoles() {
+	public Set<Role> getLocalGrantRoles() {
 		
 		return this.grantRoles;
 	}
 	
-	public Set<Role> getDenyRoles() {
+	public Set<Role> getLocalDenyRoles() {
 		
 		return this.denyRoles;
 	}
@@ -256,15 +256,25 @@ public class LocalProperty implements Property {
 		
 		this.defaultAccess = access;
 	}
-
+	
+	public boolean hasLocalDefaultAccess() {
+		
+		return this.getLocalDefaultAccess() != Access.UNKNOWN;
+	}
+	
+	public Access getLocalDefaultAccess() {
+		
+		return this.defaultAccess;
+	}
+	
 	public boolean hasDefaultAccess() {
 		
-		return this.defaultAccess != Access.UNKNOWN;
+		return this.getDefaultAccess() != Access.UNKNOWN;
 	}
 	
 	public Access getDefaultAccess() {
 		
-		if(hasDefaultAccess()) return this.defaultAccess;
+		if(hasLocalDefaultAccess()) return this.getLocalDefaultAccess();
 
 		if(!this.scheme.isInherit()) return Access.UNKNOWN;
 		
@@ -298,5 +308,17 @@ public class LocalProperty implements Property {
 	public Property getParent() {
 		
 		return this.scheme.getParentProperty(this.name);
+	}
+
+	@Override
+	public Set<Role> getGrantRoles() {
+		
+		return this.getLocalGrantRoles();
+	}
+
+	@Override
+	public Set<Role> getDenyRoles() {
+		
+		return this.getLocalDenyRoles();
 	}
 }
