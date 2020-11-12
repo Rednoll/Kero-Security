@@ -3,7 +3,7 @@ package com.kero.security.core.agent;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import com.kero.security.core.agent.configuration.KeroAccessAgentConfigurator;
+import com.kero.security.core.agent.configurator.KeroAccessAgentConfigurator;
 
 public class KeroAccessAgentFactoryImplTest {
 

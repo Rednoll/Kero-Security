@@ -6,7 +6,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.kero.security.core.agent.configuration.KeroAccessAgentConfigurator;
+import com.kero.security.core.agent.configurator.KeroAccessAgentConfigurator;
 
 public class KeroAccessAgentFactoryImpl implements KeroAccessAgentFactory {
 

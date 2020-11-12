@@ -1,4 +1,4 @@
-package com.kero.security.core.agent.configuration;
+package com.kero.security.core.agent.configurator;
 
 import com.kero.security.core.agent.KeroAccessAgent;
 
